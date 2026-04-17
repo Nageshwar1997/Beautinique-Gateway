@@ -1,6 +1,6 @@
-import { TRegister } from '@beautinique/be-zod';
+import type { TRegister } from '@beautinique/be-zod';
 import { ApiRequest } from '@/classes';
-import { AppSuccess } from '@beautinique/be-classes';
+import type { AppSuccess } from '@beautinique/be-classes';
 
 class RegisterService extends ApiRequest {
   constructor() {

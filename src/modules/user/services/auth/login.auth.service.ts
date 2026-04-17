@@ -1,4 +1,4 @@
-import { TLogin } from '@beautinique/be-zod';
+import type { TLogin } from '@beautinique/be-zod';
 import { ApiRequest } from '@/classes';
 
 class LoginService extends ApiRequest {
@@ -13,7 +13,7 @@ class LoginService extends ApiRequest {
     return this.request(this.routes.user.login.oAuth.google.redirect);
   }
 
-  public async handleGoogleCallback(params: any) {
+  public async handleGoogleCallback(params: unknown) {
     return this.request({
       ...this.routes.user.login.oAuth.google.callback,
       params,
@@ -24,7 +24,7 @@ class LoginService extends ApiRequest {
     return this.request(this.routes.user.login.oAuth.linkedin.redirect);
   }
 
-  public async handleLinkedinCallback(params: any) {
+  public async handleLinkedinCallback(params: unknown) {
     return this.request({
       ...this.routes.user.login.oAuth.linkedin.callback,
       params,

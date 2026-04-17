@@ -1,5 +1,5 @@
-import { Request, Response } from 'express';
-import { TRegister } from '@beautinique/be-zod';
+import type { Request, Response } from 'express';
+import type { TRegister } from '@beautinique/be-zod';
 import { registerService } from '../../services';
 
 class RegisterControllers {

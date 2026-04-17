@@ -1,11 +1,11 @@
 import 'dotenv/config';
 import path from 'path';
-import express, { Request, Response } from 'express';
+import express, { type Request, type Response } from 'express';
 import { parse } from 'qs';
 import { envs } from './envs';
 import { CorsMiddleware, RequestMiddleware, ResponseMiddleware } from '@beautinique/be-middlewares';
 import { ORIGINS } from './constants';
-import { errorLogger, requestLogger } from './middlewares';
+import { errorLogger, logger, requestLogger } from './middlewares';
 import { router } from './routes';
 
 const app = express();
@@ -44,10 +44,10 @@ app.use(ResponseMiddleware.error({ isDev: envs.is_dev }));
 (async () => {
   try {
     app.listen(envs.port, () => {
-      console.log(`Server running on port: ${envs.port}`);
+      logger.info(`Server running on port: ${envs.port}`);
     });
   } catch (err) {
-    console.error('❌ Failed to start server:', err);
+    logger.error('❌ Failed to start server:', err);
     process.exit(1);
   }
 })();
