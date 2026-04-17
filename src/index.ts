@@ -5,7 +5,7 @@ import { parse } from 'qs';
 import { envs } from './envs';
 import { CorsMiddleware, RequestMiddleware, ResponseMiddleware } from '@beautinique/be-middlewares';
 import { ORIGINS } from './constants';
-import { errorLog, requestLog } from './middlewares';
+import { errorLogger, requestLogger } from './middlewares';
 import { router } from './routes';
 
 const app = express();
@@ -22,7 +22,7 @@ app.use(express.static(path.resolve('public')));
 app.set('query parser', (str: string) => parse(str));
 
 // 3. Logger (logs all requests)
-app.use(requestLog);
+app.use(requestLogger);
 
 // 4. Custom middlewares
 app.use(ResponseMiddleware.success);
@@ -38,7 +38,7 @@ app.use('/api/v1', router);
 
 // ----------------- ERROR HANDLING -----------------
 app.use(ResponseMiddleware.notFound);
-app.use(errorLog);
+app.use(errorLogger);
 app.use(ResponseMiddleware.error({ isDev: envs.is_dev }));
 
 (async () => {

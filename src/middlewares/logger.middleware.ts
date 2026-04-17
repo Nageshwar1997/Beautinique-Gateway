@@ -1,6 +1,8 @@
+import { envs } from '@/envs';
 import { LoggerMiddleware } from '@beautinique/be-middlewares';
 
-export const { requestLog, errorLog, logger } = LoggerMiddleware.createLogger({
+export const { errorLogger, logger, requestLogger } = LoggerMiddleware.createLogger({
+  serviceName: 'Beautinique-Gateway',
   logDir: 'logs',
-  level: 'info',
+  level: envs.is_dev ? 'debug' : 'info',
 });
