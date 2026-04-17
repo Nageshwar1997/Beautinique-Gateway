@@ -1,7 +1,6 @@
 import axios, { AxiosError, type AxiosInstance, type AxiosRequestConfig } from 'axios';
-import { ApiError } from './ApiError';
 import { API_ROUTES_AND_METHODS, SERVICES_BASE_URLS } from '@/constants';
-import { AppSuccess } from '@beautinique/be-classes';
+import { AppError, AppSuccess } from '@beautinique/be-classes';
 
 export class ApiRequest {
   private instance: AxiosInstance;
@@ -22,13 +21,18 @@ export class ApiRequest {
         const message = error.response?.data?.message || 'API Error occurred';
         const globalErrors = error.response?.data?.globalErrors;
         const fieldErrors = error.response?.data?.fieldErrors;
-        const statusCode = error.response?.status || 500;
-        throw new ApiError({ message, globalErrors, fieldErrors, statusCode });
+        const statusCode = error.response?.status || error.response?.data?.statusCode || 500;
+        const code = error.response?.data?.code;
+        throw new AppError({ message, globalErrors, fieldErrors, statusCode, code });
       }
       if (error instanceof Error) {
-        throw new ApiError({ message: error.message, statusCode: 500 });
+        throw new AppError({ message: error.message, statusCode: 500, code: 'INTERNAL_ERROR' });
       }
-      throw new ApiError({ message: 'Something went wrong!', statusCode: 500 });
+      throw new AppError({
+        message: 'Something went wrong!',
+        statusCode: 500,
+        code: 'INTERNAL_ERROR',
+      });
     }
   };
 }
