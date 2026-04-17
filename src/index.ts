@@ -30,11 +30,11 @@ app.use(CorsMiddleware.checkOrigin({ origins: ORIGINS }));
 
 // ----------------- ROUTES -----------------
 // Home Route
-app.get('/', (_: Request, res: Response) => res.success(200, 'Welcome to the User Service API'));
+app.get('/', (_: Request, res: Response) => res.success(200, 'Welcome to Beautinique Gateway!'));
 app.get('/health', (_: Request, res: Response) => res.success(200, 'User Service is healthy'));
 
 // API Routes
-app.use('/api', router);
+app.use('/api/v1', router);
 
 // ----------------- ERROR HANDLING -----------------
 app.use(ResponseMiddleware.notFound);

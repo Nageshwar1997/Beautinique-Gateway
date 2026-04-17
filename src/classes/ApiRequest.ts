@@ -1,6 +1,7 @@
 import axios, { AxiosError, type AxiosInstance, type AxiosRequestConfig } from 'axios';
 import { ApiError } from './ApiError';
 import { API_ROUTES_AND_METHODS, SERVICES_BASE_URLS } from '@/constants';
+import { AppSuccess } from '@beautinique/be-classes';
 
 export class ApiRequest {
   private instance: AxiosInstance;
@@ -15,7 +16,7 @@ export class ApiRequest {
   protected request = async (config: AxiosRequestConfig) => {
     try {
       const { data } = await this.instance.request(config);
-      return data;
+      return data as AppSuccess;
     } catch (error) {
       if (error instanceof AxiosError) {
         const message = error.response?.data?.message || 'API Error occurred';

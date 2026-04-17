@@ -18,26 +18,26 @@ export const ORIGINS = [
 export const API_ROUTES_AND_METHODS = {
   user: {
     login: {
-      manual: { method: 'POST', path: '/auth/login/manual' },
+      manual: { method: 'POST', url: '/auth/login/manual' },
       oAuth: {
         google: {
-          redirect: { method: 'GET', path: '/auth/login/oauth/google/redirect' },
-          callback: { method: 'GET', path: '/auth/login/oauth/google/callback' },
+          redirect: { method: 'GET', url: '/auth/login/oauth/google/redirect' },
+          callback: { method: 'GET', url: '/auth/login/oauth/google/callback' },
         },
         github: {
-          redirect: { method: 'GET', path: '/auth/login/oauth/github/redirect' },
-          callback: { method: 'GET', path: '/auth/login/oauth/github/callback' },
+          redirect: { method: 'GET', url: '/auth/login/oauth/github/redirect' },
+          callback: { method: 'GET', url: '/auth/login/oauth/github/callback' },
         },
         linkedin: {
-          redirect: { method: 'GET', path: '/auth/login/oauth/linkedin/redirect' },
-          callback: { method: 'GET', path: '/auth/login/oauth/linkedin/callback' },
+          redirect: { method: 'GET', url: '/auth/login/oauth/linkedin/redirect' },
+          callback: { method: 'GET', url: '/auth/login/oauth/linkedin/callback' },
         },
       },
     },
-    logout: { method: 'DELETE', path: '/auth/logout/:userId' },
+    logout: { method: 'DELETE', url: '/auth/logout/:userId' },
     password: {},
     register: {
-      sendOtp: { method: 'POST', path: '/auth/register/send-otp' },
+      sendOtp: { method: 'POST', url: '/auth/register/send-otp' },
     },
   },
 };

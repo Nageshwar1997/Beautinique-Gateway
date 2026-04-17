@@ -1,12 +1,13 @@
 import { TRegister } from '@beautinique/be-zod';
 import { ApiRequest } from '@/classes';
+import { AppSuccess } from '@beautinique/be-classes';
 
 class RegisterService extends ApiRequest {
   constructor() {
     super('user');
   }
-  public async sendOtp(data: Pick<TRegister, 'email'>) {
-    return this.request({ ...this.routes.user.login.manual, data: data });
+  public async sendOtp(data: Pick<TRegister, 'email'>): Promise<AppSuccess> {
+    return this.request({ ...this.routes.user.register.sendOtp, data });
   }
 }
 

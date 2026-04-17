@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
-    "dev": "tsx watch src/index.ts",
+    "dev": "nodemon --watch src --ext ts --exec tsx src/index.ts",
     "start": "node dist/index.js",
     "start:dev": "npm run build && node dist/index.js",
     "clean": "rmdir /s /q dist",
@@ -32,6 +32,7 @@
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "mongoose": "^9.4.1",
+    "nodemon": "^3.1.14",
     "redis": "^5.12.1"
   }
 }

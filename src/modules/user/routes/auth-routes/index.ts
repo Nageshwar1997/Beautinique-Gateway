@@ -7,7 +7,7 @@ import { logoutRouter } from './logout.route';
 
 export const authRouter = Router();
 
-const { auth } = GATEWAY_METHODS_AND_PATHS;
+const { auth } = GATEWAY_METHODS_AND_PATHS.user;
 
 authRouter.use(auth.register.base, registerRouter);
 authRouter.use(auth.login.base, loginRouter);

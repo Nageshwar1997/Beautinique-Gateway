@@ -5,9 +5,8 @@ import { registerService } from '../../services';
 class RegisterControllers {
   public async sendOtp(req: Request, res: Response) {
     const body = req.body as Pick<TRegister, 'email'>;
-    const response = await registerService.sendOtp(body);
-    console.log('response', response);
-    res.json(response);
+    const { message, statusCode, data } = await registerService.sendOtp(body);
+    res.success(statusCode, message, { data });
   }
 }
 
