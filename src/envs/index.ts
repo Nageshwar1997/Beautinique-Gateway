@@ -27,6 +27,10 @@ export const envs = {
   // Q
   // R
   // S
+  service: {
+    user: process.env.USER_SERVICE_BASE_URL!,
+  },
+
   // T
   // U
   url: {
