@@ -1,12 +1,12 @@
 import { TLogin } from '@beautinique/be-zod';
-import { BaseUserService } from '..';
+import { ApiRequest } from '@/classes';
 
-export class AuthLoginClass extends BaseUserService {
+class LoginService extends ApiRequest {
+  constructor() {
+    super('user');
+  }
   public async manualLogin(data: TLogin) {
-    return this.request({
-      ...this.routes.user.login.manual,
-      data,
-    });
+    return this.request({ ...this.routes.user.login.manual, data });
   }
 
   public async getGoogleRedirectUrl() {
@@ -41,3 +41,5 @@ export class AuthLoginClass extends BaseUserService {
     });
   }
 }
+
+export const loginService = new LoginService();

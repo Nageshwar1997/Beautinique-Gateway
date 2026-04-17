@@ -1,11 +1,13 @@
 import axios, { AxiosError, type AxiosInstance, type AxiosRequestConfig } from 'axios';
 import { ApiError } from './ApiError';
-import { API_ROUTES_AND_METHODS } from '@/constants';
+import { API_ROUTES_AND_METHODS, SERVICES_BASE_URLS } from '@/constants';
 
 export class ApiRequest {
   private instance: AxiosInstance;
+  private baseURLs = SERVICES_BASE_URLS;
 
-  constructor(baseURL?: string) {
+  constructor(key: keyof typeof SERVICES_BASE_URLS) {
+    const baseURL = this.baseURLs[key];
     this.instance = axios.create({ baseURL });
   }
 

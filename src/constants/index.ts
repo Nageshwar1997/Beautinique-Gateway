@@ -1,5 +1,9 @@
 import { envs } from '@/envs';
 
+export const SERVICES_BASE_URLS = {
+  user: `${envs.service.user}/api/v1`,
+} as const;
+
 export const ORIGINS = [
   envs.url.frontend.prod.client,
   envs.url.frontend.prod.admin,
@@ -32,6 +36,52 @@ export const API_ROUTES_AND_METHODS = {
     },
     logout: { method: 'DELETE', path: '/auth/logout/:userId' },
     password: {},
-    register: {},
+    register: {
+      sendOtp: { method: 'POST', path: '/auth/register/send-otp' },
+    },
   },
 };
+
+export const GATEWAY_METHODS_AND_PATHS = {
+  user: {
+    base: '/user-service',
+    auth: {
+      base: '/auth',
+      login: {
+        base: '/login',
+        manual: { path: '/manual', method: 'post' },
+
+        oauth: {
+          google: {
+            redirect: { path: '/oauth/google/redirect', method: 'get' },
+            callback: { path: '/oauth/google/callback', method: 'get' },
+          },
+
+          linkedin: {
+            redirect: { path: '/oauth/linkedin/redirect', method: 'get' },
+            callback: { path: '/oauth/linkedin/callback', method: 'get' },
+          },
+
+          github: {
+            redirect: { path: '/oauth/github/redirect', method: 'get' },
+            callback: { path: '/oauth/github/callback', method: 'get' },
+          },
+        },
+      },
+      logout: {
+        base: '/logout',
+        default: { path: '/:userId', method: 'delete' },
+      },
+      register: {
+        base: '/register',
+        sendOtp: { path: '/send-otp', method: 'post' },
+      },
+      password: {
+        base: '/password',
+      },
+    },
+    user: {
+      base: '/users',
+    },
+  },
+} as const;

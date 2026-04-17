@@ -6,7 +6,7 @@ import { envs } from './envs';
 import { CorsMiddleware, RequestMiddleware, ResponseMiddleware } from '@beautinique/be-middlewares';
 import { ORIGINS } from './constants';
 import { errorLog, requestLog } from './middlewares';
-import { router } from './router';
+import { router } from './routes';
 
 const app = express();
 
