@@ -1,19 +1,10 @@
 import { envs } from '@/envs';
 
 export const SERVICES_BASE_URLS = {
-  'user-service': `${envs.service.user}/user-service/api/v1`,
+  'user-service': `${envs.url.service.user}/user-service/api/v1`,
 } as const;
 
-export const ORIGINS = [
-  envs.url.frontend.prod.client,
-  envs.url.frontend.prod.admin,
-  envs.url.frontend.prod.master,
-  envs.url.frontend.dev.client,
-  envs.url.frontend.dev.admin,
-  envs.url.frontend.dev.master,
-  envs.url.frontend.dev.public1,
-  envs.url.frontend.dev.public2,
-];
+export const ORIGINS = Object.values(envs.url.frontend);
 
 export const API_ROUTES_AND_METHODS = {
   user: {

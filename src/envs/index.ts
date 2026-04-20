@@ -1,3 +1,70 @@
+const {
+  // A
+
+  ADMIN_DEV_URL,
+  ADMIN_PROD_URL,
+
+  // B
+  // C
+
+  CLIENT_DEV_URL,
+  CLIENT_PROD_URL,
+
+  // D
+  // E
+  // F
+  // G
+
+  GATEWAY_DEV_URL,
+  GATEWAY_PROD_URL,
+
+  // H
+  // I
+
+  IS_DEV,
+
+  // J
+  // K
+  // L
+  // M
+
+  MAIL_SERVICE_DEV_URL,
+  MAIL_SERVICE_PROD_URL,
+
+  MASTER_DEV_URL,
+  MASTER_PROD_URL,
+
+  // N
+  // O
+  // P
+
+  PORT,
+
+  PUBLIC_DEV_URL_1,
+  PUBLIC_DEV_URL_2,
+
+  // Q
+  // R
+  // S
+  // T
+  // U
+
+  USER_SERVICE_DEV_URL,
+  USER_SERVICE_PROD_URL,
+
+  // V
+  // W
+
+  WORKER_SERVICE_DEV_URL,
+  WORKER_SERVICE_PROD_URL,
+
+  // X
+  // Y
+  // Z
+} = process.env as Record<string, string>;
+
+const is_dev = IS_DEV === 'true';
+
 export const envs = {
   // A
   // B
@@ -8,49 +75,38 @@ export const envs = {
   // G
   // H
   // I
-  is_dev: (process.env.IS_DEV as string) === 'true',
+
+  is_dev,
 
   // J
   // K
   // L
   // M
-  mongo_uri: {
-    prod: process.env.MONGODB_PROD_URI as string,
-    dev: process.env.MONGODB_DEV_URI as string,
-  },
-
   // N
   // O
   // P
-  port: Number(process.env.PORT as string),
+
+  port: Number(PORT),
 
   // Q
   // R
   // S
-  service: {
-    user: process.env.USER_SERVICE_BASE_URL as string,
-  },
-
   // T
   // U
+
   url: {
-    gateway: {
-      dev: process.env.BACKEND_DEV_URL as string,
-      prod: process.env.BACKEND_PROD_URL as string,
-    },
     frontend: {
-      dev: {
-        client: process.env.FRONTEND_DEV_CLIENT_URL as string,
-        admin: process.env.FRONTEND_DEV_ADMIN_URL as string,
-        master: process.env.FRONTEND_DEV_MASTER_URL as string,
-        public1: process.env.FRONTEND_DEV_PUBLIC_URL_1 as string,
-        public2: process.env.FRONTEND_DEV_PUBLIC_URL_2 as string,
-      },
-      prod: {
-        client: process.env.FRONTEND_PROD_CLIENT_URL as string,
-        admin: process.env.FRONTEND_PROD_ADMIN_URL as string,
-        master: process.env.FRONTEND_PROD_MASTER_URL as string,
-      },
+      client: is_dev ? CLIENT_DEV_URL : CLIENT_PROD_URL,
+      admin: is_dev ? ADMIN_DEV_URL : ADMIN_PROD_URL,
+      master: is_dev ? MASTER_DEV_URL : MASTER_PROD_URL,
+      public1: PUBLIC_DEV_URL_1,
+      public2: PUBLIC_DEV_URL_2,
+    },
+    gateway: is_dev ? GATEWAY_DEV_URL : GATEWAY_PROD_URL,
+    service: {
+      mail: is_dev ? MAIL_SERVICE_DEV_URL : MAIL_SERVICE_PROD_URL,
+      user: is_dev ? USER_SERVICE_DEV_URL : USER_SERVICE_PROD_URL,
+      worker: is_dev ? WORKER_SERVICE_DEV_URL : WORKER_SERVICE_PROD_URL,
     },
   },
 
