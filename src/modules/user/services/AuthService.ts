@@ -1,10 +1,17 @@
-import type { TLogin } from '@beautinique/be-zod';
+import type { TLogin, TRegister } from '@beautinique/be-zod';
 import { ApiRequest } from '@/classes';
 
-class LoginService extends ApiRequest {
+class AuthService extends ApiRequest {
   constructor() {
-    super('user');
+    super('user-service');
   }
+
+  /* ================== REGISTER METHODS ================== */
+  public async registerSendOtp(data: Pick<TRegister, 'email'>) {
+    return this.request({ ...this.routes.user.register.sendOtp, data });
+  }
+
+  /* ================== LOGIN METHODS ================== */
   public async manualLogin(data: TLogin) {
     return this.request({ ...this.routes.user.login.manual, data });
   }
@@ -42,4 +49,4 @@ class LoginService extends ApiRequest {
   }
 }
 
-export const loginService = new LoginService();
+export const authService = new AuthService();
