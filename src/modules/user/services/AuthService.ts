@@ -11,6 +11,17 @@ class AuthService extends ApiRequest {
     return this.request({ ...this.routes.user.register.sendOtp, data });
   }
 
+  public async registerResendOtp({
+    email,
+    otpToken,
+  }: Pick<TRegister, 'email'> & { otpToken: string }) {
+    return this.request({
+      ...this.routes.user.register.resendOtp,
+      data: { email },
+      headers: { Authorization: otpToken },
+    });
+  }
+
   /* ================== LOGIN METHODS ================== */
   public async manualLogin(data: TLogin) {
     return this.request({ ...this.routes.user.login.manual, data });

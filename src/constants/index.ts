@@ -29,6 +29,7 @@ export const API_ROUTES_AND_METHODS = {
     password: {},
     register: {
       sendOtp: { method: 'POST', url: '/auth/register/send-otp' },
+      resendOtp: { method: 'PATCH', url: '/auth/register/resend-otp' },
     },
   },
 };
@@ -66,6 +67,7 @@ export const GATEWAY_METHODS_AND_PATHS = {
       register: {
         base: '/register',
         sendOtp: { path: '/send-otp', method: 'post' },
+        resendOtp: { path: '/resend-otp', method: 'patch' },
       },
       password: {
         base: '/password',
