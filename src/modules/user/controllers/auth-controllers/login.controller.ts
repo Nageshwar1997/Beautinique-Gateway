@@ -1,20 +1,31 @@
 import type { Request, Response } from 'express';
 import { authService } from '../../services';
 import { envs } from '@/envs';
+import { AppError } from '@beautinique/be-classes';
 
 export const googleRedirectController = async (_req: Request, res: Response) => {
-  const { data: url } = await authService.getGoogleRedirectUrl();
-  res.redirect(url);
+  try {
+    const { data: url } = await authService.getGoogleRedirectUrl();
+    res.redirect(url);
+  } catch (error) {
+    res.redirect(
+      `${envs.url.frontend.client}/auth/oauth?error=${(error as Error).message || 'Something went wrong!'}`,
+    );
+  }
 };
 
 export const googleCallbackController = async (req: Request, res: Response) => {
   const { code } = req.query;
 
-  const { data: token } = await authService.handleGoogleCallback(String(code));
+  try {
+    if (!code) throw new AppError({ message: 'No code returned from Google', statusCode: 400 });
 
-  if (token) {
-    return res.redirect(`${envs.url.frontend.client}/auth/oauth?token=${token}`);
+    const { data: token } = await authService.handleGoogleCallback(String(code));
+
+    res.redirect(`${envs.url.frontend.client}/auth/oauth?token=${token}`);
+  } catch (error) {
+    res.redirect(
+      `${envs.url.frontend.client}/auth/oauth?error=${(error as Error).message || 'Something went wrong!'}`,
+    );
   }
-
-  res.redirect(`${envs.url.frontend.client}/auth/oauth?error=Something went wrong!`);
 };
