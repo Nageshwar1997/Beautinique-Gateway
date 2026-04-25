@@ -42,10 +42,10 @@ class AuthService extends ApiRequest {
     return this.request(this.routes.user.login.oAuth.linkedin.redirect);
   }
 
-  public async handleLinkedinCallback(params: unknown) {
+  public async handleLinkedinCallback(code: string) {
     return this.request({
       ...this.routes.user.login.oAuth.linkedin.callback,
-      params,
+      params: { code },
     });
   }
 
@@ -53,9 +53,10 @@ class AuthService extends ApiRequest {
     return this.request(this.routes.user.login.oAuth.github.redirect);
   }
 
-  public async handleGithubCallback() {
+  public async handleGithubCallback(code: string) {
     return this.request({
       ...this.routes.user.login.oAuth.github.callback,
+      params: { code },
     });
   }
 }
