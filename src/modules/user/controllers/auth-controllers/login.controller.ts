@@ -1,15 +1,15 @@
 import type { Request, Response } from 'express';
 import { authService } from '../../services';
-import { envs } from '@/envs';
 import { AppError } from '@beautinique/be-classes';
+import { CLIENT_OAUTH_REDIRECT_URL } from '../../constants';
 
 export const googleRedirectController = async (_req: Request, res: Response) => {
   try {
-    const { data: url } = await authService.getGoogleRedirectUrl();
-    res.redirect(url);
+    const { data: callbackURL } = await authService.getGoogleRedirectUrl();
+    res.redirect(callbackURL);
   } catch (error) {
     res.redirect(
-      `${envs.url.frontend.client}/auth/oauth?error=${(error as Error).message || 'Something went wrong!'}`,
+      `${CLIENT_OAUTH_REDIRECT_URL}?error=${(error as Error | AppError).message || 'Something went wrong!'}`,
     );
   }
 };
@@ -22,10 +22,10 @@ export const googleCallbackController = async (req: Request, res: Response) => {
 
     const { data: token } = await authService.handleGoogleCallback(String(code));
 
-    res.redirect(`${envs.url.frontend.client}/auth/oauth?token=${token}`);
+    res.redirect(`${CLIENT_OAUTH_REDIRECT_URL}?token=${token}`);
   } catch (error) {
     res.redirect(
-      `${envs.url.frontend.client}/auth/oauth?error=${(error as Error).message || 'Something went wrong!'}`,
+      `${CLIENT_OAUTH_REDIRECT_URL}?error=${(error as Error | AppError).message || 'Something went wrong!'}`,
     );
   }
 };
