@@ -1,5 +1,7 @@
 import { GATEWAY_METHODS_AND_PATHS } from '@/constants';
+import { RequestMiddleware, ResponseMiddleware } from '@beautinique/be-middlewares';
 import { type Request, type Response, Router } from 'express';
+import { googleCallbackController, googleRedirectController } from '../../controllers';
 
 export const loginRouter = Router();
 
@@ -13,16 +15,13 @@ loginRouter[login.manual.method](login.manual.path, (req: Request, res: Response
 // Google
 loginRouter[login.oauth.google.redirect.method](
   login.oauth.google.redirect.path,
-  (req: Request, res: Response) => {
-    res.success(200, 'Hello', { data: req.body });
-  },
+  ResponseMiddleware.tryCatch(googleRedirectController),
 );
 
 loginRouter[login.oauth.google.callback.method](
   login.oauth.google.callback.path,
-  (req: Request, res: Response) => {
-    res.success(200, 'Hello', { data: req.body });
-  },
+  RequestMiddleware.emptyRequest({ query: true }),
+  ResponseMiddleware.tryCatch(googleCallbackController),
 );
 
 // LinkedIn

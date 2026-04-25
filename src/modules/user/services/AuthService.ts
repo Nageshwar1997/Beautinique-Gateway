@@ -31,10 +31,10 @@ class AuthService extends ApiRequest {
     return this.request(this.routes.user.login.oAuth.google.redirect);
   }
 
-  public async handleGoogleCallback(params: unknown) {
+  public async handleGoogleCallback(code: string) {
     return this.request({
       ...this.routes.user.login.oAuth.google.callback,
-      params,
+      params: { code },
     });
   }
 
