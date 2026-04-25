@@ -13,8 +13,8 @@ export const googleCallbackController = async (req: Request, res: Response) => {
   const { data: token } = await authService.handleGoogleCallback(String(code));
 
   if (token) {
-    return res.redirect(`${envs.url.frontend.client}/auth?token=${token}`);
+    return res.redirect(`${envs.url.frontend.client}/auth/oauth?token=${token}`);
   }
 
-  res.redirect(`${envs.url.frontend.client}/auth?error=Something went wrong!`);
+  res.redirect(`${envs.url.frontend.client}/auth/oauth?error=Something went wrong!`);
 };
