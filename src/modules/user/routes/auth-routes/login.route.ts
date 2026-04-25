@@ -1,7 +1,14 @@
 import { GATEWAY_METHODS_AND_PATHS } from '@/constants';
 import { RequestMiddleware, ResponseMiddleware } from '@beautinique/be-middlewares';
 import { type Request, type Response, Router } from 'express';
-import { googleCallbackController, googleRedirectController } from '../../controllers';
+import {
+  githubCallbackController,
+  githubRedirectController,
+  googleCallbackController,
+  googleRedirectController,
+  linkedinCallbackController,
+  linkedinRedirectController,
+} from '../../controllers';
 
 export const loginRouter = Router();
 
@@ -27,29 +34,23 @@ loginRouter[login.oauth.google.callback.method](
 // LinkedIn
 loginRouter[login.oauth.linkedin.redirect.method](
   login.oauth.linkedin.redirect.path,
-  (req: Request, res: Response) => {
-    res.success(200, 'Hello', { data: req.body });
-  },
+  ResponseMiddleware.tryCatch(linkedinRedirectController),
 );
 
 loginRouter[login.oauth.linkedin.callback.method](
   login.oauth.linkedin.callback.path,
-  (req: Request, res: Response) => {
-    res.success(200, 'Hello', { data: req.body });
-  },
+  RequestMiddleware.emptyRequest({ query: true }),
+  ResponseMiddleware.tryCatch(linkedinCallbackController),
 );
 
 // GitHub
 loginRouter[login.oauth.github.redirect.method](
   login.oauth.github.redirect.path,
-  (req: Request, res: Response) => {
-    res.success(200, 'Hello', { data: req.body });
-  },
+  ResponseMiddleware.tryCatch(githubRedirectController),
 );
 
 loginRouter[login.oauth.github.callback.method](
   login.oauth.github.callback.path,
-  (req: Request, res: Response) => {
-    res.success(200, 'Hello', { data: req.body });
-  },
+  RequestMiddleware.emptyRequest({ query: true }),
+  ResponseMiddleware.tryCatch(githubCallbackController),
 );
