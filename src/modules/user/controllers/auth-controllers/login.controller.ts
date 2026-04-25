@@ -17,9 +17,15 @@ export const googleRedirectController = async (_req: Request, res: Response) => 
 export const googleCallbackController = async (req: Request, res: Response) => {
   const { code } = req.query;
 
-  try {
-    if (!code) throw new AppError({ message: 'No code returned from Google', statusCode: 400 });
+  if (!code) {
+    throw new AppError({
+      message: 'No code returned from Google',
+      code: 'VALIDATION_ERROR',
+      statusCode: 400,
+    });
+  }
 
+  try {
     const { data: token } = await authService.handleGoogleCallback(String(code));
 
     res.redirect(`${CLIENT_OAUTH_REDIRECT_URL}?token=${token}`);
@@ -44,9 +50,15 @@ export const linkedinRedirectController = async (_req: Request, res: Response) =
 export const linkedinCallbackController = async (req: Request, res: Response) => {
   const { code } = req.query;
 
-  try {
-    if (!code) throw new AppError({ message: 'No code returned from Linkedin', statusCode: 400 });
+  if (!code) {
+    throw new AppError({
+      message: 'No code returned from Linkedin',
+      code: 'VALIDATION_ERROR',
+      statusCode: 400,
+    });
+  }
 
+  try {
     const { data: token } = await authService.handleLinkedinCallback(String(code));
 
     res.redirect(`${CLIENT_OAUTH_REDIRECT_URL}?token=${token}`);
@@ -71,9 +83,15 @@ export const githubRedirectController = async (_req: Request, res: Response) => 
 export const githubCallbackController = async (req: Request, res: Response) => {
   const { code } = req.query;
 
-  try {
-    if (!code) throw new AppError({ message: 'No code returned from Github', statusCode: 400 });
+  if (!code) {
+    throw new AppError({
+      message: 'No code returned from Github',
+      code: 'VALIDATION_ERROR',
+      statusCode: 400,
+    });
+  }
 
+  try {
     const { data: token } = await authService.handleGithubCallback(String(code));
 
     res.redirect(`${CLIENT_OAUTH_REDIRECT_URL}?token=${token}`);
