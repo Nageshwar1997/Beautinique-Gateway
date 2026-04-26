@@ -42,7 +42,6 @@ export const GATEWAY_METHODS_AND_PATHS = {
       login: {
         base: '/login',
         manual: { path: '/manual', method: 'post' },
-
         oauth: {
           google: {
             redirect: { path: '/oauth/google/redirect', method: 'get' },

@@ -1,6 +1,6 @@
 import { GATEWAY_METHODS_AND_PATHS } from '@/constants';
-import { RequestMiddleware, ResponseMiddleware } from '@beautinique/be-middlewares';
-import { type Request, type Response, Router } from 'express';
+import { RequestMiddleware, ResponseMiddleware, ZodMiddleware } from '@beautinique/be-middlewares';
+import { Router } from 'express';
 import {
   githubCallbackController,
   githubRedirectController,
@@ -8,16 +8,21 @@ import {
   googleRedirectController,
   linkedinCallbackController,
   linkedinRedirectController,
+  manualLoginController,
 } from '../../controllers';
+import { loginSchema } from '@beautinique/be-zod';
 
 export const loginRouter = Router();
 
 const { login } = GATEWAY_METHODS_AND_PATHS.user.auth;
 
 // Manual
-loginRouter[login.manual.method](login.manual.path, (req: Request, res: Response) => {
-  res.success(200, 'Hello', { data: req.body });
-});
+loginRouter[login.manual.method](
+  login.manual.path,
+  RequestMiddleware.emptyRequest({ body: true }),
+  ZodMiddleware.validateSchema(loginSchema),
+  ResponseMiddleware.tryCatch(manualLoginController),
+);
 
 // Google
 loginRouter[login.oauth.google.redirect.method](

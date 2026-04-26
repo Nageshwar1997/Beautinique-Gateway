@@ -2,6 +2,15 @@ import type { Request, Response } from 'express';
 import { authService } from '../../services';
 import { AppError } from '@beautinique/be-classes';
 import { CLIENT_OAUTH_REDIRECT_URL } from '../../constants';
+import type { TLogin } from '@beautinique/be-zod';
+
+export const manualLoginController = async (req: Request, res: Response) => {
+  const body = req.body as TLogin;
+
+  const { message, statusCode, data } = await authService.manualLogin(body);
+
+  res.success(statusCode, message, { data });
+};
 
 export const googleRedirectController = async (_req: Request, res: Response) => {
   try {
