@@ -30,6 +30,8 @@ export const API_ROUTES_AND_METHODS = {
     register: {
       sendOtp: { method: 'POST', url: '/auth/register/send-otp' },
       resendOtp: { method: 'PATCH', url: '/auth/register/resend-otp' },
+      verifyOtp: { method: 'POST', url: '/auth/register/verify-otp' },
+      saveUser: { method: 'POST', url: '/auth/register/save' },
     },
   },
 };
@@ -67,6 +69,8 @@ export const GATEWAY_METHODS_AND_PATHS = {
         base: '/register',
         sendOtp: { path: '/send-otp', method: 'post' },
         resendOtp: { path: '/resend-otp', method: 'patch' },
+        verifyOtp: { path: '/verify-otp', method: 'post' },
+        saveUser: { path: '/save', method: 'post' },
       },
       password: {
         base: '/password',

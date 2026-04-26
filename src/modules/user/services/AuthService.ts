@@ -1,4 +1,4 @@
-import type { TLogin, TRegister } from '@beautinique/be-zod';
+import type { TLogin, TRegister, TRegisterEmail, TRegisterOtp } from '@beautinique/be-zod';
 import { ApiRequest } from '@/classes';
 
 class AuthService extends ApiRequest {
@@ -7,17 +7,30 @@ class AuthService extends ApiRequest {
   }
 
   /* ================== REGISTER METHODS ================== */
-  public async registerSendOtp(data: Pick<TRegister, 'email'>) {
+  public async registerSendOtp(data: TRegisterEmail) {
     return this.request({ ...this.routes.user.register.sendOtp, data });
   }
 
-  public async registerResendOtp({
-    email,
-    otpToken,
-  }: Pick<TRegister, 'email'> & { otpToken: string }) {
+  public async registerResendOtp({ email, otpToken }: TRegisterEmail & { otpToken: string }) {
     return this.request({
       ...this.routes.user.register.resendOtp,
       data: { email },
+      headers: { Authorization: otpToken },
+    });
+  }
+
+  public async registerVerifyOtp({ otp, otpToken }: TRegisterOtp & { otpToken: string }) {
+    return this.request({
+      ...this.routes.user.register.verifyOtp,
+      data: { otp },
+      headers: { Authorization: otpToken },
+    });
+  }
+
+  public async registerAndSave({ otpToken, ...data }: TRegister & { otpToken: string }) {
+    return this.request({
+      ...this.routes.user.register.saveUser,
+      data,
       headers: { Authorization: otpToken },
     });
   }
