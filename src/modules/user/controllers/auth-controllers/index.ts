@@ -3,7 +3,12 @@ import { authService } from '../../services';
 import type { Request, Response } from 'express';
 import { sanitizeToken } from '@beautinique/be-utils';
 import { AppError } from '@beautinique/be-classes';
-import { CLIENT_OAUTH_REDIRECT_URL } from '../../constants';
+import {
+  ACCESS_TOKEN_COOKIE_NAME,
+  ACCESS_TOKEN_COOKIE_OPTIONS,
+  CLIENT_OAUTH_REDIRECT_URL,
+} from '../../constants';
+import { generateAccessToken, verifyRefreshToken } from '@/utils';
 
 /* ================================ REGISTER CONTROLLERS ================================ */
 
@@ -160,4 +165,20 @@ export const githubCallbackController = async (req: Request, res: Response) => {
       `${CLIENT_OAUTH_REDIRECT_URL}?error=${(error as Error | AppError).message || 'Something went wrong!'}`,
     );
   }
+};
+
+export const refreshAccessTokenController = async (req: Request, res: Response) => {
+  const refreshToken = req.cookies?.refreshToken;
+
+  if (!refreshToken) {
+    throw new AppError({ message: 'Refresh token missing', statusCode: 401 });
+  }
+
+  const decoded = verifyRefreshToken(refreshToken);
+
+  const newAccessToken = generateAccessToken(decoded);
+
+  res.cookie(ACCESS_TOKEN_COOKIE_NAME, newAccessToken, ACCESS_TOKEN_COOKIE_OPTIONS);
+
+  res.success(200, 'Token refreshed');
 };

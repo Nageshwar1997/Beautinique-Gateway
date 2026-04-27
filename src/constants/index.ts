@@ -75,6 +75,10 @@ export const GATEWAY_METHODS_AND_PATHS = {
       password: {
         base: '/password',
       },
+      token: {
+        base: '/token',
+        refreshAccessToken: { path: '/refresh-access-token', method: 'post' },
+      },
     },
     user: {
       base: '/users',

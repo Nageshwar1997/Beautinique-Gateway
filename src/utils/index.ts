@@ -1,6 +1,12 @@
 import { envs } from '@/envs';
+import {
+  ACCESS_TOKEN_COOKIE_NAME,
+  ACCESS_TOKEN_COOKIE_OPTIONS,
+  REFRESH_TOKEN_COOKIE_NAME,
+  REFRESH_TOKEN_COOKIE_OPTIONS,
+} from '@/modules/user/constants';
 import type { IJwtPayload } from '@/types';
-import type { CookieOptions, Response } from 'express';
+import type { Response } from 'express';
 import jwt from 'jsonwebtoken';
 
 export const generateAccessToken = (payload: IJwtPayload) => {
@@ -24,30 +30,14 @@ export const verifyRefreshToken = (token: string) => {
 };
 
 export const setAuthCookies = (res: Response, accessToken: string, refreshToken: string) => {
-  const isProd = !envs.is_dev;
-
-  const cookieOptions: CookieOptions = {
-    httpOnly: true,
-    secure: isProd,
-    sameSite: isProd ? 'none' : 'lax',
-  };
-
   // Access Token
-  res.cookie('accessToken', accessToken, {
-    ...cookieOptions,
-    maxAge: 15 * 60 * 1000, // 15 min
-    path: '/',
-  });
+  res.cookie(ACCESS_TOKEN_COOKIE_NAME, accessToken, ACCESS_TOKEN_COOKIE_OPTIONS);
 
   // Refresh Token
-  res.cookie('refreshToken', refreshToken, {
-    ...cookieOptions,
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    path: '/', // TODO: change this with actual path
-  });
+  res.cookie(REFRESH_TOKEN_COOKIE_NAME, refreshToken, REFRESH_TOKEN_COOKIE_OPTIONS);
 };
 
 export const clearAuthCookies = (res: Response) => {
-  res.clearCookie('accessToken');
-  res.clearCookie('refreshToken');
+  res.clearCookie(ACCESS_TOKEN_COOKIE_NAME);
+  res.clearCookie(REFRESH_TOKEN_COOKIE_NAME);
 };

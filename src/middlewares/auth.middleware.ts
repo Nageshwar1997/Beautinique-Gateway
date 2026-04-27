@@ -4,7 +4,7 @@ import { AppError } from '@beautinique/be-classes';
 import type { TRole } from '@beautinique/be-constants';
 import type { NextFunction, Response } from 'express';
 
-export const authenticate = (req: AuthRequest, _res: Response, next: NextFunction) => {
+export const authenticate = async (req: AuthRequest, _res: Response, next: NextFunction) => {
   const token = req.cookies?.accessToken;
 
   if (!token) {
@@ -20,6 +20,7 @@ export const authenticate = (req: AuthRequest, _res: Response, next: NextFunctio
     req.user = decoded;
 
     next();
+    return;
   } catch {
     throw new AppError({
       message: 'Invalid or expired token',
