@@ -70,7 +70,7 @@ export const GATEWAY_METHODS_AND_PATHS = {
         sendOtp: { path: '/send-otp', method: 'post' },
         resendOtp: { path: '/resend-otp', method: 'patch' },
         verifyOtp: { path: '/verify-otp', method: 'post' },
-        saveUser: { path: '/save', method: 'post' },
+        saveUser: { path: '/save-user', method: 'post' },
       },
       password: {
         base: '/password',
