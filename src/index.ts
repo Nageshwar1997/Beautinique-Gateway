@@ -26,7 +26,12 @@ app.use(requestLogger);
 
 // 4. Custom middlewares
 app.use(ResponseMiddleware.success);
-app.use(CorsMiddleware.checkOrigin({ origins: ORIGINS }));
+app.use(
+  CorsMiddleware.checkOrigin({
+    origins: ORIGINS,
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  }),
+);
 
 // ----------------- ROUTES -----------------
 // Home Route

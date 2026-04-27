@@ -24,6 +24,10 @@ const {
   IS_DEV,
 
   // J
+
+  JWT_ACCESS_SECRET,
+  JWT_REFRESH_SECRET,
+
   // K
   // L
   // M
@@ -82,6 +86,9 @@ export const envs = {
   is_dev,
 
   // J
+
+  jwt: { access_secret: JWT_ACCESS_SECRET, refresh_secret: JWT_REFRESH_SECRET },
+
   // K
   // L
   // M
