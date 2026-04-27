@@ -1,7 +1,8 @@
 import { GATEWAY_METHODS_AND_PATHS } from '@/constants';
 import { Router } from 'express';
 import { refreshAccessTokenController } from '../../controllers';
-import { authenticate, tryCatch } from '@/middlewares';
+import { authenticate } from '@/middlewares';
+import { ResponseMiddleware } from '@beautinique/be-middlewares';
 
 export const tokenRouter = Router();
 
@@ -9,6 +10,6 @@ const { token } = GATEWAY_METHODS_AND_PATHS.user.auth;
 
 tokenRouter[token.refreshAccessToken.method](
   token.refreshAccessToken.path,
-  authenticate,
-  tryCatch(refreshAccessTokenController),
+  ResponseMiddleware.tryCatch(authenticate),
+  ResponseMiddleware.tryCatch(refreshAccessTokenController),
 );

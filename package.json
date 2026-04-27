@@ -34,7 +34,7 @@
   "dependencies": {
     "@beautinique/be-classes": "^1.0.1",
     "@beautinique/be-constants": "^1.0.6",
-    "@beautinique/be-middlewares": "^1.0.8",
+    "@beautinique/be-middlewares": "^1.0.9",
     "@beautinique/be-utils": "^1.0.4",
     "@beautinique/be-zod": "^1.0.14",
     "axios": "^1.15.0",

@@ -20,7 +20,6 @@ export const authenticate = async (req: AuthRequest, _res: Response, next: NextF
     req.user = decoded;
 
     next();
-    return;
   } catch {
     throw new AppError({
       message: 'Invalid or expired token',
