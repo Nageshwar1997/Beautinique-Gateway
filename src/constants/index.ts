@@ -33,6 +33,7 @@ export const API_ROUTES_AND_METHODS = {
       verifyOtp: { method: 'POST', url: '/auth/register/verify-otp' },
       saveUser: { method: 'POST', url: '/auth/register/save' },
     },
+    me: { method: 'GET', url: '/user/me' },
   },
 };
 
@@ -81,7 +82,8 @@ export const GATEWAY_METHODS_AND_PATHS = {
       },
     },
     user: {
-      base: '/users',
+      base: '/user',
+      me: { method: 'get', path: '/me' },
     },
   },
 } as const;
