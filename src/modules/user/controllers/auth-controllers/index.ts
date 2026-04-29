@@ -67,7 +67,7 @@ export const registerAndSaveController = async (req: Request, res: Response) => 
 
   const body = req.body as TRegister;
 
-  const { message, statusCode, data: user } = await authService.registerAndSave({ ...body, token });
+  const { message, statusCode, user } = await authService.registerAndSave({ ...body, token });
 
   const accessToken = generateAccessToken({ id: user._id, role: user.role });
   const refreshToken = generateRefreshToken({ id: user.id, role: user.role });
@@ -89,7 +89,7 @@ export const manualLoginController = async (req: Request, res: Response) => {
 
   setAuthCookies(res, accessToken, refreshToken);
 
-  res.success(statusCode, message, user);
+  res.success(statusCode, message, { user });
 };
 
 export const googleRedirectController = async (_req: Request, res: Response) => {
