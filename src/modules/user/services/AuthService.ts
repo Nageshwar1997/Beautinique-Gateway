@@ -11,27 +11,26 @@ class AuthService extends ApiRequest {
     return this.request({ ...this.routes.user.register.sendOtp, data });
   }
 
-  public async registerResendOtp({ email, otpToken }: TRegisterEmail & { otpToken: string }) {
+  public async registerResendOtp(token: string) {
     return this.request({
       ...this.routes.user.register.resendOtp,
-      data: { email },
-      headers: { Authorization: otpToken },
+      headers: { Authorization: token },
     });
   }
 
-  public async registerVerifyOtp({ otp, otpToken }: TRegisterOtp & { otpToken: string }) {
+  public async registerVerifyOtp({ otp, token }: TRegisterOtp & { token: string }) {
     return this.request({
       ...this.routes.user.register.verifyOtp,
       data: { otp },
-      headers: { Authorization: otpToken },
+      headers: { Authorization: token },
     });
   }
 
-  public async registerAndSave({ otpToken, ...data }: TRegister & { otpToken: string }) {
+  public async registerAndSave({ token, ...data }: TRegister & { token: string }) {
     return this.request({
       ...this.routes.user.register.saveUser,
       data,
-      headers: { Authorization: otpToken },
+      headers: { Authorization: token },
     });
   }
 

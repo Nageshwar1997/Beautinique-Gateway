@@ -11,6 +11,5 @@ export const getSessionUserController = async (req: AuthRequest, res: Response) 
   }
 
   const { message, statusCode, user } = await userService.getSessionUser(userId);
-
-  res.success(statusCode, message, user);
+  res.success(statusCode, message, { user });
 };

@@ -1,7 +1,6 @@
 import type { TLogin, TRegister, TRegisterEmail, TRegisterOtp } from '@beautinique/be-zod';
 import { authService } from '../../services';
 import type { Request, Response } from 'express';
-import { sanitizeToken } from '@beautinique/be-utils';
 import { AppError } from '@beautinique/be-classes';
 import {
   ACCESS_TOKEN_COOKIE_NAME,
@@ -19,15 +18,14 @@ import {
 
 export const registerSendOtpController = async (req: Request, res: Response) => {
   const body = req.body as TRegisterEmail;
-  const { message, statusCode, data } = await authService.registerSendOtp(body);
-  res.success(statusCode, message, { data });
+  const { message, statusCode, token } = await authService.registerSendOtp(body);
+  res.success(statusCode, message, { token });
 };
 
 export const registerResendOtpController = async (req: Request, res: Response) => {
-  const rawToken = req.get('Authorization') || '';
-  const otpToken = sanitizeToken(rawToken);
+  const token = req.get('Authorization') || '';
 
-  if (!rawToken || !otpToken) {
+  if (!token) {
     throw new AppError({
       message: 'Invalid or expired session',
       statusCode: 400,
@@ -35,16 +33,14 @@ export const registerResendOtpController = async (req: Request, res: Response) =
     });
   }
 
-  const { email } = req.body as TRegisterEmail;
-  const { message, statusCode, data } = await authService.registerResendOtp({ email, otpToken });
-  res.success(statusCode, message, { data });
+  const { message, statusCode, sendCount } = await authService.registerResendOtp(token);
+  res.success(statusCode, message, { sendCount });
 };
 
 export const registerVerifyOtpController = async (req: Request, res: Response) => {
-  const rawToken = req.get('Authorization') || '';
-  const otpToken = sanitizeToken(rawToken);
+  const token = req.get('Authorization') || '';
 
-  if (!rawToken || !otpToken) {
+  if (!token) {
     throw new AppError({
       message: 'Invalid or expired session',
       statusCode: 400,
@@ -53,15 +49,15 @@ export const registerVerifyOtpController = async (req: Request, res: Response) =
   }
 
   const { otp } = req.body as TRegisterOtp;
-  const { message, statusCode, data } = await authService.registerVerifyOtp({ otp, otpToken });
-  res.success(statusCode, message, { data });
+  const { message, statusCode } = await authService.registerVerifyOtp({ otp, token });
+
+  res.success(statusCode, message);
 };
 
 export const registerAndSaveController = async (req: Request, res: Response) => {
-  const rawToken = req.get('Authorization') || '';
-  const otpToken = sanitizeToken(rawToken);
+  const token = req.get('Authorization') || '';
 
-  if (!rawToken || !otpToken) {
+  if (!token) {
     throw new AppError({
       message: 'Invalid or expired session',
       statusCode: 400,
@@ -71,17 +67,14 @@ export const registerAndSaveController = async (req: Request, res: Response) => 
 
   const body = req.body as TRegister;
 
-  const { message, statusCode, user } = await authService.registerAndSave({
-    ...body,
-    otpToken,
-  });
+  const { message, statusCode, data: user } = await authService.registerAndSave({ ...body, token });
 
   const accessToken = generateAccessToken({ id: user._id, role: user.role });
   const refreshToken = generateRefreshToken({ id: user.id, role: user.role });
 
   setAuthCookies(res, accessToken, refreshToken);
 
-  res.success(statusCode, message);
+  res.success(statusCode, message, { user });
 };
 
 /* ================================ LOGIN CONTROLLERS ================================ */
@@ -89,9 +82,14 @@ export const registerAndSaveController = async (req: Request, res: Response) => 
 export const manualLoginController = async (req: Request, res: Response) => {
   const body = req.body as TLogin;
 
-  const { message, statusCode, data } = await authService.manualLogin(body);
+  const { message, statusCode, user } = await authService.manualLogin(body);
 
-  res.success(statusCode, message, { data });
+  const accessToken = generateAccessToken({ id: user._id, role: user.role });
+  const refreshToken = generateRefreshToken({ id: user.id, role: user.role });
+
+  setAuthCookies(res, accessToken, refreshToken);
+
+  res.success(statusCode, message, user);
 };
 
 export const googleRedirectController = async (_req: Request, res: Response) => {
