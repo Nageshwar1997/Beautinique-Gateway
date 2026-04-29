@@ -7,6 +7,8 @@ import type { NextFunction, Response } from 'express';
 export const authenticate = async (req: AuthRequest, _res: Response, next: NextFunction) => {
   const token = req.cookies?.accessToken;
 
+  console.log('req.cookies', req.cookies);
+
   if (!token) {
     throw new AppError({
       message: 'Access token missing',

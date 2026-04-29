@@ -7,8 +7,8 @@ class UserService extends ApiRequest {
 
   /* ================== GET METHODS ================== */
 
-  public getUserDetails(userId: string) {
-    return this.request({ ...this.routes.user.me, params: { userId } });
+  public getSessionUser(userId: string) {
+    return this.request({ ...this.routes.user.session, params: { userId } });
   }
 }
 

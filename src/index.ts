@@ -2,6 +2,7 @@ import 'dotenv/config';
 import path from 'path';
 import express, { type Request, type Response } from 'express';
 import { parse } from 'qs';
+import cookieParser from 'cookie-parser';
 import { envs } from './envs';
 import { CorsMiddleware, RequestMiddleware, ResponseMiddleware } from '@beautinique/be-middlewares';
 import { ORIGINS } from './constants';
@@ -15,17 +16,7 @@ const app = express();
 // 1. Assign requestId first (for tracing logs)
 app.use(RequestMiddleware.requestId);
 
-// 2. Body parsers & static files
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.resolve('public')));
-app.set('query parser', (str: string) => parse(str));
-
-// 3. Logger (logs all requests)
-app.use(requestLogger);
-
-// 4. Custom middlewares
-app.use(ResponseMiddleware.success);
+// 2. CORS (before anything that depends on request)
 app.use(
   CorsMiddleware.checkOrigin({
     origins: ORIGINS,
@@ -33,7 +24,23 @@ app.use(
   }),
 );
 
+// 3. Cookie parser
+app.use(cookieParser());
+
+// 4. Body parsers & static files
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.resolve('public')));
+app.set('query parser', (str: string) => parse(str));
+
+// 5. Logger (logs all requests)
+app.use(requestLogger);
+
+// 6. Custom response middleware
+app.use(ResponseMiddleware.success);
+
 // ----------------- ROUTES -----------------
+
 // Home Route
 app.get('/', (_: Request, res: Response) => res.success(200, 'Welcome to Beautinique Gateway!'));
 app.get('/gateway/health', (_: Request, res: Response) =>

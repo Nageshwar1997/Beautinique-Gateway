@@ -8,7 +8,12 @@ import {
   ACCESS_TOKEN_COOKIE_OPTIONS,
   CLIENT_OAUTH_REDIRECT_URL,
 } from '../../constants';
-import { generateAccessToken, verifyRefreshToken } from '@/utils';
+import {
+  generateAccessToken,
+  generateRefreshToken,
+  setAuthCookies,
+  verifyRefreshToken,
+} from '@/utils';
 
 /* ================================ REGISTER CONTROLLERS ================================ */
 
@@ -23,7 +28,11 @@ export const registerResendOtpController = async (req: Request, res: Response) =
   const otpToken = sanitizeToken(rawToken);
 
   if (!rawToken || !otpToken) {
-    throw new AppError({ message: 'Unauthorized', statusCode: 401, code: 'AUTH_ERROR' });
+    throw new AppError({
+      message: 'Invalid or expired session',
+      statusCode: 400,
+      code: 'AUTH_ERROR',
+    });
   }
 
   const { email } = req.body as TRegisterEmail;
@@ -36,7 +45,11 @@ export const registerVerifyOtpController = async (req: Request, res: Response) =
   const otpToken = sanitizeToken(rawToken);
 
   if (!rawToken || !otpToken) {
-    throw new AppError({ message: 'Unauthorized', statusCode: 401, code: 'AUTH_ERROR' });
+    throw new AppError({
+      message: 'Invalid or expired session',
+      statusCode: 400,
+      code: 'AUTH_ERROR',
+    });
   }
 
   const { otp } = req.body as TRegisterOtp;
@@ -49,13 +62,26 @@ export const registerAndSaveController = async (req: Request, res: Response) => 
   const otpToken = sanitizeToken(rawToken);
 
   if (!rawToken || !otpToken) {
-    throw new AppError({ message: 'Unauthorized', statusCode: 401, code: 'AUTH_ERROR' }); // NOTE - Don't change statusCode anyway, In frontend we handled logic base on it
+    throw new AppError({
+      message: 'Invalid or expired session',
+      statusCode: 400,
+      code: 'AUTH_ERROR',
+    });
   }
 
   const body = req.body as TRegister;
 
-  const { message, statusCode, data } = await authService.registerAndSave({ ...body, otpToken });
-  res.success(statusCode, message, { data });
+  const { message, statusCode, user } = await authService.registerAndSave({
+    ...body,
+    otpToken,
+  });
+
+  const accessToken = generateAccessToken({ id: user._id, role: user.role });
+  const refreshToken = generateRefreshToken({ id: user.id, role: user.role });
+
+  setAuthCookies(res, accessToken, refreshToken);
+
+  res.success(statusCode, message);
 };
 
 /* ================================ LOGIN CONTROLLERS ================================ */

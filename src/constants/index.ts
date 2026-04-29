@@ -31,9 +31,9 @@ export const API_ROUTES_AND_METHODS = {
       sendOtp: { method: 'POST', url: '/auth/register/send-otp' },
       resendOtp: { method: 'PATCH', url: '/auth/register/resend-otp' },
       verifyOtp: { method: 'POST', url: '/auth/register/verify-otp' },
-      saveUser: { method: 'POST', url: '/auth/register/save' },
+      saveUser: { method: 'POST', url: '/auth/register/save-user' },
     },
-    me: { method: 'GET', url: '/user/me' },
+    session: { method: 'GET', url: '/user/session' },
   },
 };
 
@@ -83,7 +83,7 @@ export const GATEWAY_METHODS_AND_PATHS = {
     },
     user: {
       base: '/user',
-      me: { method: 'get', path: '/me' },
+      session: { method: 'get', path: '/session' },
     },
   },
 } as const;
