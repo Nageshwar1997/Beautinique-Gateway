@@ -94,11 +94,12 @@ export const manualLoginController = async (req: Request, res: Response) => {
 
 export const googleRedirectController = async (_req: Request, res: Response) => {
   try {
-    const { data: callbackURL } = await authService.getGoogleRedirectUrl();
-    res.redirect(callbackURL);
+    const { url } = await authService.getGoogleRedirectUrl();
+
+    res.redirect(url);
   } catch (error) {
     res.redirect(
-      `${CLIENT_OAUTH_REDIRECT_URL}?error=${(error as Error | AppError).message || 'Something went wrong!'}`,
+      `${CLIENT_OAUTH_REDIRECT_URL}?error=true&message=${(error as Error | AppError).message || 'Something went wrong!'}`,
     );
   }
 };
@@ -115,23 +116,29 @@ export const googleCallbackController = async (req: Request, res: Response) => {
   }
 
   try {
-    const { data: token } = await authService.handleGoogleCallback(String(code));
+    const { user } = await authService.handleGoogleCallback(String(code));
 
-    res.redirect(`${CLIENT_OAUTH_REDIRECT_URL}?token=${token}`);
+    const accessToken = generateAccessToken({ id: user._id, role: user.role });
+    const refreshToken = generateRefreshToken({ id: user.id, role: user.role });
+
+    setAuthCookies(res, accessToken, refreshToken);
+
+    res.redirect(`${CLIENT_OAUTH_REDIRECT_URL}?success=true`);
   } catch (error) {
     res.redirect(
-      `${CLIENT_OAUTH_REDIRECT_URL}?error=${(error as Error | AppError).message || 'Something went wrong!'}`,
+      `${CLIENT_OAUTH_REDIRECT_URL}?error=true&message=${(error as Error | AppError).message || 'Something went wrong!'}`,
     );
   }
 };
 
 export const linkedinRedirectController = async (_req: Request, res: Response) => {
   try {
-    const { data: callbackURL } = await authService.getLinkedinRedirectUrl();
-    res.redirect(callbackURL);
+    const { url } = await authService.getLinkedinRedirectUrl();
+
+    res.redirect(url);
   } catch (error) {
     res.redirect(
-      `${CLIENT_OAUTH_REDIRECT_URL}?error=${(error as Error | AppError).message || 'Something went wrong!'}`,
+      `${CLIENT_OAUTH_REDIRECT_URL}?error=true&message=${(error as Error | AppError).message || 'Something went wrong!'}`,
     );
   }
 };
@@ -148,23 +155,29 @@ export const linkedinCallbackController = async (req: Request, res: Response) =>
   }
 
   try {
-    const { data: token } = await authService.handleLinkedinCallback(String(code));
+    const { user } = await authService.handleLinkedinCallback(String(code));
 
-    res.redirect(`${CLIENT_OAUTH_REDIRECT_URL}?token=${token}`);
+    const accessToken = generateAccessToken({ id: user._id, role: user.role });
+    const refreshToken = generateRefreshToken({ id: user.id, role: user.role });
+
+    setAuthCookies(res, accessToken, refreshToken);
+
+    res.redirect(`${CLIENT_OAUTH_REDIRECT_URL}?success=true`);
   } catch (error) {
     res.redirect(
-      `${CLIENT_OAUTH_REDIRECT_URL}?error=${(error as Error | AppError).message || 'Something went wrong!'}`,
+      `${CLIENT_OAUTH_REDIRECT_URL}?error=true&message=${(error as Error | AppError).message || 'Something went wrong!'}`,
     );
   }
 };
 
 export const githubRedirectController = async (_req: Request, res: Response) => {
   try {
-    const { data: callbackURL } = await authService.getGithubRedirectUrl();
-    res.redirect(callbackURL);
+    const { url } = await authService.getGithubRedirectUrl();
+
+    res.redirect(url);
   } catch (error) {
     res.redirect(
-      `${CLIENT_OAUTH_REDIRECT_URL}?error=${(error as Error | AppError).message || 'Something went wrong!'}`,
+      `${CLIENT_OAUTH_REDIRECT_URL}?error=true&message=${(error as Error | AppError).message || 'Something went wrong!'}`,
     );
   }
 };
@@ -181,12 +194,17 @@ export const githubCallbackController = async (req: Request, res: Response) => {
   }
 
   try {
-    const { data: token } = await authService.handleGithubCallback(String(code));
+    const { user } = await authService.handleGithubCallback(String(code));
 
-    res.redirect(`${CLIENT_OAUTH_REDIRECT_URL}?token=${token}`);
+    const accessToken = generateAccessToken({ id: user._id, role: user.role });
+    const refreshToken = generateRefreshToken({ id: user.id, role: user.role });
+
+    setAuthCookies(res, accessToken, refreshToken);
+
+    res.redirect(`${CLIENT_OAUTH_REDIRECT_URL}?success=true`);
   } catch (error) {
     res.redirect(
-      `${CLIENT_OAUTH_REDIRECT_URL}?error=${(error as Error | AppError).message || 'Something went wrong!'}`,
+      `${CLIENT_OAUTH_REDIRECT_URL}?error=true&message=${(error as Error | AppError).message || 'Something went wrong!'}`,
     );
   }
 };
