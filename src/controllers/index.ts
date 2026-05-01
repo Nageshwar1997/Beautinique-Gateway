@@ -2,7 +2,7 @@ import { AppError } from '@beautinique/be-classes';
 import type { Request, Response } from 'express';
 import { envs } from '../envs';
 
-export const healthController = async (_req: Request, res: Response) => {
+export const wakeUpController = async (_req: Request, res: Response) => {
   try {
     const services = envs.url.service;
 

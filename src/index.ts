@@ -7,7 +7,7 @@ import { parse } from 'qs';
 import { CorsMiddleware, RequestMiddleware, ResponseMiddleware } from '@beautinique/be-middlewares';
 
 import { ORIGINS } from './constants';
-import { healthController } from './controllers';
+import { wakeUpController } from './controllers';
 import { envs } from './envs';
 import { errorLogger, logger, requestLogger } from './middlewares';
 import { router } from './routes';
@@ -46,7 +46,10 @@ app.use(ResponseMiddleware.success);
 
 // Home Route
 app.get('/', (_: Request, res: Response) => res.success(200, 'Welcome to Beautinique Gateway!'));
-app.get('/health', ResponseMiddleware.tryCatch(healthController));
+app.get('/health', (_: Request, res: Response) =>
+  res.success(200, 'Beautinique Gateway is healthy'),
+);
+app.get('/wake-up', ResponseMiddleware.tryCatch(wakeUpController));
 
 // API Routes
 app.use('/gateway/api/v1', router);
@@ -68,3 +71,4 @@ app.use(ResponseMiddleware.error({ isDev: envs.is_dev }));
 })();
 
 export { app };
+
