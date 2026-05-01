@@ -45,7 +45,9 @@ app.use(ResponseMiddleware.success);
 
 // Home Route
 app.get('/', (_: Request, res: Response) => res.success(200, 'Welcome to Beautinique Gateway!'));
-app.get('/gateway/health', (_: Request, res: Response) => res.status(200).send('OK'));
+app.get('/health', (_: Request, res: Response) =>
+  res.success(200, 'Beautinique Gateway is healthy'),
+);
 
 // API Routes
 app.use('/gateway/api/v1', router);
