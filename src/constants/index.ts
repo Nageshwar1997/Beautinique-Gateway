@@ -39,6 +39,7 @@ export const API_ROUTES_AND_METHODS = {
 
 export const GATEWAY_METHODS_AND_PATHS = {
   user: {
+    base: '/user-service',
     auth: {
       base: '/auth',
       login: {
