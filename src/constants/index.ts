@@ -28,10 +28,10 @@ export const API_ROUTES_AND_METHODS = {
     logout: { method: 'DELETE', url: '/auth/logout/:userId' },
     password: {
       forgot: {
-        sendOtp: { method: 'POST', url: '/auth/password-forgot/send-otp' },
-        resendOtp: { method: 'PATCH', url: '/auth/password-forgot/resend-otp' },
-        verifyOtp: { method: 'POST', url: '/auth/password-forgot/verify-otp' },
-        save: { method: 'POST', url: '/auth/password-forgot/save' },
+        sendOtp: { method: 'POST', url: '/auth/password/forgot-send-otp' },
+        resendOtp: { method: 'PATCH', url: '/auth/password/forgot-resend-otp' },
+        verifyOtp: { method: 'POST', url: '/auth/password/forgot-verify-otp' },
+        save: { method: 'POST', url: '/auth/password/forgot-save' },
       },
     },
     register: {
