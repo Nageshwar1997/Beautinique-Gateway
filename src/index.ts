@@ -52,7 +52,7 @@ app.get('/health', (_: Request, res: Response) =>
 app.get('/wake-up', wakeUpController);
 
 // API Routes
-app.use('/gateway/api/v1', router);
+app.use('/api/v1', router);
 
 // ----------------- ERROR HANDLING -----------------
 app.use(ResponseMiddleware.notFound);

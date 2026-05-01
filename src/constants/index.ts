@@ -26,7 +26,14 @@ export const API_ROUTES_AND_METHODS = {
       },
     },
     logout: { method: 'DELETE', url: '/auth/logout/:userId' },
-    password: {},
+    password: {
+      forgot: {
+        sendOtp: { method: 'POST', url: '/auth/password-forgot/send-otp' },
+        resendOtp: { method: 'PATCH', url: '/auth/password-forgot/resend-otp' },
+        verifyOtp: { method: 'POST', url: '/auth/password-forgot/verify-otp' },
+        save: { method: 'POST', url: '/auth/password-forgot/save' },
+      },
+    },
     register: {
       sendOtp: { method: 'POST', url: '/auth/register/send-otp' },
       resendOtp: { method: 'PATCH', url: '/auth/register/resend-otp' },
@@ -75,6 +82,12 @@ export const GATEWAY_METHODS_AND_PATHS = {
       },
       password: {
         base: '/password',
+        forgot: {
+          sendOtp: { path: '/forgot-send-otp', method: 'post' },
+          resendOtp: { path: '/forgot-resend-otp', method: 'patch' },
+          verifyOtp: { path: '/forgot-verify-otp', method: 'post' },
+          save: { path: '/forgot-save', method: 'post' },
+        },
       },
       token: {
         base: '/token',

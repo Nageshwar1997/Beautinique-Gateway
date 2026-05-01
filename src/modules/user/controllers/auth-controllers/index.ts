@@ -1,18 +1,24 @@
-import type { TLogin, TRegister, TRegisterEmail, TRegisterOtp } from '@beautinique/be-zod';
-import { authService } from '../../services';
-import type { Request, Response } from 'express';
 import { AppError } from '@beautinique/be-classes';
-import {
-  ACCESS_TOKEN_COOKIE_NAME,
-  ACCESS_TOKEN_COOKIE_OPTIONS,
-  CLIENT_OAUTH_REDIRECT_URL,
-} from '../../constants';
+import type {
+  TLogin,
+  TPasswords,
+  TRegister,
+  TRegisterEmail,
+  TRegisterOtp,
+} from '@beautinique/be-zod';
+import type { Request, Response } from 'express';
 import {
   generateAccessToken,
   generateRefreshToken,
   setAuthCookies,
   verifyRefreshToken,
 } from '../../../../utils';
+import {
+  ACCESS_TOKEN_COOKIE_NAME,
+  ACCESS_TOKEN_COOKIE_OPTIONS,
+  CLIENT_OAUTH_REDIRECT_URL,
+} from '../../constants';
+import { authService } from '../../services';
 
 /* ================================ REGISTER CONTROLLERS ================================ */
 
@@ -208,6 +214,71 @@ export const githubCallbackController = async (req: Request, res: Response) => {
     );
   }
 };
+
+/* ================================ FORGOT PASSWORD CONTROLLERS ================================ */
+
+export const forgotPasswordSendOtpController = async (req: Request, res: Response) => {
+  const body = req.body as TRegisterEmail;
+  const { message, statusCode, token } = await authService.forgotPasswordSendOtp(body);
+  res.success(statusCode, message, { token });
+};
+
+export const forgotPasswordResendOtpController = async (req: Request, res: Response) => {
+  const token = req.get('Authorization') || '';
+
+  if (!token) {
+    throw new AppError({
+      message: 'Invalid or expired session',
+      statusCode: 400,
+      code: 'AUTH_ERROR',
+    });
+  }
+
+  const { message, statusCode, sendCount } = await authService.forgotPasswordResendOtp(token);
+  res.success(statusCode, message, { sendCount });
+};
+
+export const forgotPasswordVerifyOtpController = async (req: Request, res: Response) => {
+  const token = req.get('Authorization') || '';
+
+  if (!token) {
+    throw new AppError({
+      message: 'Invalid or expired session',
+      statusCode: 400,
+      code: 'AUTH_ERROR',
+    });
+  }
+
+  const { otp } = req.body as TRegisterOtp;
+  const { message, statusCode } = await authService.forgotPasswordVerifyOtp({ otp, token });
+
+  res.success(statusCode, message);
+};
+
+export const forgotPasswordSaveController = async (req: Request, res: Response) => {
+  const token = req.get('Authorization') || '';
+
+  if (!token) {
+    throw new AppError({
+      message: 'Invalid or expired session',
+      statusCode: 400,
+      code: 'AUTH_ERROR',
+    });
+  }
+
+  const body = req.body as TPasswords;
+
+  const { message, statusCode, user } = await authService.forgotPasswordSave({ ...body, token });
+
+  const accessToken = generateAccessToken({ id: user._id, role: user.role });
+  const refreshToken = generateRefreshToken({ id: user.id, role: user.role });
+
+  setAuthCookies(res, accessToken, refreshToken);
+
+  res.success(statusCode, message, { user });
+};
+
+/* ================================ REFRESH CONTROLLERS ================================ */
 
 export const refreshAccessTokenController = async (req: Request, res: Response) => {
   const refreshToken = req.cookies?.refreshToken;
