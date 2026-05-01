@@ -1,13 +1,13 @@
-import 'dotenv/config';
-import path from 'path';
-import express, { type Request, type Response } from 'express';
-import { parse } from 'qs';
 import cookieParser from 'cookie-parser';
+import 'dotenv/config';
+import express, { type Request, type Response } from 'express';
+import path from 'path';
+import { parse } from 'qs';
 
 import { CorsMiddleware, RequestMiddleware, ResponseMiddleware } from '@beautinique/be-middlewares';
 
-import { envs } from './envs';
 import { ORIGINS } from './constants';
+import { envs } from './envs';
 import { errorLogger, logger, requestLogger } from './middlewares';
 import { router } from './routes';
 
@@ -45,9 +45,7 @@ app.use(ResponseMiddleware.success);
 
 // Home Route
 app.get('/', (_: Request, res: Response) => res.success(200, 'Welcome to Beautinique Gateway!'));
-app.get('/gateway/health', (_: Request, res: Response) =>
-  res.success(200, 'Beautinique Gateway is healthy'),
-);
+app.get('/gateway/health', (_: Request, res: Response) => res.status(200).send('OK'));
 
 // API Routes
 app.use('/gateway/api/v1', router);
