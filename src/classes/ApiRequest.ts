@@ -1,5 +1,5 @@
 import axios, { AxiosError, type AxiosInstance, type AxiosRequestConfig } from 'axios';
-import { API_ROUTES_AND_METHODS, SERVICES_BASE_URLS } from '@/constants';
+import { API_ROUTES_AND_METHODS, SERVICES_BASE_URLS } from '../constants';
 import { AppError, type AppSuccess } from '@beautinique/be-classes';
 
 export class ApiRequest {

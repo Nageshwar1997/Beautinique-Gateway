@@ -1,4 +1,4 @@
-import { ApiRequest } from '@/classes';
+import { ApiRequest } from "../../../classes";
 
 class UserService extends ApiRequest {
   constructor() {

@@ -1,5 +1,5 @@
 import type { TLogin, TRegister, TRegisterEmail, TRegisterOtp } from '@beautinique/be-zod';
-import { ApiRequest } from '@/classes';
+import { ApiRequest } from '../../../classes';
 
 class AuthService extends ApiRequest {
   constructor() {

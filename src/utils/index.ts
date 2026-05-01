@@ -1,11 +1,11 @@
-import { envs } from '@/envs';
+import { envs } from '../envs';
 import {
   ACCESS_TOKEN_COOKIE_NAME,
   ACCESS_TOKEN_COOKIE_OPTIONS,
   REFRESH_TOKEN_COOKIE_NAME,
   REFRESH_TOKEN_COOKIE_OPTIONS,
-} from '@/modules/user/constants';
-import type { IJwtPayload } from '@/types';
+} from '../modules/user/constants';
+import type { IJwtPayload } from '../types';
 import type { Response } from 'express';
 import jwt from 'jsonwebtoken';
 

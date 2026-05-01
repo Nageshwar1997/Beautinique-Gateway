@@ -12,7 +12,7 @@ import {
   generateRefreshToken,
   setAuthCookies,
   verifyRefreshToken,
-} from '@/utils';
+} from '../../../../utils';
 
 /* ================================ REGISTER CONTROLLERS ================================ */
 

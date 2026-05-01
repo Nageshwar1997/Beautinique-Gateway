@@ -1,7 +1,9 @@
-import { GATEWAY_METHODS_AND_PATHS } from '@/constants';
 import { Router } from 'express';
-import { refreshAccessTokenController } from '../../controllers';
+
 import { ResponseMiddleware } from '@beautinique/be-middlewares';
+
+import { refreshAccessTokenController } from '../../controllers';
+import { GATEWAY_METHODS_AND_PATHS } from '../../../../constants';
 
 export const tokenRouter = Router();
 

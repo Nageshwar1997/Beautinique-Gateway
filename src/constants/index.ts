@@ -1,4 +1,4 @@
-import { envs } from '@/envs';
+import { envs } from '../envs';
 
 export const SERVICES_BASE_URLS = {
   'user-service': `${envs.url.service.user}/user-service/api/v1`,

@@ -3,8 +3,10 @@ import path from 'path';
 import express, { type Request, type Response } from 'express';
 import { parse } from 'qs';
 import cookieParser from 'cookie-parser';
-import { envs } from './envs';
+
 import { CorsMiddleware, RequestMiddleware, ResponseMiddleware } from '@beautinique/be-middlewares';
+
+import { envs } from './envs';
 import { ORIGINS } from './constants';
 import { errorLogger, logger, requestLogger } from './middlewares';
 import { router } from './routes';

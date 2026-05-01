@@ -1,5 +1,6 @@
-import type { TRole } from '@beautinique/be-constants';
 import type { Request } from 'express';
+
+import type { TRole } from '@beautinique/be-constants';
 
 export interface IJwtPayload {
   id: string;

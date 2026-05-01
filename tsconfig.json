@@ -1,15 +1,11 @@
 {
   "compilerOptions": {
     "target": "es2023",
-    "module": "commonjs",
+    "module": "esnext",
     "moduleResolution": "Bundler",
 
     "rootDir": "./src",
     "outDir": "./dist",
-
-    "paths": {
-      "@/*": ["./src/*"]
-    },
 
     "types": ["node"],
 

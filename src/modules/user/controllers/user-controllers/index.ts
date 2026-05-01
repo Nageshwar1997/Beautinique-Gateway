@@ -1,8 +1,8 @@
 import type { Response } from 'express';
-import { userService } from '../../services/UserService';
-import type { AuthRequest } from '@/types';
 import { AppError } from '@beautinique/be-classes';
 
+import type { AuthRequest } from '../../../../types';
+import { userService } from '../../services/UserService';
 export const getSessionUserController = async (req: AuthRequest, res: Response) => {
   const userId = req.user?.id;
 

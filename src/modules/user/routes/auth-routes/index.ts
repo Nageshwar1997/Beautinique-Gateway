@@ -1,9 +1,10 @@
 import { Router } from 'express';
+
 import { registerRouter } from './register.route';
 import { loginRouter } from './login.route';
 import { passwordRouter } from './password.route';
-import { GATEWAY_METHODS_AND_PATHS } from '@/constants';
 import { tokenRouter } from './token.route';
+import { GATEWAY_METHODS_AND_PATHS } from '../../../../constants';
 
 export const authRouter = Router();
 

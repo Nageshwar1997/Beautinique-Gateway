@@ -1,6 +1,8 @@
-import { GATEWAY_METHODS_AND_PATHS } from '@/constants';
-import { RequestMiddleware, ResponseMiddleware, ZodMiddleware } from '@beautinique/be-middlewares';
 import { Router } from 'express';
+
+import { RequestMiddleware, ResponseMiddleware, ZodMiddleware } from '@beautinique/be-middlewares';
+import { loginSchema } from '@beautinique/be-zod';
+
 import {
   githubCallbackController,
   githubRedirectController,
@@ -10,7 +12,8 @@ import {
   linkedinRedirectController,
   manualLoginController,
 } from '../../controllers';
-import { loginSchema } from '@beautinique/be-zod';
+
+import { GATEWAY_METHODS_AND_PATHS } from '../../../../constants';
 
 export const loginRouter = Router();
 

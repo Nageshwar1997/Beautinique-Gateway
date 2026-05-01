@@ -1,13 +1,11 @@
-import type { AuthRequest } from '@/types';
-import { verifyAccessToken } from '@/utils';
+import type { AuthRequest } from '../types';
+import { verifyAccessToken } from '../utils';
 import { AppError } from '@beautinique/be-classes';
 import type { TRole } from '@beautinique/be-constants';
 import type { NextFunction, Response } from 'express';
 
 export const authenticate = async (req: AuthRequest, _res: Response, next: NextFunction) => {
   const token = req.cookies?.accessToken;
-
-  console.log('req.cookies', req.cookies);
 
   if (!token) {
     throw new AppError({
