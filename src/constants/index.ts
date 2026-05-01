@@ -1,7 +1,7 @@
 import { envs } from '../envs';
 
 export const SERVICES_BASE_URLS = {
-  'user-service': `${envs.url.service.user}/user-service/api/v1`,
+  'user': `${envs.url.service.user}/api/v1`,
 } as const;
 
 export const ORIGINS = Object.values(envs.url.frontend);
@@ -39,7 +39,6 @@ export const API_ROUTES_AND_METHODS = {
 
 export const GATEWAY_METHODS_AND_PATHS = {
   user: {
-    base: '/user-service',
     auth: {
       base: '/auth',
       login: {
