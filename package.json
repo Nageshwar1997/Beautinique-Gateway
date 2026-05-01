@@ -13,6 +13,14 @@
     "clean": "rmdir /s /q dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nageshwar1997/Beautinique-Gateway.git"
+  },
+  "homepage": "https://github.com/Nageshwar1997/Beautinique-Gateway.git#readme",
+  "bugs": {
+    "url": "https://github.com/Nageshwar1997/Beautinique-Gateway.git/issues"
+  },
   "keywords": [],
   "author": "Nageshwar Pawar",
   "license": "ISC",
