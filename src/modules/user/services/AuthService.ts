@@ -3,7 +3,7 @@ import { ApiRequest } from '../../../classes';
 
 class AuthService extends ApiRequest {
   constructor() {
-    super('user');
+    super('user-service');
   }
 
   /* ================== REGISTER METHODS ================== */

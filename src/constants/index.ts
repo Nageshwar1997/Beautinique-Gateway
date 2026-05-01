@@ -1,7 +1,7 @@
 import { envs } from '../envs';
 
 export const SERVICES_BASE_URLS = {
-  'user': `${envs.url.service.user}/api/v1`,
+  'user-service': `${envs.url.service.user}/api/v1`,
 } as const;
 
 export const ORIGINS = Object.values(envs.url.frontend);

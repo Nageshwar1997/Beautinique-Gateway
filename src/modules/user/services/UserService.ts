@@ -2,7 +2,7 @@ import { ApiRequest } from "../../../classes";
 
 class UserService extends ApiRequest {
   constructor() {
-    super('user');
+    super('user-service');
   }
 
   /* ================== GET METHODS ================== */
