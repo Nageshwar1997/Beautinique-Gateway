@@ -49,7 +49,7 @@ app.get('/', (_: Request, res: Response) => res.success(200, 'Welcome to Beautin
 app.get('/health', (_: Request, res: Response) =>
   res.success(200, 'Beautinique Gateway is healthy'),
 );
-app.get('/wake-up', ResponseMiddleware.tryCatch(wakeUpController));
+app.get('/wake-up', wakeUpController);
 
 // API Routes
 app.use('/gateway/api/v1', router);
@@ -71,4 +71,3 @@ app.use(ResponseMiddleware.error({ isDev: envs.is_dev }));
 })();
 
 export { app };
-

@@ -1,4 +1,3 @@
-import { AppError } from '@beautinique/be-classes';
 import type { Request, Response } from 'express';
 import { envs } from '../envs';
 
@@ -22,16 +21,25 @@ export const wakeUpController = async (_req: Request, res: Response) => {
     );
 
     const allUp = formatted.every((s) => s.status === 'UP');
-    return res.success(allUp ? 200 : 500, 'Beautinique Gateway is healthy', {
+    const anyDown = formatted.some((s) => s.status === 'DOWN');
+
+    let overallStatus = 'UP';
+
+    if (!allUp && anyDown) {
+      overallStatus = 'DEGRADED';
+    }
+
+    res.status(200).json({
+      status: overallStatus,
       gateway: 'UP',
       services: formatted,
     });
   } catch (err) {
-    throw new AppError({
-      message: 'Gateway is down',
-      statusCode: 500,
-      code: 'INTERNAL_ERROR',
-      globalErrors: [(err as Error).message || 'Something went wrong!'],
+    res.status(500).json({
+      status: 'DOWN',
+      gateway: 'DOWN',
+      services: [],
+      error: (err as Error).message || 'Something went wrong!',
     });
   }
 };
