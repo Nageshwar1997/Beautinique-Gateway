@@ -35,11 +35,7 @@ export const registerResendOtpController = async (req: Request, res: Response) =
   const token = req.get('Authorization') || '';
 
   if (!token) {
-    throw new AppError({
-      message: 'Invalid or expired session',
-      statusCode: 400,
-      code: 'AUTH_ERROR',
-    });
+    throw new AppError({ message: 'Invalid or expired session', code: 'BAD_REQUEST' });
   }
 
   const { message, statusCode, sendCount } = await authService.registerResendOtp(token);
@@ -50,11 +46,7 @@ export const registerVerifyOtpController = async (req: Request, res: Response) =
   const token = req.get('Authorization') || '';
 
   if (!token) {
-    throw new AppError({
-      message: 'Invalid or expired session',
-      statusCode: 400,
-      code: 'AUTH_ERROR',
-    });
+    throw new AppError({ message: 'Invalid or expired session', code: 'BAD_REQUEST' });
   }
 
   const { otp } = req.body as TOtp;
@@ -67,11 +59,7 @@ export const registerAndSaveController = async (req: Request, res: Response) => 
   const token = req.get('Authorization') || '';
 
   if (!token) {
-    throw new AppError({
-      message: 'Invalid or expired session',
-      statusCode: 400,
-      code: 'AUTH_ERROR',
-    });
+    throw new AppError({ message: 'Invalid or expired session', code: 'BAD_REQUEST' });
   }
 
   const body = req.body as TRegister;
@@ -117,11 +105,7 @@ export const googleCallbackController = async (req: Request, res: Response) => {
   const { code } = req.query;
 
   if (!code) {
-    throw new AppError({
-      message: 'No code returned from Google',
-      code: 'VALIDATION_ERROR',
-      statusCode: 400,
-    });
+    throw new AppError({ message: 'No code returned from Google', code: 'BAD_REQUEST' });
   }
 
   try {
@@ -156,11 +140,7 @@ export const linkedinCallbackController = async (req: Request, res: Response) =>
   const { code } = req.query;
 
   if (!code) {
-    throw new AppError({
-      message: 'No code returned from Linkedin',
-      code: 'VALIDATION_ERROR',
-      statusCode: 400,
-    });
+    throw new AppError({ message: 'No code returned from Linkedin', code: 'BAD_REQUEST' });
   }
 
   try {
@@ -195,11 +175,7 @@ export const githubCallbackController = async (req: Request, res: Response) => {
   const { code } = req.query;
 
   if (!code) {
-    throw new AppError({
-      message: 'No code returned from Github',
-      code: 'VALIDATION_ERROR',
-      statusCode: 400,
-    });
+    throw new AppError({ message: 'No code returned from Github', code: 'BAD_REQUEST' });
   }
 
   try {
@@ -230,11 +206,7 @@ export const forgotPasswordResendOtpController = async (req: Request, res: Respo
   const token = req.get('Authorization') || '';
 
   if (!token) {
-    throw new AppError({
-      message: 'Invalid or expired session',
-      statusCode: 400,
-      code: 'AUTH_ERROR',
-    });
+    throw new AppError({ message: 'Invalid or expired session', code: 'BAD_REQUEST' });
   }
 
   const { message, statusCode, sendCount } = await authService.forgotPasswordResendOtp(token);
@@ -245,11 +217,7 @@ export const forgotPasswordVerifyOtpController = async (req: Request, res: Respo
   const token = req.get('Authorization') || '';
 
   if (!token) {
-    throw new AppError({
-      message: 'Invalid or expired session',
-      statusCode: 400,
-      code: 'AUTH_ERROR',
-    });
+    throw new AppError({ message: 'Invalid or expired session', code: 'BAD_REQUEST' });
   }
 
   const { otp } = req.body as TOtp;
@@ -262,11 +230,7 @@ export const forgotPasswordSaveController = async (req: Request, res: Response) 
   const token = req.get('Authorization') || '';
 
   if (!token) {
-    throw new AppError({
-      message: 'Invalid or expired session',
-      statusCode: 400,
-      code: 'AUTH_ERROR',
-    });
+    throw new AppError({ message: 'Invalid or expired session', code: 'BAD_REQUEST' });
   }
 
   const body = req.body as TPasswords;
@@ -319,7 +283,7 @@ export const refreshAccessTokenController = async (req: Request, res: Response) 
   const refreshToken = req.cookies?.refreshToken;
 
   if (!refreshToken) {
-    throw new AppError({ message: 'Refresh token missing', statusCode: 401 });
+    throw new AppError({ message: 'Refresh token missing', code: 'AUTHENTICATION_ERROR' });
   }
 
   const { id, role } = verifyRefreshToken(refreshToken);

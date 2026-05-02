@@ -1,6 +1,6 @@
+import { AppError, type AppSuccess } from '@beautinique/be-classes';
 import axios, { AxiosError, type AxiosInstance, type AxiosRequestConfig } from 'axios';
 import { API_ROUTES_AND_METHODS, SERVICES_BASE_URLS } from '../constants';
-import { AppError, type AppSuccess } from '@beautinique/be-classes';
 
 export class ApiRequest {
   private instance: AxiosInstance;
@@ -26,13 +26,9 @@ export class ApiRequest {
         throw new AppError({ message, globalErrors, fieldErrors, statusCode, code });
       }
       if (error instanceof Error) {
-        throw new AppError({ message: error.message, statusCode: 500, code: 'INTERNAL_ERROR' });
+        throw new AppError({ message: error.message, code: 'INTERNAL_SERVER_ERROR' });
       }
-      throw new AppError({
-        message: 'Something went wrong!',
-        statusCode: 500,
-        code: 'INTERNAL_ERROR',
-      });
+      throw new AppError({ message: 'Something went wrong!', code: 'INTERNAL_SERVER_ERROR' });
     }
   };
 }
