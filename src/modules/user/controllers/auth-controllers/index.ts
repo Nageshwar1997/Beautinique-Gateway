@@ -1,11 +1,5 @@
 import { AppError } from '@beautinique/be-classes';
-import type {
-  TLogin,
-  TPasswords,
-  TRegister,
-  TRegisterEmail,
-  TRegisterOtp,
-} from '@beautinique/be-zod';
+import type { TEmail, TLogin, TOtp, TPasswords, TRegister } from '@beautinique/be-zod';
 import type { Request, Response } from 'express';
 import {
   generateAccessToken,
@@ -23,7 +17,7 @@ import { authService } from '../../services';
 /* ================================ REGISTER CONTROLLERS ================================ */
 
 export const registerSendOtpController = async (req: Request, res: Response) => {
-  const body = req.body as TRegisterEmail;
+  const body = req.body as TEmail;
   const { message, statusCode, token } = await authService.registerSendOtp(body);
   res.success(statusCode, message, { token });
 };
@@ -54,7 +48,7 @@ export const registerVerifyOtpController = async (req: Request, res: Response) =
     });
   }
 
-  const { otp } = req.body as TRegisterOtp;
+  const { otp } = req.body as TOtp;
   const { message, statusCode } = await authService.registerVerifyOtp({ otp, token });
 
   res.success(statusCode, message);
@@ -218,7 +212,7 @@ export const githubCallbackController = async (req: Request, res: Response) => {
 /* ================================ FORGOT PASSWORD CONTROLLERS ================================ */
 
 export const forgotPasswordSendOtpController = async (req: Request, res: Response) => {
-  const body = req.body as TRegisterEmail;
+  const body = req.body as TEmail;
   const { message, statusCode, token } = await authService.forgotPasswordSendOtp(body);
   res.success(statusCode, message, { token });
 };
@@ -249,7 +243,7 @@ export const forgotPasswordVerifyOtpController = async (req: Request, res: Respo
     });
   }
 
-  const { otp } = req.body as TRegisterOtp;
+  const { otp } = req.body as TOtp;
   const { message, statusCode } = await authService.forgotPasswordVerifyOtp({ otp, token });
 
   res.success(statusCode, message);
@@ -277,6 +271,10 @@ export const forgotPasswordSaveController = async (req: Request, res: Response) 
 
   res.success(statusCode, message, { user });
 };
+
+/* ================================ CHANGE PASSWORD CONTROLLERS ================================ */
+
+/* ================================ SET PASSWORD CONTROLLERS ================================ */
 
 /* ================================ REFRESH CONTROLLERS ================================ */
 

@@ -1,10 +1,4 @@
-import type {
-  TLogin,
-  TPasswords,
-  TRegister,
-  TRegisterEmail,
-  TRegisterOtp,
-} from '@beautinique/be-zod';
+import type { TEmail, TLogin, TOtp, TPasswords, TRegister } from '@beautinique/be-zod';
 import { ApiRequest } from '../../../classes';
 
 class AuthService extends ApiRequest {
@@ -13,7 +7,7 @@ class AuthService extends ApiRequest {
   }
 
   /* ================== REGISTER METHODS ================== */
-  public async registerSendOtp(data: TRegisterEmail) {
+  public async registerSendOtp(data: TEmail) {
     return this.request({ ...this.routes.user.register.sendOtp, data });
   }
 
@@ -24,7 +18,7 @@ class AuthService extends ApiRequest {
     });
   }
 
-  public async registerVerifyOtp({ otp, token }: TRegisterOtp & { token: string }) {
+  public async registerVerifyOtp({ otp, token }: TOtp & { token: string }) {
     return this.request({
       ...this.routes.user.register.verifyOtp,
       data: { otp },
@@ -79,7 +73,7 @@ class AuthService extends ApiRequest {
   }
 
   /* ================== PASSWORD METHODS ================== */
-  public async forgotPasswordSendOtp(data: TRegisterEmail) {
+  public async forgotPasswordSendOtp(data: TEmail) {
     return this.request({ ...this.routes.user.password.forgot.sendOtp, data });
   }
 
@@ -90,7 +84,7 @@ class AuthService extends ApiRequest {
     });
   }
 
-  public async forgotPasswordVerifyOtp({ otp, token }: TRegisterOtp & { token: string }) {
+  public async forgotPasswordVerifyOtp({ otp, token }: TOtp & { token: string }) {
     return this.request({
       ...this.routes.user.password.forgot.verifyOtp,
       data: { otp },

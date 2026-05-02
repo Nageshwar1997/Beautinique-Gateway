@@ -1,15 +1,15 @@
 import { Router } from 'express';
 
 import { RequestMiddleware, ResponseMiddleware, ZodMiddleware } from '@beautinique/be-middlewares';
-import { registerEmailSchema, registerOtpSchema, registerSchema } from '@beautinique/be-zod';
+import { emailSchema, otpSchema, registerSchema } from '@beautinique/be-zod';
 
+import { GATEWAY_METHODS_AND_PATHS } from '../../../../constants';
 import {
   registerAndSaveController,
   registerResendOtpController,
   registerSendOtpController,
   registerVerifyOtpController,
 } from '../../controllers';
-import { GATEWAY_METHODS_AND_PATHS } from '../../../../constants';
 
 export const registerRouter = Router();
 
@@ -18,7 +18,7 @@ const { resendOtp, saveUser, sendOtp, verifyOtp } = GATEWAY_METHODS_AND_PATHS.us
 registerRouter[sendOtp.method](
   sendOtp.path,
   RequestMiddleware.emptyRequest({ body: true }),
-  ZodMiddleware.validateSchema(registerEmailSchema),
+  ZodMiddleware.validateSchema(emailSchema),
   ResponseMiddleware.tryCatch(registerSendOtpController),
 );
 
@@ -30,7 +30,7 @@ registerRouter[resendOtp.method](
 registerRouter[verifyOtp.method](
   verifyOtp.path,
   RequestMiddleware.emptyRequest({ body: true }),
-  ZodMiddleware.validateSchema(registerOtpSchema),
+  ZodMiddleware.validateSchema(otpSchema),
   ResponseMiddleware.tryCatch(registerVerifyOtpController),
 );
 
