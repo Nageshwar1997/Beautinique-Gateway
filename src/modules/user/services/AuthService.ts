@@ -1,4 +1,12 @@
-import type { TEmail, TLogin, TOtp, TPasswords, TRegister } from '@beautinique/be-zod';
+import type {
+  TChangePassword,
+  TEmail,
+  TLogin,
+  TOtp,
+  TPasswords,
+  TRegister,
+  TSetPassword,
+} from '@beautinique/be-zod';
 import { ApiRequest } from '../../../classes';
 
 class AuthService extends ApiRequest {
@@ -72,7 +80,7 @@ class AuthService extends ApiRequest {
     });
   }
 
-  /* ================== PASSWORD METHODS ================== */
+  /* ================== FORGOT PASSWORD METHODS ================== */
   public async forgotPasswordSendOtp(data: TEmail) {
     return this.request({ ...this.routes.user.password.forgot.sendOtp, data });
   }
@@ -98,6 +106,16 @@ class AuthService extends ApiRequest {
       data,
       headers: { Authorization: token },
     });
+  }
+
+  /* ================== CHANGE PASSWORD METHODS ================== */
+  public async changePassword(data: TChangePassword) {
+    return this.request({ ...this.routes.user.password.change, data });
+  }
+
+  /* ================== SET PASSWORD METHODS ================== */
+  public async setPassword(data: TSetPassword) {
+    return this.request({ ...this.routes.user.password.set, data });
   }
 }
 

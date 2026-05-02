@@ -33,6 +33,8 @@ export const API_ROUTES_AND_METHODS = {
         verifyOtp: { method: 'POST', url: '/auth/password/forgot-verify-otp' },
         save: { method: 'POST', url: '/auth/password/forgot-save' },
       },
+      change: { method: 'PATCH', url: '/auth/password/change' },
+      set: { method: 'PATCH', url: '/auth/password/set' },
     },
     register: {
       sendOtp: { method: 'POST', url: '/auth/register/send-otp' },
@@ -88,6 +90,8 @@ export const GATEWAY_METHODS_AND_PATHS = {
           verifyOtp: { path: '/forgot-verify-otp', method: 'post' },
           save: { path: '/forgot-save', method: 'post' },
         },
+        change: { path: '/change', method: 'patch' },
+        set: { path: '/set', method: 'patch' },
       },
       token: {
         base: '/token',
