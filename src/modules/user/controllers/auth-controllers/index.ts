@@ -9,6 +9,7 @@ import type {
   TSetPassword,
 } from '@beautinique/be-zod';
 import type { Request, Response } from 'express';
+import type { AuthRequest } from '../../../../types';
 import {
   generateAccessToken,
   generateRefreshToken,
@@ -282,10 +283,11 @@ export const forgotPasswordSaveController = async (req: Request, res: Response) 
 
 /* ================================ CHANGE PASSWORD CONTROLLERS ================================ */
 
-export const changePasswordController = async (req: Request, res: Response) => {
+export const changePasswordController = async (req: AuthRequest, res: Response) => {
+  const userId = req.user?.id || '';
   const body = req.body as TChangePassword;
 
-  const { message, statusCode, user } = await authService.changePassword(body);
+  const { message, statusCode, user } = await authService.changePassword(userId, body);
 
   const accessToken = generateAccessToken({ id: user._id, role: user.role });
   const refreshToken = generateRefreshToken({ id: user.id, role: user.role });
@@ -297,10 +299,11 @@ export const changePasswordController = async (req: Request, res: Response) => {
 
 /* ================================ SET PASSWORD CONTROLLERS ================================ */
 
-export const setPasswordController = async (req: Request, res: Response) => {
+export const setPasswordController = async (req: AuthRequest, res: Response) => {
+  const userId = req.user?.id || '';
   const body = req.body as TSetPassword;
 
-  const { message, statusCode, user } = await authService.setPassword(body);
+  const { message, statusCode, user } = await authService.setPassword(userId, body);
 
   const accessToken = generateAccessToken({ id: user._id, role: user.role });
   const refreshToken = generateRefreshToken({ id: user.id, role: user.role });

@@ -109,13 +109,21 @@ class AuthService extends ApiRequest {
   }
 
   /* ================== CHANGE PASSWORD METHODS ================== */
-  public async changePassword(data: TChangePassword) {
-    return this.request({ ...this.routes.user.password.change, data });
+  public async changePassword(userId: string, data: TChangePassword) {
+    return this.request({
+      ...this.routes.user.password.change,
+      data,
+      headers: { 'X-User-Id': userId },
+    });
   }
 
   /* ================== SET PASSWORD METHODS ================== */
-  public async setPassword(data: TSetPassword) {
-    return this.request({ ...this.routes.user.password.set, data });
+  public async setPassword(userId: string, data: TSetPassword) {
+    return this.request({
+      ...this.routes.user.password.set,
+      data,
+      headers: { 'X-User-Id': userId },
+    });
   }
 }
 

@@ -8,6 +8,8 @@ import {
 } from '@beautinique/be-zod';
 import { Router } from 'express';
 import { GATEWAY_METHODS_AND_PATHS } from '../../../../constants';
+import { authenticate } from '../../../../middlewares';
+import type { AuthRequest } from '../../../../types';
 import {
   changePasswordController,
   forgotPasswordResendOtpController,
@@ -51,15 +53,17 @@ passwordRouter[forgot.save.method](
 // Change Password Routes
 passwordRouter[change.method](
   change.path,
+  authenticate,
   RequestMiddleware.emptyRequest({ body: true }),
   ZodMiddleware.validateSchema(changePasswordSchema),
-  ResponseMiddleware.tryCatch(changePasswordController),
+  ResponseMiddleware.tryCatch<AuthRequest>(changePasswordController),
 );
 
 // Set Password Routes
 passwordRouter[set.method](
   set.path,
+  authenticate,
   RequestMiddleware.emptyRequest({ body: true }),
   ZodMiddleware.validateSchema(setPasswordSchema),
-  ResponseMiddleware.tryCatch(setPasswordController),
+  ResponseMiddleware.tryCatch<AuthRequest>(setPasswordController),
 );
