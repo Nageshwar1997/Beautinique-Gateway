@@ -1,4 +1,4 @@
-import { ApiRequest } from "../../../classes";
+import { ApiRequest } from '../../../classes';
 
 class UserService extends ApiRequest {
   constructor() {
@@ -8,7 +8,7 @@ class UserService extends ApiRequest {
   /* ================== GET METHODS ================== */
 
   public getSessionUser(userId: string) {
-    return this.request({ ...this.routes.user.session, params: { userId } });
+    return this.request({ ...this.routes.user.session, headers: { 'X-User-Id': userId } });
   }
 }
 
