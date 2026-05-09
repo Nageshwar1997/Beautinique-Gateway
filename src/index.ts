@@ -13,6 +13,7 @@ import { errorLogger, logger, requestLogger } from './middlewares';
 import { router } from './routes';
 
 const app = express();
+let server: ReturnType<typeof app.listen> | null = null;
 
 // ----------------- MIDDLEWARES ORDER -----------------
 
@@ -59,15 +60,54 @@ app.use(ResponseMiddleware.notFound);
 app.use(errorLogger);
 app.use(ResponseMiddleware.error({ isDev: envs.is_dev }));
 
-(async () => {
+/* ---------------- START ---------------- */
+
+async function start() {
   try {
-    app.listen(envs.port, () => {
-      logger.info(`Server running on port: ${envs.port}`);
+    // 🌐 Start server
+    server = app.listen(envs.port, () => {
+      logger.info(`🚀 Server running on port: ${envs.port}`);
     });
   } catch (err) {
     logger.error('❌ Failed to start server:', err);
     process.exit(1);
   }
-})();
+}
+
+/* ---------------- SHUTDOWN ---------------- */
+
+async function shutdown() {
+  logger.warn('🛑 Shutting down...');
+
+  try {
+    // Close server gracefully
+    if (server) {
+      await new Promise<void>((resolve) => {
+        server?.close(() => {
+          logger.info('🌐 Server closed');
+          resolve();
+        });
+      });
+    }
+
+    logger.info('✅ Shutdown complete');
+    process.exit(0);
+  } catch (err) {
+    logger.error('❌ Shutdown error:', err);
+    process.exit(1);
+  }
+}
+
+
+/* ---------------- PROCESS SIGNALS ---------------- */
+
+process.on('SIGINT', shutdown);
+process.on('SIGTERM', shutdown);
+
+/* ---------------- BOOTSTRAP ---------------- */
+
+start();
+
+/* ---------------- EXPORT ---------------- */
 
 export { app };

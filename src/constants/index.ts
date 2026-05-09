@@ -1,6 +1,7 @@
 import { envs } from '../envs';
 
 export const SERVICES_BASE_URLS = {
+  'media-service': `${envs.url.service.media}/api/v1`,
   'user-service': `${envs.url.service.user}/api/v1`,
 } as const;
 
