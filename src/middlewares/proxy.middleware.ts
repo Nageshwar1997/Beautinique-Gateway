@@ -9,7 +9,6 @@ import type { AuthRequest } from '../types';
 const mediaProxy = proxy.createProxyServer<AuthRequest, Response>({
   target: SERVICES_BASE_URLS['media-service'],
   changeOrigin: true,
-  
   xfwd: true,
 });
 
