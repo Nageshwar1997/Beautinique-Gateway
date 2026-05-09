@@ -103,4 +103,5 @@ export const GATEWAY_METHODS_AND_PATHS = {
       session: { method: 'get', path: '/session' },
     },
   },
+  media: { base: '/media-service' },
 } as const;
