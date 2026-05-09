@@ -66,8 +66,8 @@ export const registerAndSaveController = async (req: Request, res: Response) => 
 
   const { message, statusCode, user } = await authService.registerAndSave({ ...body, token });
 
-  const accessToken = generateAccessToken({ id: user._id, role: user.role });
-  const refreshToken = generateRefreshToken({ id: user._id, role: user.role });
+  const accessToken = generateAccessToken({ _id: user._id, role: user.role });
+  const refreshToken = generateRefreshToken({ _id: user._id, role: user.role });
 
   setAuthCookies(res, accessToken, refreshToken);
 
@@ -81,8 +81,8 @@ export const manualLoginController = async (req: Request, res: Response) => {
 
   const { message, statusCode, user } = await authService.manualLogin(body);
 
-  const accessToken = generateAccessToken({ id: user._id, role: user.role });
-  const refreshToken = generateRefreshToken({ id: user._id, role: user.role });
+  const accessToken = generateAccessToken({ _id: user._id, role: user.role });
+  const refreshToken = generateRefreshToken({ _id: user._id, role: user.role });
 
   setAuthCookies(res, accessToken, refreshToken);
 
@@ -111,8 +111,8 @@ export const googleCallbackController = async (req: Request, res: Response) => {
   try {
     const { user } = await authService.handleGoogleCallback(String(code));
 
-    const accessToken = generateAccessToken({ id: user._id, role: user.role });
-    const refreshToken = generateRefreshToken({ id: user._id, role: user.role });
+    const accessToken = generateAccessToken({ _id: user._id, role: user.role });
+    const refreshToken = generateRefreshToken({ _id: user._id, role: user.role });
 
     setAuthCookies(res, accessToken, refreshToken);
 
@@ -146,8 +146,8 @@ export const linkedinCallbackController = async (req: Request, res: Response) =>
   try {
     const { user } = await authService.handleLinkedinCallback(String(code));
 
-    const accessToken = generateAccessToken({ id: user._id, role: user.role });
-    const refreshToken = generateRefreshToken({ id: user._id, role: user.role });
+    const accessToken = generateAccessToken({ _id: user._id, role: user.role });
+    const refreshToken = generateRefreshToken({ _id: user._id, role: user.role });
 
     setAuthCookies(res, accessToken, refreshToken);
 
@@ -181,8 +181,8 @@ export const githubCallbackController = async (req: Request, res: Response) => {
   try {
     const { user } = await authService.handleGithubCallback(String(code));
 
-    const accessToken = generateAccessToken({ id: user._id, role: user.role });
-    const refreshToken = generateRefreshToken({ id: user._id, role: user.role });
+    const accessToken = generateAccessToken({ _id: user._id, role: user.role });
+    const refreshToken = generateRefreshToken({ _id: user._id, role: user.role });
 
     setAuthCookies(res, accessToken, refreshToken);
 
@@ -237,8 +237,8 @@ export const forgotPasswordSaveController = async (req: Request, res: Response) 
 
   const { message, statusCode, user } = await authService.forgotPasswordSave({ ...body, token });
 
-  const accessToken = generateAccessToken({ id: user._id, role: user.role });
-  const refreshToken = generateRefreshToken({ id: user._id, role: user.role });
+  const accessToken = generateAccessToken({ _id: user._id, role: user.role });
+  const refreshToken = generateRefreshToken({ _id: user._id, role: user.role });
 
   setAuthCookies(res, accessToken, refreshToken);
 
@@ -248,13 +248,13 @@ export const forgotPasswordSaveController = async (req: Request, res: Response) 
 /* ================================ CHANGE PASSWORD CONTROLLERS ================================ */
 
 export const changePasswordController = async (req: AuthRequest, res: Response) => {
-  const userId = req.user?.id || '';
+  const userId = req.user?._id || '';
   const body = req.body as TChangePassword;
 
   const { message, statusCode, user } = await authService.changePassword(userId, body);
 
-  const accessToken = generateAccessToken({ id: user._id, role: user.role });
-  const refreshToken = generateRefreshToken({ id: user._id, role: user.role });
+  const accessToken = generateAccessToken({ _id: user._id, role: user.role });
+  const refreshToken = generateRefreshToken({ _id: user._id, role: user.role });
 
   setAuthCookies(res, accessToken, refreshToken);
 
@@ -264,13 +264,13 @@ export const changePasswordController = async (req: AuthRequest, res: Response) 
 /* ================================ SET PASSWORD CONTROLLERS ================================ */
 
 export const setPasswordController = async (req: AuthRequest, res: Response) => {
-  const userId = req.user?.id || '';
+  const userId = req.user?._id || '';
   const body = req.body as TSetPassword;
 
   const { message, statusCode, user } = await authService.setPassword(userId, body);
 
-  const accessToken = generateAccessToken({ id: user._id, role: user.role });
-  const refreshToken = generateRefreshToken({ id: user._id, role: user.role });
+  const accessToken = generateAccessToken({ _id: user._id, role: user.role });
+  const refreshToken = generateRefreshToken({ _id: user._id, role: user.role });
 
   setAuthCookies(res, accessToken, refreshToken);
 
@@ -286,9 +286,9 @@ export const refreshAccessTokenController = async (req: Request, res: Response) 
     throw new AppError({ message: 'Refresh token missing', code: 'AUTHENTICATION_ERROR' });
   }
 
-  const { id, role } = verifyRefreshToken(refreshToken);
+  const { _id, role } = verifyRefreshToken(refreshToken);
 
-  const newAccessToken = generateAccessToken({ id, role });
+  const newAccessToken = generateAccessToken({ _id, role });
 
   res.cookie(ACCESS_TOKEN_COOKIE_NAME, newAccessToken, ACCESS_TOKEN_COOKIE_OPTIONS);
 

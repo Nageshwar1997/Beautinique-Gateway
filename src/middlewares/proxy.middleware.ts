@@ -18,7 +18,7 @@ const isServerResponse = (res: ServerResponse | unknown): res is ServerResponse 
 
 mediaProxy.on('proxyReq', (proxyReq, req) => {
   if (req.user) {
-    proxyReq.setHeader('X-User-Id', req.user.id);
+    proxyReq.setHeader('X-User-Id', req.user._id);
     proxyReq.setHeader('X-User-Role', req.user.role);
   }
 });
