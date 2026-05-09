@@ -41,7 +41,6 @@ const isServerResponse = (res: ServerResponse | unknown): res is ServerResponse 
 mediaProxy.on('proxyReq', fixRequestBody);
 
 mediaProxy.on('error', (err, req, res) => {
-  console.log("🚀 ~ err:", err)
   logger.error(`Media service proxy failed for ${req.method} ${req.url}: ${err.message}`);
 
   if (!isServerResponse(res) || res.headersSent) return;
