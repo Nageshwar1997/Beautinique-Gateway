@@ -6,11 +6,13 @@ import { parse } from 'qs';
 
 import { CorsMiddleware, RequestMiddleware, ResponseMiddleware } from '@beautinique/be-middlewares';
 
-import { ORIGINS } from './constants';
+import { GATEWAY_METHODS_AND_PATHS, ORIGINS } from './constants';
 import { wakeUpController } from './controllers';
 import { envs } from './envs';
-import { errorLogger, logger, requestLogger } from './middlewares';
+import { errorLogger, logger, mediaServiceProxy, requestLogger } from './middlewares';
 import { router } from './routes';
+
+const { base, media } = GATEWAY_METHODS_AND_PATHS;
 
 const app = express();
 let server: ReturnType<typeof app.listen> | null = null;
@@ -31,16 +33,19 @@ app.use(
 // 3. Cookie parser
 app.use(cookieParser());
 
-// 4. Body parsers & static files
+// 4. Logger (logs all requests)
+app.use(requestLogger);
+
+// 5. Raw proxy routes (before body parsers so request streams pass through as-it-is)
+app.use(`${base}${media.base}`, mediaServiceProxy);
+
+// 6. Body parsers & static files
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.resolve('public')));
 app.set('query parser', (str: string) => parse(str));
 
-// 5. Logger (logs all requests)
-app.use(requestLogger);
-
-// 6. Custom response middleware
+// 7. Custom response middleware
 app.use(ResponseMiddleware.success);
 
 // ----------------- ROUTES -----------------
@@ -53,7 +58,7 @@ app.get('/health', (_: Request, res: Response) =>
 app.get('/wake-up', wakeUpController);
 
 // API Routes
-app.use('/api/v1', router);
+app.use(base, router);
 
 // ----------------- ERROR HANDLING -----------------
 app.use(ResponseMiddleware.notFound);
@@ -97,7 +102,6 @@ async function shutdown() {
     process.exit(1);
   }
 }
-
 
 /* ---------------- PROCESS SIGNALS ---------------- */
 
