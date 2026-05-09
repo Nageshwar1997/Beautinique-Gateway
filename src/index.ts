@@ -1,6 +1,7 @@
 import cookieParser from 'cookie-parser';
 import 'dotenv/config';
 import express, { type Request, type Response } from 'express';
+import type { Socket } from 'node:net';
 import path from 'path';
 import { parse } from 'qs';
 
@@ -9,46 +10,60 @@ import { CorsMiddleware, RequestMiddleware, ResponseMiddleware } from '@beautini
 import { GATEWAY_METHODS_AND_PATHS, ORIGINS } from './constants';
 import { wakeUpController } from './controllers';
 import { envs } from './envs';
-import { errorLogger, logger, mediaServiceProxy, requestLogger } from './middlewares';
+import {
+  authenticate,
+  authorize,
+  errorLogger,
+  logger,
+  mediaServiceProxy,
+  requestLogger,
+} from './middlewares';
 import { router } from './routes';
 
 const { base, media } = GATEWAY_METHODS_AND_PATHS;
 
 const app = express();
+
+app.set('query parser', (str: string) => parse(str));
+
 let server: ReturnType<typeof app.listen> | null = null;
 
-// ----------------- MIDDLEWARES ORDER -----------------
+/* ---------------- CONNECTION TRACKING ---------------- */
 
-// 1. Assign requestId first (for tracing logs)
+const connections = new Set<Socket>();
+
+/* ---------------- MIDDLEWARES ORDER ---------------- */
+
+// 1. Request ID (must be first)
 app.use(RequestMiddleware.requestId);
 
 // 2. CORS (before anything that depends on request)
 app.use(
   CorsMiddleware.checkOrigin({
     origins: ORIGINS,
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   }),
 );
 
-// 3. Cookie parser
+// 3. Cookies parser
 app.use(cookieParser());
 
-// 4. Logger (logs all requests)
+// 4. Request logger (logs all requests)
 app.use(requestLogger);
 
-// 5. Raw proxy routes (before body parsers so request streams pass through as-it-is)
-app.use(`${base}${media.base}`, mediaServiceProxy);
-
-// 6. Body parsers & static files
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// 5. Static files middleware
 app.use(express.static(path.resolve('public')));
-app.set('query parser', (str: string) => parse(str));
 
-// 7. Custom response middleware
+// 6. Proxy routes (BEFORE body parsers)
+app.use(`${base}${media.base}`, authenticate, authorize(['ADMIN', 'SELLER']), mediaServiceProxy);
+
+// 7. Body parsers
+app.use(express.json({ limit: '10mb' }));
+
+// 8. Custom response middleware
 app.use(ResponseMiddleware.success);
 
-// ----------------- ROUTES -----------------
+/* ---------------- ROUTES ---------------- */
 
 // Home Route
 app.get('/', (_: Request, res: Response) => res.success(200, 'Welcome to Beautinique Gateway!'));
@@ -60,7 +75,8 @@ app.get('/wake-up', wakeUpController);
 // API Routes
 app.use(base, router);
 
-// ----------------- ERROR HANDLING -----------------
+/* ---------------- ERROR HANDLING ---------------- */
+
 app.use(ResponseMiddleware.notFound);
 app.use(errorLogger);
 app.use(ResponseMiddleware.error({ isDev: envs.is_dev }));
@@ -69,10 +85,43 @@ app.use(ResponseMiddleware.error({ isDev: envs.is_dev }));
 
 async function start() {
   try {
-    // 🌐 Start server
-    server = app.listen(envs.port, () => {
-      logger.info(`🚀 Server running on port: ${envs.port}`);
+    await new Promise<void>((resolve, reject) => {
+      const onError = (err: Error) => {
+        reject(err);
+      };
+
+      const httpServer = app.listen(envs.port, () => {
+        httpServer.off('error', onError);
+        logger.info(`🚀 Server running on port: ${envs.port}`);
+        resolve();
+      });
+
+      server = httpServer;
+      httpServer.once('error', onError);
     });
+
+    const httpServer = server;
+
+    if (!httpServer) {
+      throw new Error('HTTP server did not initialize');
+    }
+
+    httpServer.on('error', (err) => {
+      logger.error('❌ HTTP server error:', err);
+    });
+
+    // Track active connections
+    httpServer.on('connection', (socket: Socket) => {
+      connections.add(socket);
+
+      socket.on('close', () => {
+        connections.delete(socket);
+      });
+    });
+
+    // Optional hard timeouts
+    httpServer.keepAliveTimeout = 65_000;
+    httpServer.headersTimeout = 66_000;
   } catch (err) {
     logger.error('❌ Failed to start server:', err);
     process.exit(1);
@@ -81,15 +130,28 @@ async function start() {
 
 /* ---------------- SHUTDOWN ---------------- */
 
-async function shutdown() {
-  logger.warn('🛑 Shutting down...');
+async function shutdown(signal: string) {
+  logger.warn(`🛑 Received ${signal}. Starting graceful shutdown...`);
 
   try {
-    // Close server gracefully
     if (server) {
-      await new Promise<void>((resolve) => {
-        server?.close(() => {
-          logger.info('🌐 Server closed');
+      // Force close hanging sockets after timeout
+      const forceCloseTimer = setTimeout(() => {
+        logger.warn('⚠️ Force closing hanging connections...');
+
+        for (const socket of connections) {
+          socket.destroy();
+        }
+      }, 10_000);
+
+      // Stop accepting new connections and wait until active ones close
+      await new Promise<void>((resolve, reject) => {
+        server?.close((err) => {
+          clearTimeout(forceCloseTimer);
+
+          if (err) return reject(err);
+
+          logger.info('🌐 HTTP server closed');
           resolve();
         });
       });
@@ -105,12 +167,12 @@ async function shutdown() {
 
 /* ---------------- PROCESS SIGNALS ---------------- */
 
-process.on('SIGINT', shutdown);
-process.on('SIGTERM', shutdown);
+process.on('SIGINT', () => shutdown('SIGINT'));
+process.on('SIGTERM', () => shutdown('SIGTERM'));
 
 /* ---------------- BOOTSTRAP ---------------- */
 
-start();
+void start();
 
 /* ---------------- EXPORT ---------------- */
 

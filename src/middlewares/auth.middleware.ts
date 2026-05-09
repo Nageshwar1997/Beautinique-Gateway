@@ -40,7 +40,10 @@ export const authorize =
 
       const decoded = verifyAccessToken(token);
 
-      if (!allowedRoles.includes(decoded.role)) {
+      const isMaster = decoded.role === 'MASTER';
+      const hasAccess = allowedRoles.includes(decoded.role);
+
+      if (!hasAccess && !isMaster) {
         throw new AppError({
           message: 'You are not authorized to perform this action',
           code: 'AUTHORIZATION_ERROR',
