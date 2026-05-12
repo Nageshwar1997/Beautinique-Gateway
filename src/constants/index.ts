@@ -1,3 +1,4 @@
+import type { CookieOptions } from 'express';
 import { envs } from '../envs';
 
 export const SERVICES_BASE_URLS = {
@@ -26,7 +27,7 @@ export const API_ROUTES_AND_METHODS = {
         },
       },
     },
-    logout: { method: 'DELETE', url: '/auth/logout/:userId' },
+    logout: { method: 'DELETE', url: '/auth/logout' },
     password: {
       forgot: {
         sendOtp: { method: 'POST', url: '/auth/password/forgot-send-otp' },
@@ -48,7 +49,7 @@ export const API_ROUTES_AND_METHODS = {
 };
 
 export const GATEWAY_METHODS_AND_PATHS = {
-  base: "/api/v1",
+  base: '/api/v1',
   user: {
     base: '/user-service',
     auth: {
@@ -73,10 +74,7 @@ export const GATEWAY_METHODS_AND_PATHS = {
           },
         },
       },
-      logout: {
-        base: '/logout',
-        default: { path: '/:userId', method: 'delete' },
-      },
+      logout: { path: '/logout', method: 'delete' },
       register: {
         base: '/register',
         sendOtp: { path: '/send-otp', method: 'post' },
@@ -95,10 +93,6 @@ export const GATEWAY_METHODS_AND_PATHS = {
         change: { path: '/change', method: 'patch' },
         set: { path: '/set', method: 'patch' },
       },
-      token: {
-        base: '/token',
-        refreshAccessToken: { path: '/refresh-access-token', method: 'post' },
-      },
     },
     user: {
       base: '/user',
@@ -107,3 +101,20 @@ export const GATEWAY_METHODS_AND_PATHS = {
   },
   media: { base: '/media-service' },
 } as const;
+
+export const COOKIE_OPTIONS: CookieOptions = {
+  httpOnly: true,
+  secure: !envs.is_dev,
+  sameSite: envs.is_dev ? 'lax' : 'none',
+};
+
+export const ACCESS_TOKEN_COOKIE_OPTIONS = { ...COOKIE_OPTIONS, maxAge: 15 * 60 * 1000 };
+
+export const ACCESS_TOKEN_COOKIE_NAME = 'accessToken';
+
+export const REFRESH_TOKEN_COOKIE_OPTIONS = {
+  ...COOKIE_OPTIONS,
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+};
+
+export const REFRESH_TOKEN_COOKIE_NAME = 'refreshToken';

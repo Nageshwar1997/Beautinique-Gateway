@@ -1,8 +1,6 @@
-import { Router } from 'express';
-
-import { RequestMiddleware, ResponseMiddleware, ZodMiddleware } from '@beautinique/be-middlewares';
+import { checkEmptyRequest, tryCatchResponse, zodValidator } from '@beautinique/be-middlewares';
 import { emailSchema, otpSchema, registerSchema } from '@beautinique/be-zod';
-
+import { Router } from 'express';
 import { GATEWAY_METHODS_AND_PATHS } from '../../../../constants';
 import {
   registerAndSaveController,
@@ -17,26 +15,23 @@ const { resendOtp, saveUser, sendOtp, verifyOtp } = GATEWAY_METHODS_AND_PATHS.us
 
 registerRouter[sendOtp.method](
   sendOtp.path,
-  RequestMiddleware.emptyRequest({ body: true }),
-  ZodMiddleware.validateSchema(emailSchema),
-  ResponseMiddleware.tryCatch(registerSendOtpController),
+  checkEmptyRequest({ body: true }),
+  zodValidator(emailSchema),
+  tryCatchResponse(registerSendOtpController),
 );
 
-registerRouter[resendOtp.method](
-  resendOtp.path,
-  ResponseMiddleware.tryCatch(registerResendOtpController),
-);
+registerRouter[resendOtp.method](resendOtp.path, tryCatchResponse(registerResendOtpController));
 
 registerRouter[verifyOtp.method](
   verifyOtp.path,
-  RequestMiddleware.emptyRequest({ body: true }),
-  ZodMiddleware.validateSchema(otpSchema),
-  ResponseMiddleware.tryCatch(registerVerifyOtpController),
+  checkEmptyRequest({ body: true }),
+  zodValidator(otpSchema),
+  tryCatchResponse(registerVerifyOtpController),
 );
 
 registerRouter[saveUser.method](
   saveUser.path,
-  RequestMiddleware.emptyRequest({ body: true }),
-  ZodMiddleware.validateSchema(registerSchema),
-  ResponseMiddleware.tryCatch(registerAndSaveController),
+  checkEmptyRequest({ body: true }),
+  zodValidator(registerSchema),
+  tryCatchResponse(registerAndSaveController),
 );

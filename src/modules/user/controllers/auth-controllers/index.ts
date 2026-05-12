@@ -11,16 +11,12 @@ import type {
 import type { Request, Response } from 'express';
 import type { AuthRequest } from '../../../../types';
 import {
+  clearAuthCookies,
   generateAccessToken,
   generateRefreshToken,
   setAuthCookies,
-  verifyRefreshToken,
 } from '../../../../utils';
-import {
-  ACCESS_TOKEN_COOKIE_NAME,
-  ACCESS_TOKEN_COOKIE_OPTIONS,
-  CLIENT_OAUTH_REDIRECT_URL,
-} from '../../constants';
+import { CLIENT_OAUTH_REDIRECT_URL } from '../../constants';
 import { authService } from '../../services';
 
 /* ================================ REGISTER CONTROLLERS ================================ */
@@ -277,20 +273,12 @@ export const setPasswordController = async (req: AuthRequest, res: Response) => 
   res.success(statusCode, message, { user });
 };
 
-/* ================================ REFRESH CONTROLLERS ================================ */
+/* ================================ LOGOUT CONTROLLERS ================================ */
 
-export const refreshAccessTokenController = async (req: Request, res: Response) => {
-  const refreshToken = req.cookies?.refreshToken;
+export const logoutController = async (req: AuthRequest, res: Response) => {
+  const userId = req.user?._id || '';
 
-  if (!refreshToken) {
-    throw new AppError({ message: 'Refresh token missing', code: 'AUTHENTICATION_ERROR' });
-  }
-
-  const { _id, role } = verifyRefreshToken(refreshToken);
-
-  const newAccessToken = generateAccessToken({ _id, role });
-
-  res.cookie(ACCESS_TOKEN_COOKIE_NAME, newAccessToken, ACCESS_TOKEN_COOKIE_OPTIONS);
-
-  res.success(200, 'Token refreshed');
+  const { message, statusCode } = await authService.logout(userId);
+  clearAuthCookies(res);
+  res.success(statusCode, message);
 };

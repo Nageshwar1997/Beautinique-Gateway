@@ -1,22 +1,27 @@
+import {
+  checkCors,
+  errorResponse,
+  notFoundResponse,
+  setRequestId,
+  successResponse,
+  tryCatchResponse,
+} from '@beautinique/be-middlewares';
 import cookieParser from 'cookie-parser';
 import 'dotenv/config';
-import express, { type Request, type Response } from 'express';
+import express from 'express';
 import type { Socket } from 'node:net';
 import path from 'path';
 import { parse } from 'qs';
-
-import { CorsMiddleware, RequestMiddleware, ResponseMiddleware } from '@beautinique/be-middlewares';
-
 import { GATEWAY_METHODS_AND_PATHS, ORIGINS } from './constants';
-import { wakeUpController } from './controllers';
+import { refreshAccessTokenController, wakeUpController } from './controllers';
 import { envs } from './envs';
 import {
   authenticate,
   authorize,
-  errorLogger,
+  errorLogs,
   logger,
   mediaServiceProxy,
-  requestLogger,
+  requestLogs,
 } from './middlewares';
 import { router } from './routes';
 
@@ -35,21 +40,16 @@ const connections = new Set<Socket>();
 /* ---------------- MIDDLEWARES ORDER ---------------- */
 
 // 1. Request ID (must be first)
-app.use(RequestMiddleware.requestId);
+app.use(setRequestId);
 
 // 2. CORS (before anything that depends on request)
-app.use(
-  CorsMiddleware.checkOrigin({
-    origins: ORIGINS,
-    allowedHeaders: ['Content-Type', 'Authorization'],
-  }),
-);
+app.use(checkCors({ origins: ORIGINS, allowedHeaders: ['Content-Type', 'Authorization'] }));
 
 // 3. Cookies parser
 app.use(cookieParser());
 
 // 4. Request logger (logs all requests)
-app.use(requestLogger);
+app.use(requestLogs);
 
 // 5. Static files middleware
 app.use(express.static(path.resolve('public')));
@@ -61,25 +61,24 @@ app.use(`${base}${media.base}`, authenticate, authorize(['ADMIN', 'SELLER']), me
 app.use(express.json({ limit: '10mb' }));
 
 // 8. Custom response middleware
-app.use(ResponseMiddleware.success);
+app.use(successResponse);
 
 /* ---------------- ROUTES ---------------- */
 
 // Home Route
-app.get('/', (_: Request, res: Response) => res.success(200, 'Welcome to Beautinique Gateway!'));
-app.get('/health', (_: Request, res: Response) =>
-  res.success(200, 'Beautinique Gateway is healthy'),
-);
+app.get('/', (_, res) => res.success(200, 'Welcome to Beautinique Gateway!'));
+app.get('/health', (_, res) => res.success(200, 'Beautinique Gateway is healthy'));
 app.get('/wake-up', wakeUpController);
+app.post('/refresh-access-token', tryCatchResponse(refreshAccessTokenController));
 
 // API Routes
 app.use(base, router);
 
 /* ---------------- ERROR HANDLING ---------------- */
 
-app.use(ResponseMiddleware.notFound);
-app.use(errorLogger);
-app.use(ResponseMiddleware.error({ isDev: envs.is_dev }));
+app.use(notFoundResponse);
+app.use(errorLogs);
+app.use(errorResponse({ isDev: envs.is_dev }));
 
 /* ---------------- START ---------------- */
 

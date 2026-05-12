@@ -1,13 +1,13 @@
-import { envs } from '../envs';
+import type { Response } from 'express';
+import jwt from 'jsonwebtoken';
 import {
   ACCESS_TOKEN_COOKIE_NAME,
   ACCESS_TOKEN_COOKIE_OPTIONS,
   REFRESH_TOKEN_COOKIE_NAME,
   REFRESH_TOKEN_COOKIE_OPTIONS,
-} from '../modules/user/constants';
+} from '../constants';
+import { envs } from '../envs';
 import type { IJwtPayload } from '../types';
-import type { Response } from 'express';
-import jwt from 'jsonwebtoken';
 
 export const generateAccessToken = (payload: IJwtPayload) => {
   return jwt.sign(payload, envs.jwt.access_secret, {

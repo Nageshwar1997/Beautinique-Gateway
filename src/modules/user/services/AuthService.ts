@@ -125,6 +125,11 @@ class AuthService extends ApiRequest {
       headers: { 'X-User-Id': userId },
     });
   }
+
+  /* ================== LOGOUT METHODS ================== */
+  public async logout(userId: string) {
+    return this.request({ ...this.routes.user.logout, headers: { 'X-User-Id': userId } });
+  }
 }
 
 export const authService = new AuthService();

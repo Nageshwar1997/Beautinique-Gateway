@@ -1,8 +1,5 @@
-import { Router } from 'express';
-
-import { RequestMiddleware, ResponseMiddleware, ZodMiddleware } from '@beautinique/be-middlewares';
 import { loginSchema } from '@beautinique/be-zod';
-
+import { Router } from 'express';
 import {
   githubCallbackController,
   githubRedirectController,
@@ -13,52 +10,54 @@ import {
   manualLoginController,
 } from '../../controllers';
 
+import { checkEmptyRequest, tryCatchResponse, zodValidator } from '@beautinique/be-middlewares';
 import { GATEWAY_METHODS_AND_PATHS } from '../../../../constants';
 
 export const loginRouter = Router();
 
-const { login } = GATEWAY_METHODS_AND_PATHS.user.auth;
+const { manual, oauth } = GATEWAY_METHODS_AND_PATHS.user.auth.login;
+const { github, google, linkedin } = oauth;
 
 // Manual
-loginRouter[login.manual.method](
-  login.manual.path,
-  RequestMiddleware.emptyRequest({ body: true }),
-  ZodMiddleware.validateSchema(loginSchema),
-  ResponseMiddleware.tryCatch(manualLoginController),
+loginRouter[manual.method](
+  manual.path,
+  checkEmptyRequest({ body: true }),
+  zodValidator(loginSchema),
+  tryCatchResponse(manualLoginController),
 );
 
 // Google
-loginRouter[login.oauth.google.redirect.method](
-  login.oauth.google.redirect.path,
-  ResponseMiddleware.tryCatch(googleRedirectController),
+loginRouter[google.redirect.method](
+  google.redirect.path,
+  tryCatchResponse(googleRedirectController),
 );
 
-loginRouter[login.oauth.google.callback.method](
-  login.oauth.google.callback.path,
-  RequestMiddleware.emptyRequest({ query: true }),
-  ResponseMiddleware.tryCatch(googleCallbackController),
+loginRouter[google.callback.method](
+  google.callback.path,
+  checkEmptyRequest({ query: true }),
+  tryCatchResponse(googleCallbackController),
 );
 
 // LinkedIn
-loginRouter[login.oauth.linkedin.redirect.method](
-  login.oauth.linkedin.redirect.path,
-  ResponseMiddleware.tryCatch(linkedinRedirectController),
+loginRouter[linkedin.redirect.method](
+  linkedin.redirect.path,
+  tryCatchResponse(linkedinRedirectController),
 );
 
-loginRouter[login.oauth.linkedin.callback.method](
-  login.oauth.linkedin.callback.path,
-  RequestMiddleware.emptyRequest({ query: true }),
-  ResponseMiddleware.tryCatch(linkedinCallbackController),
+loginRouter[linkedin.callback.method](
+  linkedin.callback.path,
+  checkEmptyRequest({ query: true }),
+  tryCatchResponse(linkedinCallbackController),
 );
 
 // GitHub
-loginRouter[login.oauth.github.redirect.method](
-  login.oauth.github.redirect.path,
-  ResponseMiddleware.tryCatch(githubRedirectController),
+loginRouter[github.redirect.method](
+  github.redirect.path,
+  tryCatchResponse(githubRedirectController),
 );
 
-loginRouter[login.oauth.github.callback.method](
-  login.oauth.github.callback.path,
-  RequestMiddleware.emptyRequest({ query: true }),
-  ResponseMiddleware.tryCatch(githubCallbackController),
+loginRouter[github.callback.method](
+  github.callback.path,
+  checkEmptyRequest({ query: true }),
+  tryCatchResponse(githubCallbackController),
 );
