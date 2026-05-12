@@ -1,20 +1,27 @@
 import { AppError, type AppSuccess } from '@beautinique/be-classes';
+import type { TService } from '@beautinique/be-constants';
 import axios, { AxiosError, type AxiosInstance, type AxiosRequestConfig } from 'axios';
-import { API_ROUTES_AND_METHODS, SERVICES_BASE_URLS } from '../constants';
+import { API_ROUTES_AND_METHODS, SERVICES_BASE_URLS, SERVICE_SECRET_MAP } from '../constants';
 
 export class ApiRequest {
   private instance: AxiosInstance;
   private baseURLs = SERVICES_BASE_URLS;
+  private secret: (typeof SERVICE_SECRET_MAP)[TService];
 
   constructor(key: keyof typeof SERVICES_BASE_URLS) {
     const baseURL = this.baseURLs[key];
+    this.secret = SERVICE_SECRET_MAP[key];
     this.instance = axios.create({ baseURL });
   }
 
   protected routes = API_ROUTES_AND_METHODS;
   protected request = async (config: AxiosRequestConfig) => {
     try {
-      const { data } = await this.instance.request(config);
+      const { headers, ...restConfigs } = config ?? {};
+      const { data } = await this.instance.request({
+        ...restConfigs,
+        headers: { ...headers, 'X-Service-Secret': this.secret },
+      });
       return data as AppSuccess;
     } catch (error) {
       if (error instanceof AxiosError) {

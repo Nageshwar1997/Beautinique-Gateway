@@ -35,11 +35,14 @@ const {
   MAIL_SERVICE_DEV_URL,
   MAIL_SERVICE_PROD_URL,
 
+  MAIL_SERVICE_SECRET,
+
   MASTER_DEV_URL,
   MASTER_PROD_URL,
 
   MEDIA_SERVICE_DEV_URL,
   MEDIA_SERVICE_PROD_URL,
+  MEDIA_SERVICE_SECRET,
 
   // N
   // O
@@ -49,6 +52,8 @@ const {
 
   PRODUCT_SERVICE_DEV_URL,
   PRODUCT_SERVICE_PROD_URL,
+
+  PRODUCT_SERVICE_SECRET,
 
   PUBLIC_DEV_URL_1,
   PUBLIC_DEV_URL_2,
@@ -61,6 +66,8 @@ const {
 
   USER_SERVICE_DEV_URL,
   USER_SERVICE_PROD_URL,
+
+  USER_SERVICE_SECRET,
 
   // V
   // W
@@ -100,6 +107,14 @@ export const envs = {
   // Q
   // R
   // S
+
+  service_secret: {
+    user: USER_SERVICE_SECRET,
+    product: PRODUCT_SERVICE_SECRET,
+    mail: MAIL_SERVICE_SECRET,
+    media: MEDIA_SERVICE_SECRET,
+  },
+
   // T
   // U
 

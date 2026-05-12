@@ -1,9 +1,19 @@
+import type { TService } from '@beautinique/be-constants';
 import type { CookieOptions } from 'express';
 import { envs } from '../envs';
 
-export const SERVICES_BASE_URLS = {
+export const SERVICES_BASE_URLS: Record<TService, string> = {
+  'mail-service': `${envs.url.service.mail}/api/v1`,
   'media-service': `${envs.url.service.media}/api/v1`,
+  'product-service': `${envs.url.service.product}/api/v1`,
   'user-service': `${envs.url.service.user}/api/v1`,
+} as const;
+
+export const SERVICE_SECRET_MAP: Record<TService, string> = {
+  'mail-service': envs.service_secret.mail,
+  'media-service': envs.service_secret.media,
+  'product-service': envs.service_secret.product,
+  'user-service': envs.service_secret.user,
 } as const;
 
 export const ORIGINS = Object.values(envs.url.frontend);
