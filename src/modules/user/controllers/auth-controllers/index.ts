@@ -11,12 +11,7 @@ import type {
 import type { Request, Response } from 'express';
 import { HEADERS_KEYS } from '../../../../constants';
 import type { AuthRequest } from '../../../../types';
-import {
-  clearAuthCookies,
-  generateAccessToken,
-  generateRefreshToken,
-  setAuthCookies,
-} from '../../../../utils';
+import { clearAuthCookies, generateAuthTokens, setAuthCookies } from '../../../../utils';
 import { CLIENT_OAUTH_REDIRECT_URL } from '../../constants';
 import { authService } from '../../services';
 
@@ -63,8 +58,7 @@ export const registerAndSaveController = async (req: Request, res: Response) => 
 
   const { message, statusCode, user } = await authService.registerAndSave({ ...body, token });
 
-  const accessToken = generateAccessToken({ _id: user._id, role: user.role });
-  const refreshToken = generateRefreshToken({ _id: user._id, role: user.role });
+  const { accessToken, refreshToken } = generateAuthTokens({ _id: user._id, role: user.role });
 
   setAuthCookies(res, accessToken, refreshToken);
 
@@ -78,8 +72,7 @@ export const manualLoginController = async (req: Request, res: Response) => {
 
   const { message, statusCode, user } = await authService.manualLogin(body);
 
-  const accessToken = generateAccessToken({ _id: user._id, role: user.role });
-  const refreshToken = generateRefreshToken({ _id: user._id, role: user.role });
+  const { accessToken, refreshToken } = generateAuthTokens({ _id: user._id, role: user.role });
 
   setAuthCookies(res, accessToken, refreshToken);
 
@@ -108,8 +101,7 @@ export const googleCallbackController = async (req: Request, res: Response) => {
   try {
     const { user } = await authService.handleGoogleCallback(String(code));
 
-    const accessToken = generateAccessToken({ _id: user._id, role: user.role });
-    const refreshToken = generateRefreshToken({ _id: user._id, role: user.role });
+    const { accessToken, refreshToken } = generateAuthTokens({ _id: user._id, role: user.role });
 
     setAuthCookies(res, accessToken, refreshToken);
 
@@ -143,8 +135,7 @@ export const linkedinCallbackController = async (req: Request, res: Response) =>
   try {
     const { user } = await authService.handleLinkedinCallback(String(code));
 
-    const accessToken = generateAccessToken({ _id: user._id, role: user.role });
-    const refreshToken = generateRefreshToken({ _id: user._id, role: user.role });
+    const { accessToken, refreshToken } = generateAuthTokens({ _id: user._id, role: user.role });
 
     setAuthCookies(res, accessToken, refreshToken);
 
@@ -178,8 +169,7 @@ export const githubCallbackController = async (req: Request, res: Response) => {
   try {
     const { user } = await authService.handleGithubCallback(String(code));
 
-    const accessToken = generateAccessToken({ _id: user._id, role: user.role });
-    const refreshToken = generateRefreshToken({ _id: user._id, role: user.role });
+    const { accessToken, refreshToken } = generateAuthTokens({ _id: user._id, role: user.role });
 
     setAuthCookies(res, accessToken, refreshToken);
 
@@ -234,8 +224,7 @@ export const forgotPasswordSaveController = async (req: Request, res: Response) 
 
   const { message, statusCode, user } = await authService.forgotPasswordSave({ ...body, token });
 
-  const accessToken = generateAccessToken({ _id: user._id, role: user.role });
-  const refreshToken = generateRefreshToken({ _id: user._id, role: user.role });
+  const { accessToken, refreshToken } = generateAuthTokens({ _id: user._id, role: user.role });
 
   setAuthCookies(res, accessToken, refreshToken);
 
@@ -250,8 +239,7 @@ export const changePasswordController = async (req: AuthRequest, res: Response) 
 
   const { message, statusCode, user } = await authService.changePassword(userId, body);
 
-  const accessToken = generateAccessToken({ _id: user._id, role: user.role });
-  const refreshToken = generateRefreshToken({ _id: user._id, role: user.role });
+  const { accessToken, refreshToken } = generateAuthTokens({ _id: user._id, role: user.role });
 
   setAuthCookies(res, accessToken, refreshToken);
 
@@ -266,8 +254,7 @@ export const setPasswordController = async (req: AuthRequest, res: Response) => 
 
   const { message, statusCode, user } = await authService.setPassword(userId, body);
 
-  const accessToken = generateAccessToken({ _id: user._id, role: user.role });
-  const refreshToken = generateRefreshToken({ _id: user._id, role: user.role });
+  const { accessToken, refreshToken } = generateAuthTokens({ _id: user._id, role: user.role });
 
   setAuthCookies(res, accessToken, refreshToken);
 

@@ -1,6 +1,6 @@
 import { AppError } from '@beautinique/be-classes';
 import type { Request, Response } from 'express';
-import { ACCESS_TOKEN_COOKIE_NAME, ACCESS_TOKEN_COOKIE_OPTIONS } from '../constants';
+import { COOKIES_DATA } from '../constants';
 import { envs } from '../envs';
 import { generateAccessToken, verifyRefreshToken } from '../utils';
 
@@ -50,17 +50,17 @@ export const wakeUpController = async (_req: Request, res: Response) => {
 /* ================================ REFRESH CONTROLLERS ================================ */
 
 export const refreshAccessTokenController = async (req: Request, res: Response) => {
-  const refreshToken = req.cookies?.refreshToken;
+  const token = req.cookies?.[COOKIES_DATA.refresh_token.name];
 
-  if (!refreshToken) {
+  if (!token) {
     throw new AppError({ message: 'Refresh token missing', code: 'AUTHENTICATION_ERROR' });
   }
 
-  const { _id, role } = verifyRefreshToken(refreshToken);
+  const { _id, role } = verifyRefreshToken(token);
 
   const newAccessToken = generateAccessToken({ _id, role });
 
-  res.cookie(ACCESS_TOKEN_COOKIE_NAME, newAccessToken, ACCESS_TOKEN_COOKIE_OPTIONS);
+  res.cookie(COOKIES_DATA.access_token.name, newAccessToken, COOKIES_DATA.access_token.options);
 
   res.success(200, 'Token refreshed');
 };

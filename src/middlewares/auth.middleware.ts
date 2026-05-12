@@ -1,11 +1,12 @@
 import { AppError } from '@beautinique/be-classes';
 import type { TRole } from '@beautinique/be-constants';
 import type { NextFunction, Response } from 'express';
+import { COOKIES_DATA } from '../constants';
 import type { AuthRequest } from '../types';
 import { verifyAccessToken } from '../utils';
 
 export const authenticate = async (req: AuthRequest, _res: Response, next: NextFunction) => {
-  const token = req.cookies?.accessToken;
+  const token = req.cookies?.[COOKIES_DATA.access_token.name];
 
   if (!token) {
     throw new AppError({ message: 'Access token missing', code: 'AUTHENTICATION_ERROR' });
@@ -32,7 +33,7 @@ export const authenticate = async (req: AuthRequest, _res: Response, next: NextF
 export const authorize =
   (allowedRoles: TRole[]) => (req: AuthRequest, _res: Response, next: NextFunction) => {
     try {
-      const token = req.cookies?.accessToken;
+      const token = req.cookies?.[COOKIES_DATA.access_token.name];
 
       if (!token) {
         throw new AppError({ message: 'Access token missing', code: 'AUTHENTICATION_ERROR' });

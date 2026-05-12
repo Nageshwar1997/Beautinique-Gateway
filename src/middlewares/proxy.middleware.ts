@@ -28,7 +28,7 @@ mediaProxy.on('error', (err, req, res) => {
 
   if (!isServerResponse(res) || res.headersSent) return;
 
-  res.writeHead(502, { 'Content-Type': 'application/json' });
+  res.writeHead(502, { [HEADERS_KEYS.contentType]: 'application/json' });
   res.end(
     JSON.stringify({
       success: false,

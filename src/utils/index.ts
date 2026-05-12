@@ -1,24 +1,22 @@
 import type { Response } from 'express';
 import jwt from 'jsonwebtoken';
-import {
-  ACCESS_TOKEN_COOKIE_NAME,
-  ACCESS_TOKEN_COOKIE_OPTIONS,
-  REFRESH_TOKEN_COOKIE_NAME,
-  REFRESH_TOKEN_COOKIE_OPTIONS,
-} from '../constants';
+import { COOKIES_DATA } from '../constants';
 import { envs } from '../envs';
 import type { IJwtPayload } from '../types';
 
 export const generateAccessToken = (payload: IJwtPayload) => {
-  return jwt.sign(payload, envs.jwt.access_secret, {
-    expiresIn: '15m',
-  });
+  return jwt.sign(payload, envs.jwt.access_secret, { expiresIn: '15m' });
 };
 
 export const generateRefreshToken = (payload: IJwtPayload) => {
-  return jwt.sign(payload, envs.jwt.refresh_secret, {
-    expiresIn: '7d',
-  });
+  return jwt.sign(payload, envs.jwt.refresh_secret, { expiresIn: '7d' });
+};
+
+export const generateAuthTokens = (payload: IJwtPayload) => {
+  const accessToken = generateAccessToken(payload);
+  const refreshToken = generateRefreshToken(payload);
+
+  return { accessToken, refreshToken };
 };
 
 export const verifyAccessToken = (token: string) => {
@@ -31,13 +29,13 @@ export const verifyRefreshToken = (token: string) => {
 
 export const setAuthCookies = (res: Response, accessToken: string, refreshToken: string) => {
   // Access Token
-  res.cookie(ACCESS_TOKEN_COOKIE_NAME, accessToken, ACCESS_TOKEN_COOKIE_OPTIONS);
+  res.cookie(COOKIES_DATA.access_token.name, accessToken, COOKIES_DATA.access_token.options);
 
   // Refresh Token
-  res.cookie(REFRESH_TOKEN_COOKIE_NAME, refreshToken, REFRESH_TOKEN_COOKIE_OPTIONS);
+  res.cookie(COOKIES_DATA.refresh_token.name, refreshToken, COOKIES_DATA.refresh_token.options);
 };
 
 export const clearAuthCookies = (res: Response) => {
-  res.clearCookie(ACCESS_TOKEN_COOKIE_NAME);
-  res.clearCookie(REFRESH_TOKEN_COOKIE_NAME);
+  res.clearCookie(COOKIES_DATA.access_token.name);
+  res.clearCookie(COOKIES_DATA.refresh_token.name);
 };

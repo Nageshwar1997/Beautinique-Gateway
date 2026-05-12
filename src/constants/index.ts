@@ -118,20 +118,18 @@ export const COOKIE_OPTIONS: CookieOptions = {
   sameSite: envs.is_dev ? 'lax' : 'none',
 };
 
-export const ACCESS_TOKEN_COOKIE_OPTIONS = { ...COOKIE_OPTIONS, maxAge: 15 * 60 * 1000 };
-
-export const ACCESS_TOKEN_COOKIE_NAME = 'accessToken';
-
-export const REFRESH_TOKEN_COOKIE_OPTIONS = {
-  ...COOKIE_OPTIONS,
-  maxAge: 7 * 24 * 60 * 60 * 1000,
-};
-
-export const REFRESH_TOKEN_COOKIE_NAME = 'refreshToken';
+export const COOKIES_DATA = {
+  access_token: {
+    name: 'access_token',
+    options: { ...COOKIE_OPTIONS, maxAge: 15 * 60 * 1000 } as CookieOptions,
+  },
+  refresh_token: {
+    name: 'refresh_token',
+    options: { ...COOKIE_OPTIONS, maxAge: 7 * 24 * 60 * 60 * 1000 } as CookieOptions,
+  },
+} as const;
 
 export const HEADERS_KEYS = {
-  accessToken: 'X-Access-Token',
-  refreshToken: 'X-Refresh-Token',
   serviceSecret: 'X-Service-Secret',
   userId: 'X-User-Id',
   userRole: 'X-User-Role',
