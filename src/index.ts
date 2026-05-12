@@ -12,7 +12,7 @@ import express from 'express';
 import type { Socket } from 'node:net';
 import path from 'path';
 import { parse } from 'qs';
-import { GATEWAY_METHODS_AND_PATHS, ORIGINS } from './constants';
+import { GATEWAY_METHODS_AND_PATHS, HEADERS_KEYS, ORIGINS } from './constants';
 import { refreshAccessTokenController, wakeUpController } from './controllers';
 import { envs } from './envs';
 import {
@@ -43,7 +43,12 @@ const connections = new Set<Socket>();
 app.use(setRequestId);
 
 // 2. CORS (before anything that depends on request)
-app.use(checkCors({ origins: ORIGINS, allowedHeaders: ['Content-Type', 'Authorization'] }));
+app.use(
+  checkCors({
+    origins: ORIGINS,
+    allowedHeaders: [HEADERS_KEYS.contentType, HEADERS_KEYS.authorization],
+  }),
+);
 
 // 3. Cookies parser
 app.use(cookieParser());

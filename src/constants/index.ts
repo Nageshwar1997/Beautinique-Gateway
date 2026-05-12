@@ -128,3 +128,13 @@ export const REFRESH_TOKEN_COOKIE_OPTIONS = {
 };
 
 export const REFRESH_TOKEN_COOKIE_NAME = 'refreshToken';
+
+export const HEADERS_KEYS = {
+  accessToken: 'X-Access-Token',
+  refreshToken: 'X-Refresh-Token',
+  serviceSecret: 'X-Service-Secret',
+  userId: 'X-User-Id',
+  userRole: 'X-User-Role',
+  authorization: 'Authorization',
+  contentType: 'Content-Type',
+} as const;

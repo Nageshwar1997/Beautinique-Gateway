@@ -1,4 +1,5 @@
 import { ApiRequest } from '../../../classes';
+import { HEADERS_KEYS } from '../../../constants';
 
 class UserService extends ApiRequest {
   constructor() {
@@ -8,7 +9,10 @@ class UserService extends ApiRequest {
   /* ================== GET METHODS ================== */
 
   public getSessionUser(userId: string) {
-    return this.request({ ...this.routes.user.session, headers: { 'X-User-Id': userId } });
+    return this.request({
+      ...this.routes.user.session,
+      headers: { [HEADERS_KEYS.userId]: userId },
+    });
   }
 }
 

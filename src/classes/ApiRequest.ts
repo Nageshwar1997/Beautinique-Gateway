@@ -1,7 +1,12 @@
 import { AppError, type AppSuccess } from '@beautinique/be-classes';
 import type { TService } from '@beautinique/be-constants';
 import axios, { AxiosError, type AxiosInstance, type AxiosRequestConfig } from 'axios';
-import { API_ROUTES_AND_METHODS, SERVICES_BASE_URLS, SERVICE_SECRET_MAP } from '../constants';
+import {
+  API_ROUTES_AND_METHODS,
+  HEADERS_KEYS,
+  SERVICES_BASE_URLS,
+  SERVICE_SECRET_MAP,
+} from '../constants';
 
 export class ApiRequest {
   private instance: AxiosInstance;
@@ -20,7 +25,7 @@ export class ApiRequest {
       const { headers, ...restConfigs } = config ?? {};
       const { data } = await this.instance.request({
         ...restConfigs,
-        headers: { ...headers, 'X-Service-Secret': this.secret },
+        headers: { ...headers, [HEADERS_KEYS.serviceSecret]: this.secret },
       });
       return data as AppSuccess;
     } catch (error) {

@@ -9,6 +9,7 @@ import type {
   TSetPassword,
 } from '@beautinique/be-zod';
 import type { Request, Response } from 'express';
+import { HEADERS_KEYS } from '../../../../constants';
 import type { AuthRequest } from '../../../../types';
 import {
   clearAuthCookies,
@@ -28,7 +29,7 @@ export const registerSendOtpController = async (req: Request, res: Response) => 
 };
 
 export const registerResendOtpController = async (req: Request, res: Response) => {
-  const token = req.get('Authorization') || '';
+  const token = req.get(HEADERS_KEYS.authorization) || '';
 
   if (!token) {
     throw new AppError({ message: 'Invalid or expired session', code: 'BAD_REQUEST' });
@@ -39,7 +40,7 @@ export const registerResendOtpController = async (req: Request, res: Response) =
 };
 
 export const registerVerifyOtpController = async (req: Request, res: Response) => {
-  const token = req.get('Authorization') || '';
+  const token = req.get(HEADERS_KEYS.authorization) || '';
 
   if (!token) {
     throw new AppError({ message: 'Invalid or expired session', code: 'BAD_REQUEST' });
@@ -52,7 +53,7 @@ export const registerVerifyOtpController = async (req: Request, res: Response) =
 };
 
 export const registerAndSaveController = async (req: Request, res: Response) => {
-  const token = req.get('Authorization') || '';
+  const token = req.get(HEADERS_KEYS.authorization) || '';
 
   if (!token) {
     throw new AppError({ message: 'Invalid or expired session', code: 'BAD_REQUEST' });
@@ -199,7 +200,7 @@ export const forgotPasswordSendOtpController = async (req: Request, res: Respons
 };
 
 export const forgotPasswordResendOtpController = async (req: Request, res: Response) => {
-  const token = req.get('Authorization') || '';
+  const token = req.get(HEADERS_KEYS.authorization) || '';
 
   if (!token) {
     throw new AppError({ message: 'Invalid or expired session', code: 'BAD_REQUEST' });
@@ -210,7 +211,7 @@ export const forgotPasswordResendOtpController = async (req: Request, res: Respo
 };
 
 export const forgotPasswordVerifyOtpController = async (req: Request, res: Response) => {
-  const token = req.get('Authorization') || '';
+  const token = req.get(HEADERS_KEYS.authorization) || '';
 
   if (!token) {
     throw new AppError({ message: 'Invalid or expired session', code: 'BAD_REQUEST' });
@@ -223,7 +224,7 @@ export const forgotPasswordVerifyOtpController = async (req: Request, res: Respo
 };
 
 export const forgotPasswordSaveController = async (req: Request, res: Response) => {
-  const token = req.get('Authorization') || '';
+  const token = req.get(HEADERS_KEYS.authorization) || '';
 
   if (!token) {
     throw new AppError({ message: 'Invalid or expired session', code: 'BAD_REQUEST' });

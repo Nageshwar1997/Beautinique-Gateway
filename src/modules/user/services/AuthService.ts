@@ -8,6 +8,7 @@ import type {
   TSetPassword,
 } from '@beautinique/be-zod';
 import { ApiRequest } from '../../../classes';
+import { HEADERS_KEYS } from '../../../constants';
 
 class AuthService extends ApiRequest {
   constructor() {
@@ -22,7 +23,7 @@ class AuthService extends ApiRequest {
   public async registerResendOtp(token: string) {
     return this.request({
       ...this.routes.user.register.resendOtp,
-      headers: { Authorization: token },
+      headers: { [HEADERS_KEYS.authorization]: token },
     });
   }
 
@@ -30,7 +31,7 @@ class AuthService extends ApiRequest {
     return this.request({
       ...this.routes.user.register.verifyOtp,
       data: { otp },
-      headers: { Authorization: token },
+      headers: { [HEADERS_KEYS.authorization]: token },
     });
   }
 
@@ -38,7 +39,7 @@ class AuthService extends ApiRequest {
     return this.request({
       ...this.routes.user.register.saveUser,
       data,
-      headers: { Authorization: token },
+      headers: { [HEADERS_KEYS.authorization]: token },
     });
   }
 
@@ -88,7 +89,7 @@ class AuthService extends ApiRequest {
   public async forgotPasswordResendOtp(token: string) {
     return this.request({
       ...this.routes.user.password.forgot.resendOtp,
-      headers: { Authorization: token },
+      headers: { [HEADERS_KEYS.authorization]: token },
     });
   }
 
@@ -96,7 +97,7 @@ class AuthService extends ApiRequest {
     return this.request({
       ...this.routes.user.password.forgot.verifyOtp,
       data: { otp },
-      headers: { Authorization: token },
+      headers: { [HEADERS_KEYS.authorization]: token },
     });
   }
 
@@ -104,7 +105,7 @@ class AuthService extends ApiRequest {
     return this.request({
       ...this.routes.user.password.forgot.save,
       data,
-      headers: { Authorization: token },
+      headers: { [HEADERS_KEYS.authorization]: token },
     });
   }
 
@@ -113,7 +114,7 @@ class AuthService extends ApiRequest {
     return this.request({
       ...this.routes.user.password.change,
       data,
-      headers: { 'X-User-Id': userId },
+      headers: { [HEADERS_KEYS.userId]: userId },
     });
   }
 
@@ -122,13 +123,13 @@ class AuthService extends ApiRequest {
     return this.request({
       ...this.routes.user.password.set,
       data,
-      headers: { 'X-User-Id': userId },
+      headers: { [HEADERS_KEYS.userId]: userId },
     });
   }
 
   /* ================== LOGOUT METHODS ================== */
   public async logout(userId: string) {
-    return this.request({ ...this.routes.user.logout, headers: { 'X-User-Id': userId } });
+    return this.request({ ...this.routes.user.logout, headers: { [HEADERS_KEYS.userId]: userId } });
   }
 }
 
