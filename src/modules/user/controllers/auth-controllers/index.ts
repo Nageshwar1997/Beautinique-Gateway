@@ -1,4 +1,5 @@
 import { AppError } from '@beautinique/be-classes';
+import type { TRole } from '@beautinique/be-constants';
 import type {
   TChangePassword,
   TEmail,
@@ -69,8 +70,9 @@ export const registerAndSaveController = async (req: Request, res: Response) => 
 
 export const manualLoginController = async (req: Request, res: Response) => {
   const body = req.body as TLogin;
+  const role = req.get(HEADERS_KEYS.loginRole) as TRole | undefined;
 
-  const { message, statusCode, user } = await authService.manualLogin(body);
+  const { message, statusCode, user } = await authService.manualLogin(body, role);
 
   const { accessToken, refreshToken } = generateAuthTokens({ _id: user._id, role: user.role });
 

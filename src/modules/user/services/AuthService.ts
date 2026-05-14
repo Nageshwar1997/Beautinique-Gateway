@@ -1,3 +1,4 @@
+import type { TRole } from '@beautinique/be-constants';
 import type {
   TChangePassword,
   TEmail,
@@ -44,8 +45,12 @@ class AuthService extends ApiRequest {
   }
 
   /* ================== LOGIN METHODS ================== */
-  public async manualLogin(data: TLogin) {
-    return this.request({ ...this.routes.user.login.manual, data });
+  public async manualLogin(data: TLogin, role?: TRole) {
+
+    return this.request({
+      ...this.routes.user.login.manual, data, headers: {
+        [HEADERS_KEYS.loginRole]: role,
+    } });
   }
 
   public async getGoogleRedirectUrl() {

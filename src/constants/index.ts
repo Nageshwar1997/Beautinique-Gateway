@@ -135,4 +135,5 @@ export const HEADERS_KEYS = {
   userRole: 'X-User-Role',
   authorization: 'Authorization',
   contentType: 'Content-Type',
+  loginRole: 'X-Login-Role',
 } as const;

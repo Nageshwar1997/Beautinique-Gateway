@@ -61,6 +61,10 @@ const {
   // Q
   // R
   // S
+
+  SELLER_DEV_URL,
+  SELLER_PROD_URL,
+
   // T
   // U
 
@@ -123,6 +127,7 @@ export const envs = {
       client: is_dev ? CLIENT_DEV_URL : CLIENT_PROD_URL,
       admin: is_dev ? ADMIN_DEV_URL : ADMIN_PROD_URL,
       master: is_dev ? MASTER_DEV_URL : MASTER_PROD_URL,
+      seller: is_dev ? SELLER_DEV_URL : SELLER_PROD_URL,
       public1: PUBLIC_DEV_URL_1,
       public2: PUBLIC_DEV_URL_2,
     },
