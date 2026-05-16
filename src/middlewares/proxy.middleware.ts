@@ -2,6 +2,7 @@ import type { Request, Response } from 'express';
 import proxy from 'http-proxy';
 import type { ServerResponse } from 'node:http';
 import { HEADERS_KEYS, SERVICES_BASE_URLS } from '../constants';
+import { getUser } from '../utils';
 import { logger } from './logger.middleware';
 
 const mediaProxy = proxy.createProxyServer<Request, Response>({
@@ -16,10 +17,9 @@ const isServerResponse = (res: ServerResponse | unknown): res is ServerResponse 
   typeof res === 'object' && res !== null && 'writeHead' in res && 'end' in res;
 
 mediaProxy.on('proxyReq', (proxyReq, req) => {
-  if (req.user) {
-    proxyReq.setHeader(HEADERS_KEYS.userId, req.user._id);
-    proxyReq.setHeader(HEADERS_KEYS.userRole, req.user.role);
-  }
+  const { _id, role } = getUser(req);
+  proxyReq.setHeader(HEADERS_KEYS.userId, _id);
+  proxyReq.setHeader(HEADERS_KEYS.userRole, role);
 });
 
 mediaProxy.on('error', (err, req, res) => {
