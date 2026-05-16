@@ -56,6 +56,14 @@ export const API_ROUTES_AND_METHODS = {
     },
     session: { method: 'GET', url: '/user/session' },
   },
+  product: {
+    category: {
+      base: '/category',
+      get: {
+        all: { method: 'GET', url: '/all' },
+      },
+    },
+  },
 };
 
 export const GATEWAY_METHODS_AND_PATHS = {
@@ -110,6 +118,15 @@ export const GATEWAY_METHODS_AND_PATHS = {
     },
   },
   media: { base: '/media-service' },
+  product: {
+    base: '/product-service',
+    category: {
+      base: '/category',
+      get: {
+        all: { method: 'get', path: '/all' },
+      },
+    },
+  },
 } as const;
 
 export const COOKIE_OPTIONS: CookieOptions = {
