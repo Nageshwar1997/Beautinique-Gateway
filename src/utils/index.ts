@@ -1,4 +1,5 @@
-import type { Response } from 'express';
+import { AppError } from '@beautinique/be-classes';
+import type { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { COOKIES_DATA } from '../constants';
 import { envs } from '../envs';
@@ -38,4 +39,13 @@ export const setAuthCookies = (res: Response, accessToken: string, refreshToken:
 export const clearAuthCookies = (res: Response) => {
   res.clearCookie(COOKIES_DATA.access_token.name);
   res.clearCookie(COOKIES_DATA.refresh_token.name);
+};
+
+/* ========== GET AUTH USER ========== */
+export const getUser = (req: Request) => {
+  const user = req.user;
+
+  if (!user) throw new AppError({ message: 'You are not logged in', code: 'AUTHENTICATION_ERROR' });
+
+  return user;
 };

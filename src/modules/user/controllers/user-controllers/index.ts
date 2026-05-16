@@ -1,9 +1,8 @@
 import { AppError } from '@beautinique/be-classes';
-import type { Response } from 'express';
+import type { Request, Response } from 'express';
 
-import type { AuthRequest } from '../../../../types';
 import { userService } from '../../services/UserService';
-export const getSessionUserController = async (req: AuthRequest, res: Response) => {
+export const getSessionUserController = async (req: Request, res: Response) => {
   const userId = req.user?._id;
 
   if (!userId) {

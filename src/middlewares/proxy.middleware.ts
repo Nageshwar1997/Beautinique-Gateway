@@ -1,11 +1,10 @@
-import type { Response } from 'express';
+import type { Request, Response } from 'express';
 import proxy from 'http-proxy';
 import type { ServerResponse } from 'node:http';
 import { HEADERS_KEYS, SERVICES_BASE_URLS } from '../constants';
-import type { AuthRequest } from '../types';
 import { logger } from './logger.middleware';
 
-const mediaProxy = proxy.createProxyServer<AuthRequest, Response>({
+const mediaProxy = proxy.createProxyServer<Request, Response>({
   target: SERVICES_BASE_URLS['media-service'],
   changeOrigin: true,
   xfwd: true,
@@ -37,6 +36,6 @@ mediaProxy.on('error', (err, req, res) => {
   );
 });
 
-export const mediaServiceProxy = (req: AuthRequest, res: Response) => {
+export const mediaServiceProxy = (req: Request, res: Response) => {
   mediaProxy.web(req, res);
 };

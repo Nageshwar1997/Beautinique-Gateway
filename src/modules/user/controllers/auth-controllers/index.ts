@@ -11,7 +11,6 @@ import type {
 } from '@beautinique/be-zod';
 import type { Request, Response } from 'express';
 import { HEADERS_KEYS } from '../../../../constants';
-import type { AuthRequest } from '../../../../types';
 import { clearAuthCookies, generateAuthTokens, setAuthCookies } from '../../../../utils';
 import { CLIENT_OAUTH_REDIRECT_URL } from '../../constants';
 import { authService } from '../../services';
@@ -235,7 +234,7 @@ export const forgotPasswordSaveController = async (req: Request, res: Response) 
 
 /* ================================ CHANGE PASSWORD CONTROLLERS ================================ */
 
-export const changePasswordController = async (req: AuthRequest, res: Response) => {
+export const changePasswordController = async (req: Request, res: Response) => {
   const userId = req.user?._id || '';
   const body = req.body as TChangePassword;
 
@@ -250,7 +249,7 @@ export const changePasswordController = async (req: AuthRequest, res: Response) 
 
 /* ================================ SET PASSWORD CONTROLLERS ================================ */
 
-export const setPasswordController = async (req: AuthRequest, res: Response) => {
+export const setPasswordController = async (req: Request, res: Response) => {
   const userId = req.user?._id || '';
   const body = req.body as TSetPassword;
 
@@ -265,7 +264,7 @@ export const setPasswordController = async (req: AuthRequest, res: Response) => 
 
 /* ================================ LOGOUT CONTROLLERS ================================ */
 
-export const logoutController = async (req: AuthRequest, res: Response) => {
+export const logoutController = async (req: Request, res: Response) => {
   const userId = req.user?._id || '';
 
   const { message, statusCode } = await authService.logout(userId);

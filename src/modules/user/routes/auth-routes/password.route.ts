@@ -9,7 +9,6 @@ import {
 import { Router } from 'express';
 import { GATEWAY_METHODS_AND_PATHS } from '../../../../constants';
 import { authenticate } from '../../../../middlewares';
-import type { AuthRequest } from '../../../../types';
 import {
   changePasswordController,
   forgotPasswordResendOtpController,
@@ -56,7 +55,7 @@ passwordRouter[change.method](
   authenticate,
   checkEmptyRequest({ body: true }),
   zodValidator(changePasswordSchema),
-  tryCatchResponse<AuthRequest>(changePasswordController),
+  tryCatchResponse(changePasswordController),
 );
 
 // Set Password Routes
@@ -65,5 +64,5 @@ passwordRouter[set.method](
   authenticate,
   checkEmptyRequest({ body: true }),
   zodValidator(setPasswordSchema),
-  tryCatchResponse<AuthRequest>(setPasswordController),
+  tryCatchResponse(setPasswordController),
 );
