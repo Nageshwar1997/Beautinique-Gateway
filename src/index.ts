@@ -46,7 +46,8 @@ app.use(setRequestId);
 app.use(
   checkCors({
     origins: ORIGINS,
-    allowedHeaders: [HEADERS_KEYS.contentType, HEADERS_KEYS.authorization],
+    allowedHeaders: [HEADERS_KEYS.contentType, HEADERS_KEYS.authorization, HEADERS_KEYS.loginRole],
+    credentials: true,
   }),
 );
 

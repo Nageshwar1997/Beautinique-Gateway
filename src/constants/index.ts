@@ -58,9 +58,8 @@ export const API_ROUTES_AND_METHODS = {
   },
   product: {
     category: {
-      base: '/category',
       get: {
-        all: { method: 'GET', url: '/all' },
+        all: { method: 'GET', url: '/category/all' },
       },
     },
   },
