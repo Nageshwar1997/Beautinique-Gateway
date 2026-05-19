@@ -58,6 +58,7 @@ export const API_ROUTES_AND_METHODS = {
   },
   product: {
     category: {
+      add: { method: 'POST', url: '/category/add' },
       get: {
         getByParentLevel: { method: 'GET', url: '/category/by-parent-level' },
       },
@@ -121,6 +122,7 @@ export const GATEWAY_METHODS_AND_PATHS = {
     base: '/product-service',
     category: {
       base: '/category',
+      add: { method: 'post', path: '/add' },
       get: {
         getByParentLevel: { method: 'get', path: '/by-parent-level' },
       },

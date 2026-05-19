@@ -7,6 +7,24 @@ class CategoryService extends ApiRequest {
     super('product-service');
   }
 
+  /* ================== POST METHODS ================== */
+  public addCategory({
+    _id,
+    role,
+    ...data
+  }: {
+    description?: null | string;
+    level: '1' | '2' | '3';
+    name: string;
+    parent?: null | string;
+  } & IJwtPayload) {
+    return this.request({
+      ...this.routes.product.category.add,
+      data,
+      headers: { [HEADERS_KEYS.userId]: _id, [HEADERS_KEYS.userRole]: role },
+    });
+  }
+
   /* ================== GET METHODS ================== */
 
   public getCategoriesByParentLevel({
