@@ -18,10 +18,10 @@ export const addCategoryController = async (req: Request, res: Response) => {
 
 export const getCategoriesByParentLevelController = async (req: Request, res: Response) => {
   const user = getUser(req);
-  const parentId = req.query.parentId?.toString();
+  const parent = req.query.parent?.toString();
   const level = req.query.level?.toString();
   const { message, statusCode, categories } = await categoryService.getCategoriesByParentLevel({
-    parentId,
+    parent,
     level,
     ...user,
   });

@@ -31,7 +31,7 @@ class CategoryService extends ApiRequest {
     _id,
     role,
     ...params
-  }: { parentId?: string; level?: string } & IJwtPayload) {
+  }: { parent?: string; level?: string } & IJwtPayload) {
     return this.request({
       ...this.routes.product.category.get.getByParentLevel,
       params,
