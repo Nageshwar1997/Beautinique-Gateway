@@ -4,6 +4,7 @@ import { GATEWAY_METHODS_AND_PATHS } from '../../../constants';
 import { authorize } from '../../../middlewares';
 import {
   addCategoryController,
+  deleteCategoryController,
   getCategoriesByParentLevelController,
   updateCategoryController,
 } from '../controllers';
@@ -30,7 +31,7 @@ categoryRouter[remove.method](
   remove.path,
   authorize(['ADMIN', 'MASTER']),
   checkEmptyRequest({ params: true }),
-  tryCatchResponse(updateCategoryController),
+  tryCatchResponse(deleteCategoryController),
 );
 
 categoryRouter[get.getByParentLevel.method](
