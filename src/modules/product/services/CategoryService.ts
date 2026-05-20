@@ -8,6 +8,7 @@ class CategoryService extends ApiRequest {
   }
 
   /* ================== POST METHODS ================== */
+
   public addCategory({
     _id,
     role,
@@ -22,6 +23,28 @@ class CategoryService extends ApiRequest {
       ...this.routes.product.category.add,
       data,
       headers: { [HEADERS_KEYS.userId]: _id, [HEADERS_KEYS.userRole]: role },
+    });
+  }
+
+  /* ================== PATCH METHODS ================== */
+
+  public updateCategory({
+    user,
+    data,
+  }: {
+    data: {
+      _id: string;
+      description?: null | string;
+      level: '1' | '2' | '3';
+      name: string;
+      parent?: null | string;
+    };
+    user: IJwtPayload;
+  }) {
+    return this.request({
+      ...this.routes.product.category.update,
+      data,
+      headers: { [HEADERS_KEYS.userId]: user._id, [HEADERS_KEYS.userRole]: user.role },
     });
   }
 

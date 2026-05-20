@@ -16,6 +16,21 @@ export const addCategoryController = async (req: Request, res: Response) => {
   res.success(statusCode, message);
 };
 
+export const updateCategoryController = async (req: Request, res: Response) => {
+  const user = getUser(req);
+  const data = (req.body ?? {}) as {
+    _id: string;
+    description?: null | string;
+    level: '1' | '2' | '3';
+    name: string;
+    parent?: null | string;
+  };
+
+  const { message, statusCode } = await categoryService.updateCategory({ user, data });
+
+  res.success(statusCode, message);
+};
+
 export const getCategoriesByParentLevelController = async (req: Request, res: Response) => {
   const user = getUser(req);
   const parent = req.query.parent?.toString();
