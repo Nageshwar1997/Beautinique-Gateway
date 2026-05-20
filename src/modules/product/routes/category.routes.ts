@@ -10,7 +10,7 @@ import {
 
 export const categoryRouter = Router();
 
-const { get, add, update } = GATEWAY_METHODS_AND_PATHS.product.category;
+const { get, add, update, delete: remove } = GATEWAY_METHODS_AND_PATHS.product.category;
 
 categoryRouter[add.method](
   add.path,
@@ -23,6 +23,13 @@ categoryRouter[update.method](
   update.path,
   authorize(['ADMIN', 'MASTER']),
   checkEmptyRequest({ body: true }),
+  tryCatchResponse(updateCategoryController),
+);
+
+categoryRouter[remove.method](
+  remove.path,
+  authorize(['ADMIN', 'MASTER']),
+  checkEmptyRequest({ params: true }),
   tryCatchResponse(updateCategoryController),
 );
 

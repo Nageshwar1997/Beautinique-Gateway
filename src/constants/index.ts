@@ -60,6 +60,7 @@ export const API_ROUTES_AND_METHODS = {
     category: {
       add: { method: 'POST', url: '/category/add' },
       update: { method: 'PATCH', url: '/category/update' },
+      delete: { method: 'DELETE', url: '/category/delete' },
       get: {
         getByParentLevel: { method: 'GET', url: '/category/by-parent-level' },
       },
@@ -125,6 +126,7 @@ export const GATEWAY_METHODS_AND_PATHS = {
       base: '/category',
       add: { method: 'post', path: '/add' },
       update: { method: 'patch', path: '/update' },
+      delete: { method: 'delete', path: '/delete/:categoryId' },
       get: {
         getByParentLevel: { method: 'get', path: '/by-parent-level' },
       },

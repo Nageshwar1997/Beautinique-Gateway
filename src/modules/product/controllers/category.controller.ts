@@ -31,6 +31,18 @@ export const updateCategoryController = async (req: Request, res: Response) => {
   res.success(statusCode, message);
 };
 
+export const deleteCategoryController = async (req: Request, res: Response) => {
+  const user = getUser(req);
+  const { categoryId } = req.params ?? {};
+
+  const { message, statusCode } = await categoryService.deleteCategory({
+    user,
+    categoryId: categoryId.toString(),
+  });
+
+  res.success(statusCode, message);
+};
+
 export const getCategoriesByParentLevelController = async (req: Request, res: Response) => {
   const user = getUser(req);
   const parent = req.query.parent?.toString();

@@ -48,6 +48,17 @@ class CategoryService extends ApiRequest {
     });
   }
 
+  /* ================== DELETE METHODS ================== */
+
+  public deleteCategory({ user, categoryId }: { categoryId: string; user: IJwtPayload }) {
+    const { method, url } = this.routes.product.category.delete;
+    return this.request({
+      method,
+      url: `${url}/${categoryId}`,
+      headers: { [HEADERS_KEYS.userId]: user._id, [HEADERS_KEYS.userRole]: user.role },
+    });
+  }
+
   /* ================== GET METHODS ================== */
 
   public getCategoriesByParentLevel({
