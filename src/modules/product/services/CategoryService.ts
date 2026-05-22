@@ -31,18 +31,21 @@ class CategoryService extends ApiRequest {
   public updateCategory({
     user,
     data,
+    categoryId,
   }: {
     data: {
-      _id: string;
       description?: null | string;
       level: '1' | '2' | '3';
       name: string;
       parent?: null | string;
     };
+    categoryId: string;
     user: IJwtPayload;
   }) {
+    const { method, url } = this.routes.product.category.update;
     return this.request({
-      ...this.routes.product.category.update,
+      method,
+      url: `${url}/${categoryId}`,
       data,
       headers: { [HEADERS_KEYS.userId]: user._id, [HEADERS_KEYS.userRole]: user.role },
     });

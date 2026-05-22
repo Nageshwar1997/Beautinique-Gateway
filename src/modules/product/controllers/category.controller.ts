@@ -25,8 +25,9 @@ export const updateCategoryController = async (req: Request, res: Response) => {
     name: string;
     parent?: null | string;
   };
+  const categoryId = req.params.categoryId?.toString();
 
-  const { message, statusCode } = await categoryService.updateCategory({ user, data });
+  const { message, statusCode } = await categoryService.updateCategory({ user, data, categoryId });
 
   res.success(statusCode, message);
 };
