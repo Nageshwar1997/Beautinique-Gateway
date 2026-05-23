@@ -20,7 +20,7 @@ type ExtractRouteParams<T extends string> = T extends `${string}:${infer Param}/
 interface TGeneratedEndpoint<T extends IEndpoint, FullPath extends string> {
   method: T['method'];
 
-  getUrl: (params?: ExtractRouteParams<FullPath>) => string;
+  getUrl: (params?: ExtractRouteParams<FullPath>) => FullPath;
 }
 
 type TGenerateRoutes<T, ParentPath extends string = ''> = {
@@ -47,15 +47,18 @@ const isEndpoint = (value: unknown): value is IEndpoint => {
   return typeof value === 'object' && value !== null && 'path' in value && 'method' in value;
 };
 
-const buildDynamicUrl = (path: string, params?: TStrRecord) => {
+const buildDynamicUrl = <TPath extends string>(path: TPath, params?: TStrRecord): TPath => {
   if (!params) {
     return path;
   }
 
-  return Object.entries(params).reduce(
-    (acc, [key, value]) => acc.replace(`:${key}`, String(value)),
-    path,
-  );
+  let result = path as string;
+
+  Object.entries(params).forEach(([key, value]) => {
+    result = result.replace(`:${key}`, String(value));
+  });
+
+  return result as TPath;
 };
 
 export const createGatewayHelper = <T extends Record<string, unknown>>(
