@@ -169,4 +169,4 @@ export const HEADERS_KEYS = {
   loginRole: 'X-Login-Role',
 } as const;
 
-export const ROUTES = createGatewayHelper(METHODS_AND_PATHS);
+export const API_METHODS_AND_URLS = createGatewayHelper(METHODS_AND_PATHS);
