@@ -5,6 +5,7 @@ import { authorize } from '../../../middlewares';
 import {
   addCategoryController,
   deleteCategoryController,
+  getCategoriesByHierarchyController,
   getCategoriesByParentLevelController,
   updateCategoryController,
 } from '../controllers';
@@ -34,9 +35,13 @@ categoryRouter[remove.method](
   tryCatchResponse(deleteCategoryController),
 );
 
-categoryRouter[get.getByParentLevel.method](
-  get.getByParentLevel.path,
+categoryRouter[get.byParentLevel.method](
+  get.byParentLevel.path,
   authorize(['ADMIN', 'SELLER', 'MASTER']),
-  checkEmptyRequest({ query: true }),
   tryCatchResponse(getCategoriesByParentLevelController),
+);
+
+categoryRouter[get.byHierarchy.method](
+  get.byHierarchy.path,
+  tryCatchResponse(getCategoriesByHierarchyController),
 );

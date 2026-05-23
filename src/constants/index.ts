@@ -62,7 +62,8 @@ export const API_ROUTES_AND_METHODS = {
       update: { method: 'PATCH', url: '/category/update' },
       delete: { method: 'DELETE', url: '/category/delete' },
       get: {
-        getByParentLevel: { method: 'GET', url: '/category/by-parent-level' },
+        byParentLevel: { method: 'GET', url: '/category/by-parent-level' },
+        byHierarchy: { method: 'GET', url: '/category/by-hierarchy' },
       },
     },
   },
@@ -128,7 +129,8 @@ export const GATEWAY_METHODS_AND_PATHS = {
       update: { method: 'patch', path: '/update/:categoryId' },
       delete: { method: 'delete', path: '/delete/:categoryId' },
       get: {
-        getByParentLevel: { method: 'get', path: '/by-parent-level' },
+        byParentLevel: { method: 'get', path: '/by-parent-level' },
+        byHierarchy: { method: 'get', path: '/by-hierarchy' },
       },
     },
   },

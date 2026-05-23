@@ -1,6 +1,7 @@
+import type { TCategory, TUpdateCategory } from '@beautinique/be-zod';
 import { ApiRequest } from '../../../classes';
 import { HEADERS_KEYS } from '../../../constants';
-import type { IJwtPayload } from '../../../types';
+import type { IUser, TUser } from '../../../types';
 
 class CategoryService extends ApiRequest {
   constructor() {
@@ -9,20 +10,11 @@ class CategoryService extends ApiRequest {
 
   /* ================== POST METHODS ================== */
 
-  public addCategory({
-    _id,
-    role,
-    ...data
-  }: {
-    description?: null | string;
-    level: '1' | '2' | '3';
-    name: string;
-    parent?: null | string;
-  } & IJwtPayload) {
+  public addCategory({ user, data }: { data: TCategory } & IUser) {
     return this.request({
       ...this.routes.product.category.add,
       data,
-      headers: { [HEADERS_KEYS.userId]: _id, [HEADERS_KEYS.userRole]: role },
+      headers: { [HEADERS_KEYS.userId]: user._id, [HEADERS_KEYS.userRole]: user.role },
     });
   }
 
@@ -33,15 +25,9 @@ class CategoryService extends ApiRequest {
     data,
     categoryId,
   }: {
-    data: {
-      description?: null | string;
-      level: '1' | '2' | '3';
-      name: string;
-      parent?: null | string;
-    };
+    data: TUpdateCategory;
     categoryId: string;
-    user: IJwtPayload;
-  }) {
+  } & IUser) {
     const { method, url } = this.routes.product.category.update;
     return this.request({
       method,
@@ -53,7 +39,7 @@ class CategoryService extends ApiRequest {
 
   /* ================== DELETE METHODS ================== */
 
-  public deleteCategory({ user, categoryId }: { categoryId: string; user: IJwtPayload }) {
+  public deleteCategory({ user, categoryId }: { categoryId: string } & IUser) {
     const { method, url } = this.routes.product.category.delete;
     return this.request({
       method,
@@ -65,14 +51,22 @@ class CategoryService extends ApiRequest {
   /* ================== GET METHODS ================== */
 
   public getCategoriesByParentLevel({
-    _id,
-    role,
-    ...params
-  }: { parent?: string; level?: string } & IJwtPayload) {
+    user,
+    params,
+  }: {
+    params: { parent?: string; level?: string };
+  } & IUser) {
     return this.request({
-      ...this.routes.product.category.get.getByParentLevel,
+      ...this.routes.product.category.get.byParentLevel,
       params,
-      headers: { [HEADERS_KEYS.userId]: _id, [HEADERS_KEYS.userRole]: role },
+      headers: { [HEADERS_KEYS.userId]: user._id, [HEADERS_KEYS.userRole]: user.role },
+    });
+  }
+
+  public getCategoriesByHierarchy(user: TUser) {
+    return this.request({
+      ...this.routes.product.category.get.byHierarchy,
+      headers: { [HEADERS_KEYS.userId]: user._id, [HEADERS_KEYS.userRole]: user.role },
     });
   }
 }
