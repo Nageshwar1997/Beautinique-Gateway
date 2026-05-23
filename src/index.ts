@@ -12,7 +12,7 @@ import express from 'express';
 import type { Socket } from 'node:net';
 import path from 'path';
 import { parse } from 'qs';
-import { HEADERS_KEYS, ORIGINS, ROUTES } from './constants';
+import { HEADERS_KEYS, METHODS_AND_PATHS, ORIGINS } from './constants';
 import { refreshAccessTokenController, wakeUpController } from './controllers';
 import { envs } from './envs';
 import {
@@ -25,7 +25,7 @@ import {
 } from './middlewares';
 import { router } from './routes';
 
-const { base, media_service, gateway } = ROUTES;
+const { base, media_service, gateway } = METHODS_AND_PATHS;
 
 const { health, home, refreshAccessToken, wakeUp } = gateway;
 

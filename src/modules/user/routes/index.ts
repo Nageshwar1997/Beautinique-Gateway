@@ -1,11 +1,10 @@
 import { Router } from 'express';
-
-import { ROUTES } from '../../../constants';
+import { METHODS_AND_PATHS } from '../../../constants';
 import { authRouter } from './auth-routes';
 import { userRouter } from './user-routes';
 
 export const userServiceRouter = Router();
-const { user, auth } = ROUTES.user_service;
+const { user, auth } = METHODS_AND_PATHS.user_service;
 
 userServiceRouter.use(auth.base, authRouter);
 userServiceRouter.use(user.base, userRouter);

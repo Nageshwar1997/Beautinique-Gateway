@@ -1,5 +1,7 @@
+import { checkEmptyRequest, tryCatchResponse, zodValidator } from '@beautinique/be-middlewares';
 import { loginSchema } from '@beautinique/be-zod';
 import { Router } from 'express';
+import { METHODS_AND_PATHS } from '../../../../constants';
 import {
   githubCallbackController,
   githubRedirectController,
@@ -10,12 +12,9 @@ import {
   manualLoginController,
 } from '../../controllers';
 
-import { checkEmptyRequest, tryCatchResponse, zodValidator } from '@beautinique/be-middlewares';
-import { ROUTES } from '../../../../constants';
-
 export const loginRouter = Router();
 
-const { manual, oauth } = ROUTES.user_service.auth.login;
+const { manual, oauth } = METHODS_AND_PATHS.user_service.auth.login;
 const { github, google, linkedin } = oauth;
 
 // Manual

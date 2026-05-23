@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import { ROUTES } from '../../../constants';
+import { METHODS_AND_PATHS } from '../../../constants';
 import { categoryRouter } from './category.routes';
 
 export const productServiceRouter = Router();
 
-const { category } = ROUTES.product_service;
+const { category } = METHODS_AND_PATHS.product_service;
 
 productServiceRouter.use(category.base, categoryRouter);

@@ -1,6 +1,6 @@
 import { checkEmptyRequest, tryCatchResponse } from '@beautinique/be-middlewares';
 import { Router } from 'express';
-import { ROUTES } from '../../../constants';
+import { METHODS_AND_PATHS } from '../../../constants';
 import { authorize } from '../../../middlewares';
 import {
   addCategoryController,
@@ -12,7 +12,7 @@ import {
 
 export const categoryRouter = Router();
 
-const { get, add, update, delete: remove } = ROUTES.product_service.category;
+const { get, add, update, delete: remove } = METHODS_AND_PATHS.product_service.category;
 
 categoryRouter[add.method](
   add.path,
