@@ -1,13 +1,11 @@
 import { Router } from 'express';
 
+import { ROUTES } from '../../../constants';
 import { authRouter } from './auth-routes';
 import { userRouter } from './user-routes';
-import { GATEWAY_METHODS_AND_PATHS } from '../../../constants';
 
 export const userServiceRouter = Router();
-const { user: _user } = GATEWAY_METHODS_AND_PATHS;
-
-const { auth, user } = _user;
+const { user, auth } = ROUTES.user_service;
 
 userServiceRouter.use(auth.base, authRouter);
 userServiceRouter.use(user.base, userRouter);

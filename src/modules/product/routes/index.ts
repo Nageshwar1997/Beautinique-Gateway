@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import { GATEWAY_METHODS_AND_PATHS } from '../../../constants';
+import { ROUTES } from '../../../constants';
 import { categoryRouter } from './category.routes';
 
 export const productServiceRouter = Router();
 
-const { category } = GATEWAY_METHODS_AND_PATHS.product;
+const { category } = ROUTES.product_service;
 
 productServiceRouter.use(category.base, categoryRouter);

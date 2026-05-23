@@ -1,7 +1,7 @@
 import { checkEmptyRequest, tryCatchResponse, zodValidator } from '@beautinique/be-middlewares';
 import { emailSchema, otpSchema, registerSchema } from '@beautinique/be-zod';
 import { Router } from 'express';
-import { GATEWAY_METHODS_AND_PATHS } from '../../../../constants';
+import { ROUTES } from '../../../../constants';
 import {
   registerAndSaveController,
   registerResendOtpController,
@@ -11,7 +11,7 @@ import {
 
 export const registerRouter = Router();
 
-const { resendOtp, saveUser, sendOtp, verifyOtp } = GATEWAY_METHODS_AND_PATHS.user.auth.register;
+const { resendOtp, saveUser, sendOtp, verifyOtp } = ROUTES.user_service.auth.register;
 
 registerRouter[sendOtp.method](
   sendOtp.path,

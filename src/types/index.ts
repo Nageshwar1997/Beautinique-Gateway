@@ -33,9 +33,9 @@ interface IGeneratedEndpoint<T extends IEndpoint> {
 }
 
 export type TGenerateRoutes<T> = {
-  [K in keyof T as K extends 'base' ? never : K]: T[K] extends IEndpoint
+  [K in keyof T]: T[K] extends IEndpoint
     ? IGeneratedEndpoint<T[K]>
     : T[K] extends object
       ? TGenerateRoutes<T[K]>
-      : never;
+      : T[K];
 };

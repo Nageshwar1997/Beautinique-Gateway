@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
 import { tryCatchResponse } from '@beautinique/be-middlewares';
-import { GATEWAY_METHODS_AND_PATHS } from '../../../../constants';
+import { ROUTES } from '../../../../constants';
 import { authenticate } from '../../../../middlewares';
 import { logoutController } from '../../controllers';
 import { loginRouter } from './login.route';
@@ -10,7 +10,7 @@ import { registerRouter } from './register.route';
 
 export const authRouter = Router();
 
-const { login, logout, password, register } = GATEWAY_METHODS_AND_PATHS.user.auth;
+const { login, logout, password, register } = ROUTES.user_service.auth;
 
 authRouter[logout.method](logout.path, authenticate, tryCatchResponse(logoutController));
 authRouter.use(register.base, registerRouter);

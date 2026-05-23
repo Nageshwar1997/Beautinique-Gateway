@@ -7,7 +7,7 @@ import {
   setPasswordSchema,
 } from '@beautinique/be-zod';
 import { Router } from 'express';
-import { GATEWAY_METHODS_AND_PATHS } from '../../../../constants';
+import { ROUTES } from '../../../../constants';
 import { authenticate } from '../../../../middlewares';
 import {
   changePasswordController,
@@ -20,7 +20,7 @@ import {
 
 export const passwordRouter = Router();
 
-const { forgot, change, set } = GATEWAY_METHODS_AND_PATHS.user.auth.password;
+const { forgot, change, set } = ROUTES.user_service.auth.password;
 
 // Forgot Password Routes
 passwordRouter[forgot.sendOtp.method](

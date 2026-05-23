@@ -89,7 +89,11 @@ export const createGatewayHelper = <T extends Record<string, unknown>>(
     const result = {} as TGenerateRoutes<K>;
 
     Object.entries(node).forEach(([key, value]) => {
-      if (key === 'base') return;
+      if (key === 'base') {
+        (result as Record<string, unknown>)[key] = joinPaths(...currentBase);
+
+        return;
+      }
 
       if (isEndpoint(value)) {
         const fullPath = joinPaths(...currentBase, value.path);

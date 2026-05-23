@@ -11,11 +11,11 @@ import {
 } from '../../controllers';
 
 import { checkEmptyRequest, tryCatchResponse, zodValidator } from '@beautinique/be-middlewares';
-import { GATEWAY_METHODS_AND_PATHS } from '../../../../constants';
+import { ROUTES } from '../../../../constants';
 
 export const loginRouter = Router();
 
-const { manual, oauth } = GATEWAY_METHODS_AND_PATHS.user.auth.login;
+const { manual, oauth } = ROUTES.user_service.auth.login;
 const { github, google, linkedin } = oauth;
 
 // Manual

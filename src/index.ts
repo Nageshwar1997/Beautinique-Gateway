@@ -12,7 +12,7 @@ import express from 'express';
 import type { Socket } from 'node:net';
 import path from 'path';
 import { parse } from 'qs';
-import { GATEWAY_METHODS_AND_PATHS, HEADERS_KEYS, ORIGINS } from './constants';
+import { HEADERS_KEYS, ORIGINS, ROUTES } from './constants';
 import { refreshAccessTokenController, wakeUpController } from './controllers';
 import { envs } from './envs';
 import {
@@ -25,7 +25,7 @@ import {
 } from './middlewares';
 import { router } from './routes';
 
-const { base, media } = GATEWAY_METHODS_AND_PATHS;
+const { base, media_service } = ROUTES;
 
 const app = express();
 
@@ -61,7 +61,12 @@ app.use(requestLogs);
 app.use(express.static(path.resolve('public')));
 
 // 6. Proxy routes (BEFORE body parsers)
-app.use(`${base}${media.base}`, authenticate, authorize(['ADMIN', 'SELLER']), mediaServiceProxy);
+app.use(
+  `${base}${media_service.base}`,
+  authenticate,
+  authorize(['ADMIN', 'SELLER']),
+  mediaServiceProxy,
+);
 
 // 7. Body parsers
 app.use(express.json({ limit: '10mb' }));

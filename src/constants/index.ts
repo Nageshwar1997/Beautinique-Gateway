@@ -70,9 +70,9 @@ export const API_ROUTES_AND_METHODS = {
   },
 };
 
-export const GATEWAY_METHODS_AND_PATHS = {
+export const METHODS_AND_PATHS = {
   base: '/api/v1',
-  user: {
+  user_service: {
     base: '/user-service',
     auth: {
       base: '/auth',
@@ -121,14 +121,14 @@ export const GATEWAY_METHODS_AND_PATHS = {
       session: { method: 'get', path: '/session' },
     },
   },
-  media: { base: '/media-service' },
-  product: {
+  media_service: { base: '/media-service' },
+  product_service: {
     base: '/product-service',
     category: {
       base: '/category',
-      add: { method: 'post', path: '/add' },
-      update: { method: 'patch', path: '/update/:categoryId' },
-      delete: { method: 'delete', path: '/delete/:categoryId' },
+      add: { method: 'post', path: '/' },
+      update: { method: 'patch', path: '/:categoryId' },
+      delete: { method: 'delete', path: '/:categoryId' },
       get: {
         byParentLevel: { method: 'get', path: '/by-parent-level' },
         byHierarchy: { method: 'get', path: '/by-hierarchy' },
@@ -136,8 +136,6 @@ export const GATEWAY_METHODS_AND_PATHS = {
     },
   },
 } as const;
-
-const METHODS_AND_PATHS = GATEWAY_METHODS_AND_PATHS;
 
 export const COOKIE_OPTIONS: CookieOptions = {
   httpOnly: true,
