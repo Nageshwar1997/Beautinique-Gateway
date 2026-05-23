@@ -1,6 +1,7 @@
 import type { TService } from '@beautinique/be-constants';
 import type { CookieOptions } from 'express';
 import { envs } from '../envs';
+import { createGatewayHelper } from '../utils';
 
 export const SERVICES_BASE_URLS: Record<TService, string> = {
   'mail-service': `${envs.url.service.mail}/api/v1`,
@@ -136,6 +137,8 @@ export const GATEWAY_METHODS_AND_PATHS = {
   },
 } as const;
 
+const METHODS_AND_PATHS = GATEWAY_METHODS_AND_PATHS;
+
 export const COOKIE_OPTIONS: CookieOptions = {
   httpOnly: true,
   secure: !envs.is_dev,
@@ -161,3 +164,5 @@ export const HEADERS_KEYS = {
   contentType: 'Content-Type',
   loginRole: 'X-Login-Role',
 } as const;
+
+export const ROUTES = createGatewayHelper(METHODS_AND_PATHS);
