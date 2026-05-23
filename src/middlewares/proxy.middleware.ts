@@ -28,12 +28,7 @@ mediaProxy.on('error', (err, req, res) => {
   if (!isServerResponse(res) || res.headersSent) return;
 
   res.writeHead(502, { [HEADERS_KEYS.contentType]: 'application/json' });
-  res.end(
-    JSON.stringify({
-      success: false,
-      message: 'Media service is currently unavailable',
-    }),
-  );
+  res.end(JSON.stringify({ success: false, message: 'Media service is currently unavailable' }));
 });
 
 export const mediaServiceProxy = (req: Request, res: Response) => {

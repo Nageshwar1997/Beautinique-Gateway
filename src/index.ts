@@ -25,7 +25,9 @@ import {
 } from './middlewares';
 import { router } from './routes';
 
-const { base, media_service } = ROUTES;
+const { base, media_service, gateway } = ROUTES;
+
+const { health, home, refreshAccessToken, wakeUp } = gateway;
 
 const app = express();
 
@@ -77,10 +79,13 @@ app.use(successResponse);
 /* ---------------- ROUTES ---------------- */
 
 // Home Route
-app.get('/', (_, res) => res.success(200, 'Welcome to Beautinique Gateway!'));
-app.get('/health', (_, res) => res.success(200, 'Beautinique Gateway is healthy'));
-app.get('/wake-up', wakeUpController);
-app.post('/refresh-access-token', tryCatchResponse(refreshAccessTokenController));
+app[home.method](home.path, (_, res) => res.success(200, 'Welcome to Beautinique Gateway!'));
+app[health.method](health.path, (_, res) => res.success(200, 'Beautinique Gateway is healthy'));
+app[wakeUp.method](wakeUp.path, wakeUpController);
+app[refreshAccessToken.method](
+  refreshAccessToken.path,
+  tryCatchResponse(refreshAccessTokenController),
+);
 
 // API Routes
 app.use(base, router);

@@ -72,6 +72,12 @@ export const API_ROUTES_AND_METHODS = {
 
 export const METHODS_AND_PATHS = {
   base: '/api/v1',
+  gateway: {
+    home: { path: '/', method: 'get' },
+    health: { path: '/health', method: 'get' },
+    wakeUp: { path: '/wake-up', method: 'get' },
+    refreshAccessToken: { path: '/refresh-access-token', method: 'post' },
+  },
   user_service: {
     base: '/user-service',
     auth: {
