@@ -36,7 +36,7 @@ export const METHODS_AND_PATHS = {
     refreshAccessToken: { method: METHOD_MAP.POST, path: '/refresh-access-token' },
   },
   user_service: {
-    base: '/user-service',
+    default: '/user-service',
     auth: {
       base: '/auth',
       login: {
@@ -84,9 +84,9 @@ export const METHODS_AND_PATHS = {
       session: { method: METHOD_MAP.GET, path: '/session' },
     },
   },
-  media_service: { base: '/media-service' },
+  media_service: { default: '/media-service' },
   product_service: {
-    base: '/product-service',
+    default: '/product-service',
     category: {
       base: '/category',
       add: { method: METHOD_MAP.POST, path: '/' },

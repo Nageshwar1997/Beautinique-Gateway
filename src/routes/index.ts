@@ -28,5 +28,5 @@ router[refreshAccessToken.method](
 
 // API Routes
 
-router.use(user_service.base, userServiceRouter);
-router.use(product_service.base, productServiceRouter);
+router.use(user_service.default, userServiceRouter);
+router.use(product_service.default, productServiceRouter);

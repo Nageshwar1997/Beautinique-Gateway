@@ -60,7 +60,7 @@ app.use(express.static(path.resolve('public')));
 
 // 6. Proxy routes (BEFORE body parsers)
 app.use(
-  `${base}${media_service.base}`,
+  `${base}${media_service.default}`,
   authenticate,
   authorize(['ADMIN', 'SELLER', 'MASTER']),
   mediaServiceProxy,
