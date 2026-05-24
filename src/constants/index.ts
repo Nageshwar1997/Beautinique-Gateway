@@ -4,10 +4,10 @@ import { envs } from '../envs';
 import { createRouteHelper } from '../utils';
 
 export const SERVICES_BASE_URLS: Record<TService, string> = {
-  'mail-service': `${envs.url.service.mail}/api/v1`,
-  'media-service': `${envs.url.service.media}/api/v1`,
-  'product-service': `${envs.url.service.product}/api/v1`,
-  'user-service': `${envs.url.service.user}/api/v1`,
+  'mail-service': envs.url.service.mail,
+  'media-service': envs.url.service.media,
+  'product-service': envs.url.service.product,
+  'user-service': envs.url.service.user,
 } as const;
 
 export const SERVICE_SECRET_MAP: Record<TService, string> = {

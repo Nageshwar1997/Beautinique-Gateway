@@ -46,9 +46,8 @@ export const getCategoriesByParentLevelController = async (req: Request, res: Re
   res.success(statusCode, message, { categories });
 };
 
-export const getCategoriesByHierarchyController = async (req: Request, res: Response) => {
-  const user = getUser(req);
-  const { message, statusCode, categories } = await categoryService.getCategoriesByHierarchy(user);
+export const getCategoriesByHierarchyController = async (_req: Request, res: Response) => {
+  const { message, statusCode, categories } = await categoryService.getCategoriesByHierarchy();
 
   res.success(statusCode, message, { categories });
 };

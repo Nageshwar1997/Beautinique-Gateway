@@ -52,7 +52,7 @@ export const clearAuthCookies = (res: Response) => {
 export const getUser = (req: Request) => {
   const user = req.user;
 
-  if (!user) throw new AppError({ message: 'You are not logged in', code: 'AUTHENTICATION_ERROR' });
+  if (!user) throw new AppError({ message: 'You are not logged in g', code: 'AUTHENTICATION_ERROR' });
 
   return user;
 };

@@ -1,6 +1,5 @@
-import type { TRole } from '@beautinique/be-constants';
+import type { TRole, TService } from '@beautinique/be-constants';
 import type { METHOD_MAP } from '../constants';
-import { type SERVICES_BASE_URLS } from '../constants';
 
 export interface IJwtPayload {
   _id: string;
@@ -66,5 +65,5 @@ export interface ICreateHeaders {
   token?: string;
   loginRole?: TRole;
   contentType?: string;
-  serviceSecret?: keyof typeof SERVICES_BASE_URLS;
+  serviceSecret?: TService;
 }

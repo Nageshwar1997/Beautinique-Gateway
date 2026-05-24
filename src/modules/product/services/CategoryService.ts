@@ -1,7 +1,7 @@
 import type { TCategory, TUpdateCategory } from '@beautinique/be-zod';
 import { BaseProductService } from '../../../classes';
 import { API_METHODS_AND_URLS } from '../../../constants';
-import type { IUser, TUser } from '../../../types';
+import type { IUser } from '../../../types';
 
 class CategoryService extends BaseProductService {
   private readonly routes = API_METHODS_AND_URLS.product_service.category;
@@ -37,8 +37,8 @@ class CategoryService extends BaseProductService {
     return this.request({ ...this.routes.get.byParentLevel, params: data.params, user: data.user });
   }
 
-  public getCategoriesByHierarchy(user: TUser) {
-    return this.request({ ...this.routes.get.byHierarchy, user });
+  public getCategoriesByHierarchy() {
+    return this.request(this.routes.get.byHierarchy);
   }
 }
 

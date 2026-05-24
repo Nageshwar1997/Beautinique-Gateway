@@ -4,7 +4,6 @@ import {
   notFoundResponse,
   setRequestId,
   successResponse,
-  tryCatchResponse,
 } from '@beautinique/be-middlewares';
 import cookieParser from 'cookie-parser';
 import 'dotenv/config';
@@ -13,7 +12,6 @@ import type { Socket } from 'node:net';
 import path from 'path';
 import { parse } from 'qs';
 import { HEADERS_KEYS, METHODS_AND_PATHS, ORIGINS } from './constants';
-import { refreshAccessTokenController, wakeUpController } from './controllers';
 import { envs } from './envs';
 import {
   authenticate,
@@ -25,9 +23,7 @@ import {
 } from './middlewares';
 import { router } from './routes';
 
-const { base, media_service, gateway } = METHODS_AND_PATHS;
-
-const { health, home, refreshAccessToken, wakeUp } = gateway;
+const { base, media_service } = METHODS_AND_PATHS;
 
 const app = express();
 
@@ -66,7 +62,7 @@ app.use(express.static(path.resolve('public')));
 app.use(
   `${base}${media_service.base}`,
   authenticate,
-  authorize(['ADMIN', 'SELLER']),
+  authorize(['ADMIN', 'SELLER', 'MASTER']),
   mediaServiceProxy,
 );
 
@@ -78,16 +74,6 @@ app.use(successResponse);
 
 /* ---------------- ROUTES ---------------- */
 
-// Home Route
-app[home.method](home.path, (_, res) => res.success(200, 'Welcome to Beautinique Gateway!'));
-app[health.method](health.path, (_, res) => res.success(200, 'Beautinique Gateway is healthy'));
-app[wakeUp.method](wakeUp.path, wakeUpController);
-app[refreshAccessToken.method](
-  refreshAccessToken.path,
-  tryCatchResponse(refreshAccessTokenController),
-);
-
-// API Routes
 app.use(base, router);
 
 /* ---------------- ERROR HANDLING ---------------- */
