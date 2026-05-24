@@ -13,13 +13,13 @@ import type { Request, Response } from 'express';
 import { HEADERS_KEYS } from '../../../../constants';
 import { clearAuthCookies, generateAuthTokens, getUser, setAuthCookies } from '../../../../utils';
 import { CLIENT_OAUTH_REDIRECT_URL } from '../../constants';
-import { userService } from '../../services';
+import { authService } from '../../services';
 
 /* ================================ REGISTER CONTROLLERS ================================ */
 
 export const registerSendOtpController = async (req: Request, res: Response) => {
   const body = req.body as TEmail;
-  const { message, statusCode, token } = await userService.registerSendOtp(body);
+  const { message, statusCode, token } = await authService.registerSendOtp(body);
   res.success(statusCode, message, { token });
 };
 
@@ -30,7 +30,7 @@ export const registerResendOtpController = async (req: Request, res: Response) =
     throw new AppError({ message: 'Invalid or expired session', code: 'BAD_REQUEST' });
   }
 
-  const { message, statusCode, sendCount } = await userService.registerResendOtp(token);
+  const { message, statusCode, sendCount } = await authService.registerResendOtp(token);
   res.success(statusCode, message, { sendCount });
 };
 
@@ -42,7 +42,7 @@ export const registerVerifyOtpController = async (req: Request, res: Response) =
   }
 
   const { otp } = req.body as TOtp;
-  const { message, statusCode } = await userService.registerVerifyOtp({ otp, token });
+  const { message, statusCode } = await authService.registerVerifyOtp({ otp, token });
 
   res.success(statusCode, message);
 };
@@ -56,7 +56,7 @@ export const registerAndSaveController = async (req: Request, res: Response) => 
 
   const body = req.body as TRegister;
 
-  const { message, statusCode, user } = await userService.registerAndSave({ ...body, token });
+  const { message, statusCode, user } = await authService.registerAndSave({ ...body, token });
 
   const { accessToken, refreshToken } = generateAuthTokens({ _id: user._id, role: user.role });
 
@@ -71,7 +71,7 @@ export const manualLoginController = async (req: Request, res: Response) => {
   const body = req.body as TLogin;
   const role = req.get(HEADERS_KEYS.loginRole) as TRole | undefined;
 
-  const { message, statusCode, user } = await userService.manualLogin(body, role);
+  const { message, statusCode, user } = await authService.manualLogin(body, role);
 
   const { accessToken, refreshToken } = generateAuthTokens({ _id: user._id, role: user.role });
 
@@ -82,7 +82,7 @@ export const manualLoginController = async (req: Request, res: Response) => {
 
 export const googleRedirectController = async (_req: Request, res: Response) => {
   try {
-    const { url } = await userService.getGoogleRedirectUrl();
+    const { url } = await authService.getGoogleRedirectUrl();
 
     res.redirect(url);
   } catch (error) {
@@ -100,7 +100,7 @@ export const googleCallbackController = async (req: Request, res: Response) => {
   }
 
   try {
-    const { user } = await userService.handleGoogleCallback(String(code));
+    const { user } = await authService.handleGoogleCallback(String(code));
 
     const { accessToken, refreshToken } = generateAuthTokens({ _id: user._id, role: user.role });
 
@@ -116,7 +116,7 @@ export const googleCallbackController = async (req: Request, res: Response) => {
 
 export const linkedinRedirectController = async (_req: Request, res: Response) => {
   try {
-    const { url } = await userService.getLinkedinRedirectUrl();
+    const { url } = await authService.getLinkedinRedirectUrl();
 
     res.redirect(url);
   } catch (error) {
@@ -134,7 +134,7 @@ export const linkedinCallbackController = async (req: Request, res: Response) =>
   }
 
   try {
-    const { user } = await userService.handleLinkedinCallback(String(code));
+    const { user } = await authService.handleLinkedinCallback(String(code));
 
     const { accessToken, refreshToken } = generateAuthTokens({ _id: user._id, role: user.role });
 
@@ -150,7 +150,7 @@ export const linkedinCallbackController = async (req: Request, res: Response) =>
 
 export const githubRedirectController = async (_req: Request, res: Response) => {
   try {
-    const { url } = await userService.getGithubRedirectUrl();
+    const { url } = await authService.getGithubRedirectUrl();
 
     res.redirect(url);
   } catch (error) {
@@ -168,7 +168,7 @@ export const githubCallbackController = async (req: Request, res: Response) => {
   }
 
   try {
-    const { user } = await userService.handleGithubCallback(String(code));
+    const { user } = await authService.handleGithubCallback(String(code));
 
     const { accessToken, refreshToken } = generateAuthTokens({ _id: user._id, role: user.role });
 
@@ -186,7 +186,7 @@ export const githubCallbackController = async (req: Request, res: Response) => {
 
 export const forgotPasswordSendOtpController = async (req: Request, res: Response) => {
   const body = req.body as TEmail;
-  const { message, statusCode, token } = await userService.forgotPasswordSendOtp(body);
+  const { message, statusCode, token } = await authService.forgotPasswordSendOtp(body);
   res.success(statusCode, message, { token });
 };
 
@@ -197,7 +197,7 @@ export const forgotPasswordResendOtpController = async (req: Request, res: Respo
     throw new AppError({ message: 'Invalid or expired session', code: 'BAD_REQUEST' });
   }
 
-  const { message, statusCode, sendCount } = await userService.forgotPasswordResendOtp(token);
+  const { message, statusCode, sendCount } = await authService.forgotPasswordResendOtp(token);
   res.success(statusCode, message, { sendCount });
 };
 
@@ -209,7 +209,7 @@ export const forgotPasswordVerifyOtpController = async (req: Request, res: Respo
   }
 
   const { otp } = req.body as TOtp;
-  const { message, statusCode } = await userService.forgotPasswordVerifyOtp({ otp, token });
+  const { message, statusCode } = await authService.forgotPasswordVerifyOtp({ otp, token });
 
   res.success(statusCode, message);
 };
@@ -223,7 +223,7 @@ export const forgotPasswordSaveController = async (req: Request, res: Response) 
 
   const body = req.body as TPasswords;
 
-  const { message, statusCode, user } = await userService.forgotPasswordSave({ ...body, token });
+  const { message, statusCode, user } = await authService.forgotPasswordSave({ ...body, token });
 
   const { accessToken, refreshToken } = generateAuthTokens({ _id: user._id, role: user.role });
 
@@ -239,7 +239,7 @@ export const changePasswordController = async (req: Request, res: Response) => {
 
   const body = req.body as TChangePassword;
 
-  const { message, statusCode, user } = await userService.changePassword(_user, body);
+  const { message, statusCode, user } = await authService.changePassword(_user, body);
 
   const { accessToken, refreshToken } = generateAuthTokens({ _id: user._id, role: user.role });
 
@@ -255,7 +255,7 @@ export const setPasswordController = async (req: Request, res: Response) => {
 
   const body = req.body as TSetPassword;
 
-  const { message, statusCode, user } = await userService.setPassword(_user, body);
+  const { message, statusCode, user } = await authService.setPassword(_user, body);
 
   const { accessToken, refreshToken } = generateAuthTokens({ _id: user._id, role: user.role });
 
@@ -269,7 +269,7 @@ export const setPasswordController = async (req: Request, res: Response) => {
 export const logoutController = async (req: Request, res: Response) => {
   const user = getUser(req);
 
-  const { message, statusCode } = await userService.logout(user);
+  const { message, statusCode } = await authService.logout(user);
   clearAuthCookies(res);
   res.success(statusCode, message);
 };

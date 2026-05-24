@@ -1,18 +1,16 @@
 import type { TCategory, TUpdateCategory } from '@beautinique/be-zod';
-import { ApiRequest } from '../../../classes';
+import { BaseProductService } from '../../../classes';
+import { API_METHODS_AND_URLS } from '../../../constants';
 import type { IUser, TUser } from '../../../types';
-import { createHeaders } from '../../../utils';
 
-class CategoryService extends ApiRequest {
-  private router = this.routes.product_service.category;
-  constructor() {
-    super('product-service');
-  }
+class CategoryService extends BaseProductService {
+  private readonly routes = API_METHODS_AND_URLS.product_service.category;
 
   /* ================== POST METHODS ================== */
 
   public addCategory({ user, data }: { data: TCategory } & IUser) {
-    return this.request({ ...this.router.add, data, headers: createHeaders({ user }) });
+    // const test = this.
+    return this.request({ ...this.routes.add, data, user });
   }
 
   /* ================== PATCH METHODS ================== */
@@ -22,34 +20,25 @@ class CategoryService extends ApiRequest {
     data,
     categoryId,
   }: IUser & { data: TUpdateCategory; categoryId: string }) {
-    const { method, url } = this.router.update;
-    return this.request({
-      method,
-      url: url({ categoryId }),
-      data,
-      headers: createHeaders({ user }),
-    });
+    const { method, url } = this.routes.update;
+    return this.request({ method, url: url({ categoryId }), data, user });
   }
 
   /* ================== DELETE METHODS ================== */
 
   public deleteCategory({ user, categoryId }: { categoryId: string } & IUser) {
-    const { method, url } = this.router.delete;
-    return this.request({ method, url: url({ categoryId }), headers: createHeaders({ user }) });
+    const { method, url } = this.routes.delete;
+    return this.request({ method, url: url({ categoryId }), user });
   }
 
   /* ================== GET METHODS ================== */
 
   public getCategoriesByParentLevel(data: { params: { parent?: string; level?: string } } & IUser) {
-    return this.request({
-      ...this.router.get.byParentLevel,
-      params: data.params,
-      headers: createHeaders({ user: data.user }),
-    });
+    return this.request({ ...this.routes.get.byParentLevel, params: data.params, user: data.user });
   }
 
   public getCategoriesByHierarchy(user: TUser) {
-    return this.request({ ...this.router.get.byHierarchy, headers: createHeaders({ user }) });
+    return this.request({ ...this.routes.get.byHierarchy, user });
   }
 }
 

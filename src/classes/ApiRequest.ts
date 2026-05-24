@@ -1,25 +1,20 @@
 import { AppError, type AppSuccess } from '@beautinique/be-classes';
 import type { TService } from '@beautinique/be-constants';
 import axios, { AxiosError, type AxiosInstance, type AxiosRequestConfig } from 'axios';
-import { API_METHODS_AND_URLS, SERVICES_BASE_URLS } from '../constants';
+import { SERVICES_BASE_URLS } from '../constants';
 import type { ICreateHeaders } from '../types';
 import { createHeaders } from '../utils';
 
 export class ApiRequest {
-  private instance: AxiosInstance;
-  private baseURLs = SERVICES_BASE_URLS;
-  private serviceKey: TService;
+  private readonly instance: AxiosInstance;
+  private readonly serviceKey: TService;
 
   constructor(key: TService) {
-    const baseURL = this.baseURLs[key];
     this.serviceKey = key;
-    this.instance = axios.create({ baseURL });
+    this.instance = axios.create({ baseURL: SERVICES_BASE_URLS[key] });
   }
 
-  protected routes = API_METHODS_AND_URLS;
-  protected request = async (
-    config: AxiosRequestConfig & Omit<ICreateHeaders, 'serviceSecret'>,
-  ) => {
+  protected async request(config: AxiosRequestConfig & Omit<ICreateHeaders, 'serviceSecret'>) {
     try {
       const { headers, user, token, loginRole, contentType, ...restConfigs } = config;
 
@@ -45,5 +40,5 @@ export class ApiRequest {
         code: 'INTERNAL_SERVER_ERROR',
       });
     }
-  };
+  }
 }
