@@ -1,9 +1,16 @@
 import { AppError } from '@beautinique/be-classes';
 import type { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { COOKIES_DATA } from '../constants';
+import { COOKIES_DATA, HEADERS_KEYS, SERVICE_SECRET_MAP } from '../constants';
 import { envs } from '../envs';
-import type { IEndpoint, IJwtPayload, IRouteNode, TGenerateRoutes, TStrRecord } from '../types';
+import type {
+  ICreateHeaders,
+  IEndpoint,
+  IJwtPayload,
+  TGenerateRoutes,
+  TParams,
+  TRouteNode,
+} from '../types';
 
 export const generateAccessToken = (payload: IJwtPayload) => {
   return jwt.sign(payload, envs.jwt.access_secret, { expiresIn: '15m' });
@@ -53,68 +60,72 @@ export const getUser = (req: Request) => {
 const joinPaths = (...paths: (string | undefined)[]) =>
   paths.filter(Boolean).join('/').replace(/\/+/g, '/').replace(/\/$/, '');
 
-const extractParams = (path: string): TStrRecord => {
-  const matches = path.match(/:([A-Za-z0-9_]+)/g);
-
-  if (!matches) return {};
-
-  return matches.reduce<TStrRecord>((acc, match) => {
-    acc[match.replace(':', '')] = '';
-
-    return acc;
-  }, {});
-};
-
 const isEndpoint = (value: unknown): value is IEndpoint => {
   return typeof value === 'object' && value !== null && 'path' in value && 'method' in value;
 };
 
-const buildDynamicUrl = (path: string, params?: TStrRecord) => {
+const buildDynamicUrl = <TPath extends string>(path: TPath, params?: TParams): TPath => {
   if (!params) {
     return path;
   }
 
-  return Object.entries(params).reduce(
-    (acc, [key, value]) => acc.replace(`:${key}`, String(value)),
-    path,
-  );
+  let result = path as string;
+
+  Object.entries(params).forEach(([key, value]) => {
+    result = result.replace(`:${key}`, String(value));
+  });
+
+  return result as TPath;
 };
 
-export const createGatewayHelper = <T extends Record<string, unknown>>(
+export const createRouteHelper = <T extends Record<string, unknown>>(
   config: T,
 ): TGenerateRoutes<T> => {
-  const build = <K extends IRouteNode>(node: K, parents: string[] = []): TGenerateRoutes<K> => {
+  const build = (node: TRouteNode, parents: string[] = []): Record<string, unknown> => {
     const currentBase = node.base ? [...parents, node.base] : parents;
 
-    const result = {} as TGenerateRoutes<K>;
+    const result: Record<string, unknown> = {};
 
     Object.entries(node).forEach(([key, value]) => {
-      if (key === 'base') {
-        (result as Record<string, unknown>)[key] = joinPaths(...currentBase);
-
-        return;
-      }
-
       if (isEndpoint(value)) {
         const fullPath = joinPaths(...currentBase, value.path);
 
-        (result as Record<string, unknown>)[key] = {
-          method: value.method,
-          path: value.path,
-          params: extractParams(fullPath),
-          getUrl: (params?: TStrRecord) => buildDynamicUrl(fullPath, params),
+        result[key] = {
+          method: value.method.toUpperCase() as Uppercase<typeof value.method>,
+
+          getUrl: (params?: TParams) => buildDynamicUrl(fullPath, params),
         };
 
         return;
       }
 
       if (typeof value === 'object' && value !== null) {
-        (result as Record<string, unknown>)[key] = build(value as IRouteNode, currentBase);
+        result[key] = build(value as TRouteNode, currentBase);
       }
     });
 
     return result;
   };
 
-  return build(config);
+  return build(config) as TGenerateRoutes<T>;
+};
+
+export const createHeaders = ({
+  user,
+  token,
+  loginRole,
+  contentType,
+  serviceSecret,
+}: ICreateHeaders = {}) => {
+  return {
+    ...(serviceSecret && { [HEADERS_KEYS.serviceSecret]: SERVICE_SECRET_MAP[serviceSecret] }),
+
+    ...(user && { [HEADERS_KEYS.userId]: user._id, [HEADERS_KEYS.userRole]: user.role }),
+
+    ...(token && { [HEADERS_KEYS.authorization]: token }),
+
+    ...(loginRole && { [HEADERS_KEYS.loginRole]: loginRole }),
+
+    ...(contentType && { [HEADERS_KEYS.contentType]: contentType }),
+  };
 };

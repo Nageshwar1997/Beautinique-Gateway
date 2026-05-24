@@ -1,31 +1,34 @@
 import { AppError, type AppSuccess } from '@beautinique/be-classes';
 import type { TService } from '@beautinique/be-constants';
 import axios, { AxiosError, type AxiosInstance, type AxiosRequestConfig } from 'axios';
-import {
-  API_ROUTES_AND_METHODS,
-  HEADERS_KEYS,
-  SERVICES_BASE_URLS,
-  SERVICE_SECRET_MAP,
-} from '../constants';
+import { API_METHODS_AND_URLS, SERVICES_BASE_URLS } from '../constants';
+import type { ICreateHeaders } from '../types';
+import { createHeaders } from '../utils';
 
 export class ApiRequest {
   private instance: AxiosInstance;
   private baseURLs = SERVICES_BASE_URLS;
-  private secret: (typeof SERVICE_SECRET_MAP)[TService];
+  private serviceKey: TService;
 
-  constructor(key: keyof typeof SERVICES_BASE_URLS) {
+  constructor(key: TService) {
     const baseURL = this.baseURLs[key];
-    this.secret = SERVICE_SECRET_MAP[key];
+    this.serviceKey = key;
     this.instance = axios.create({ baseURL });
   }
 
-  protected routes = API_ROUTES_AND_METHODS;
-  protected request = async (config: AxiosRequestConfig) => {
+  protected routes = API_METHODS_AND_URLS;
+  protected request = async (
+    config: AxiosRequestConfig & Omit<ICreateHeaders, 'serviceSecret'>,
+  ) => {
     try {
-      const { headers, ...restConfigs } = config ?? {};
+      const { headers, user, token, loginRole, contentType, ...restConfigs } = config;
+
       const { data } = await this.instance.request({
         ...restConfigs,
-        headers: { ...headers, [HEADERS_KEYS.serviceSecret]: this.secret },
+        headers: {
+          ...createHeaders({ user, token, loginRole, contentType, serviceSecret: this.serviceKey }),
+          ...headers,
+        },
       });
       return data as AppSuccess;
     } catch (error) {

@@ -1,15 +1,10 @@
-import { AppError } from '@beautinique/be-classes';
 import type { Request, Response } from 'express';
-
 import { getUser } from '../../../../utils';
-import { userService } from '../../services/UserService';
+import { userService } from '../../services';
+
 export const getSessionUserController = async (req: Request, res: Response) => {
-  const { _id: userId } = getUser(req);
+  const _user = getUser(req);
 
-  if (!userId) {
-    throw new AppError({ message: 'You are not logged in', code: 'AUTHENTICATION_ERROR' });
-  }
-
-  const { message, statusCode, user } = await userService.getSessionUser(userId);
+  const { message, statusCode, user } = await userService.getSessionUser(_user);
   res.success(statusCode, message, { user });
 };

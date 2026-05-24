@@ -1,7 +1,7 @@
 import type { TService } from '@beautinique/be-constants';
 import type { CookieOptions } from 'express';
 import { envs } from '../envs';
-import { createGatewayHelper } from '../utils';
+import { createRouteHelper } from '../utils';
 
 export const SERVICES_BASE_URLS: Record<TService, string> = {
   'mail-service': `${envs.url.service.mail}/api/v1`,
@@ -19,64 +19,23 @@ export const SERVICE_SECRET_MAP: Record<TService, string> = {
 
 export const ORIGINS = Object.values(envs.url.frontend);
 
-export const API_ROUTES_AND_METHODS = {
-  user: {
-    login: {
-      manual: { method: 'POST', url: '/auth/login/manual' },
-      oAuth: {
-        google: {
-          redirect: { method: 'GET', url: '/auth/login/oauth/google/redirect' },
-          callback: { method: 'GET', url: '/auth/login/oauth/google/callback' },
-        },
-        github: {
-          redirect: { method: 'GET', url: '/auth/login/oauth/github/redirect' },
-          callback: { method: 'GET', url: '/auth/login/oauth/github/callback' },
-        },
-        linkedin: {
-          redirect: { method: 'GET', url: '/auth/login/oauth/linkedin/redirect' },
-          callback: { method: 'GET', url: '/auth/login/oauth/linkedin/callback' },
-        },
-      },
-    },
-    logout: { method: 'DELETE', url: '/auth/logout' },
-    password: {
-      forgot: {
-        sendOtp: { method: 'POST', url: '/auth/password/forgot-send-otp' },
-        resendOtp: { method: 'PATCH', url: '/auth/password/forgot-resend-otp' },
-        verifyOtp: { method: 'POST', url: '/auth/password/forgot-verify-otp' },
-        save: { method: 'POST', url: '/auth/password/forgot-save' },
-      },
-      change: { method: 'PATCH', url: '/auth/password/change' },
-      set: { method: 'PATCH', url: '/auth/password/set' },
-    },
-    register: {
-      sendOtp: { method: 'POST', url: '/auth/register/send-otp' },
-      resendOtp: { method: 'PATCH', url: '/auth/register/resend-otp' },
-      verifyOtp: { method: 'POST', url: '/auth/register/verify-otp' },
-      saveUser: { method: 'POST', url: '/auth/register/save-user' },
-    },
-    session: { method: 'GET', url: '/user/session' },
-  },
-  product: {
-    category: {
-      add: { method: 'POST', url: '/category/add' },
-      update: { method: 'PATCH', url: '/category/update' },
-      delete: { method: 'DELETE', url: '/category/delete' },
-      get: {
-        byParentLevel: { method: 'GET', url: '/category/by-parent-level' },
-        byHierarchy: { method: 'GET', url: '/category/by-hierarchy' },
-      },
-    },
-  },
-};
+export const METHODS = ['get', 'post', 'put', 'patch', 'delete'] as const;
+
+export const METHOD_MAP = {
+  GET: 'get',
+  POST: 'post',
+  PUT: 'put',
+  PATCH: 'patch',
+  DELETE: 'delete',
+} as const;
 
 export const METHODS_AND_PATHS = {
   base: '/api/v1',
   gateway: {
-    home: { path: '/', method: 'get' },
-    health: { path: '/health', method: 'get' },
-    wakeUp: { path: '/wake-up', method: 'get' },
-    refreshAccessToken: { path: '/refresh-access-token', method: 'post' },
+    home: { method: METHOD_MAP.GET, path: '/' },
+    health: { method: METHOD_MAP.GET, path: '/health' },
+    wakeUp: { method: METHOD_MAP.GET, path: '/wake-up' },
+    refreshAccessToken: { method: METHOD_MAP.POST, path: '/refresh-access-token' },
   },
   user_service: {
     base: '/user-service',
@@ -84,47 +43,47 @@ export const METHODS_AND_PATHS = {
       base: '/auth',
       login: {
         base: '/login',
-        manual: { path: '/manual', method: 'post' },
+        manual: { method: METHOD_MAP.POST, path: '/manual' },
         oauth: {
           google: {
-            redirect: { path: '/oauth/google/redirect', method: 'get' },
-            callback: { path: '/oauth/google/callback', method: 'get' },
+            redirect: { method: METHOD_MAP.GET, path: '/oauth/google/redirect' },
+            callback: { method: METHOD_MAP.GET, path: '/oauth/google/callback' },
           },
 
           linkedin: {
-            redirect: { path: '/oauth/linkedin/redirect', method: 'get' },
-            callback: { path: '/oauth/linkedin/callback', method: 'get' },
+            redirect: { method: METHOD_MAP.GET, path: '/oauth/linkedin/redirect' },
+            callback: { method: METHOD_MAP.GET, path: '/oauth/linkedin/callback' },
           },
 
           github: {
-            redirect: { path: '/oauth/github/redirect', method: 'get' },
-            callback: { path: '/oauth/github/callback', method: 'get' },
+            redirect: { method: METHOD_MAP.GET, path: '/oauth/github/redirect' },
+            callback: { method: METHOD_MAP.GET, path: '/oauth/github/callback' },
           },
         },
       },
-      logout: { path: '/logout', method: 'delete' },
+      logout: { method: METHOD_MAP.DELETE, path: '/logout' },
       register: {
         base: '/register',
-        sendOtp: { path: '/send-otp', method: 'post' },
-        resendOtp: { path: '/resend-otp', method: 'patch' },
-        verifyOtp: { path: '/verify-otp', method: 'post' },
-        saveUser: { path: '/save-user', method: 'post' },
+        sendOtp: { method: METHOD_MAP.POST, path: '/send-otp' },
+        resendOtp: { method: METHOD_MAP.PATCH, path: '/resend-otp' },
+        verifyOtp: { method: METHOD_MAP.POST, path: '/verify-otp' },
+        saveUser: { method: METHOD_MAP.POST, path: '/save-user' },
       },
       password: {
         base: '/password',
         forgot: {
-          sendOtp: { path: '/forgot-send-otp', method: 'post' },
-          resendOtp: { path: '/forgot-resend-otp', method: 'patch' },
-          verifyOtp: { path: '/forgot-verify-otp', method: 'post' },
-          save: { path: '/forgot-save', method: 'post' },
+          sendOtp: { method: METHOD_MAP.POST, path: '/forgot-send-otp' },
+          resendOtp: { method: METHOD_MAP.PATCH, path: '/forgot-resend-otp' },
+          verifyOtp: { method: METHOD_MAP.POST, path: '/forgot-verify-otp' },
+          save: { method: METHOD_MAP.POST, path: '/forgot-save' },
         },
-        change: { path: '/change', method: 'patch' },
-        set: { path: '/set', method: 'patch' },
+        change: { method: METHOD_MAP.PATCH, path: '/change' },
+        set: { method: METHOD_MAP.PATCH, path: '/set' },
       },
     },
     user: {
       base: '/user',
-      session: { method: 'get', path: '/session' },
+      session: { method: METHOD_MAP.GET, path: '/session' },
     },
   },
   media_service: { base: '/media-service' },
@@ -132,12 +91,12 @@ export const METHODS_AND_PATHS = {
     base: '/product-service',
     category: {
       base: '/category',
-      add: { method: 'post', path: '/' },
-      update: { method: 'patch', path: '/:categoryId' },
-      delete: { method: 'delete', path: '/:categoryId' },
+      add: { method: METHOD_MAP.POST, path: '/' },
+      update: { method: METHOD_MAP.PATCH, path: '/:categoryId' },
+      delete: { method: METHOD_MAP.DELETE, path: '/:categoryId' },
       get: {
-        byParentLevel: { method: 'get', path: '/by-parent-level' },
-        byHierarchy: { method: 'get', path: '/by-hierarchy' },
+        byParentLevel: { method: METHOD_MAP.GET, path: '/by-parent-level' },
+        byHierarchy: { method: METHOD_MAP.GET, path: '/by-hierarchy' },
       },
     },
   },
@@ -169,4 +128,4 @@ export const HEADERS_KEYS = {
   loginRole: 'X-Login-Role',
 } as const;
 
-export const API_METHODS_AND_URLS = createGatewayHelper(METHODS_AND_PATHS);
+export const API_METHODS_AND_URLS = createRouteHelper(METHODS_AND_PATHS);
