@@ -12,9 +12,7 @@ class CategoryService extends ApiRequest {
   /* ================== POST METHODS ================== */
 
   public addCategory({ user, data }: { data: TCategory } & IUser) {
-    const { method, getUrl } = this.router.add;
-
-    return this.request({ method, url: getUrl(), data, headers: createHeaders({ user }) });
+    return this.request({ ...this.router.add, data, headers: createHeaders({ user }) });
   }
 
   /* ================== PATCH METHODS ================== */
@@ -24,10 +22,10 @@ class CategoryService extends ApiRequest {
     data,
     categoryId,
   }: IUser & { data: TUpdateCategory; categoryId: string }) {
-    const { method, getUrl } = this.router.update;
+    const { method, url } = this.router.update;
     return this.request({
       method,
-      url: getUrl({ categoryId }),
+      url: url({ categoryId }),
       data,
       headers: createHeaders({ user }),
     });
@@ -36,26 +34,22 @@ class CategoryService extends ApiRequest {
   /* ================== DELETE METHODS ================== */
 
   public deleteCategory({ user, categoryId }: { categoryId: string } & IUser) {
-    const { method, getUrl } = this.router.delete;
-    return this.request({ method, url: getUrl({ categoryId }), headers: createHeaders({ user }) });
+    const { method, url } = this.router.delete;
+    return this.request({ method, url: url({ categoryId }), headers: createHeaders({ user }) });
   }
 
   /* ================== GET METHODS ================== */
 
   public getCategoriesByParentLevel(data: { params: { parent?: string; level?: string } } & IUser) {
-    const { method, getUrl } = this.router.get.byParentLevel;
-
     return this.request({
-      method,
-      url: getUrl(),
+      ...this.router.get.byParentLevel,
       params: data.params,
       headers: createHeaders({ user: data.user }),
     });
   }
 
   public getCategoriesByHierarchy(user: TUser) {
-    const { getUrl, method } = this.router.get.byHierarchy;
-    return this.request({ method, url: getUrl(), headers: createHeaders({ user }) });
+    return this.request({ ...this.router.get.byHierarchy, headers: createHeaders({ user }) });
   }
 }
 

@@ -28,12 +28,17 @@ type TExtractRouteParams<T extends string> = T extends `${string}:${infer Param}
   ? Record<Param | keyof TExtractRouteParams<`/${Rest}`>, string | number>
   : T extends `${string}:${infer Param}`
     ? Record<Param, string | number>
-    : Record<string, never>;
+    : never;
+
+type TUrl<FullPath extends string> =
+  TExtractRouteParams<FullPath> extends never
+    ? FullPath
+    : (params: TExtractRouteParams<FullPath>) => FullPath;
 
 interface IGeneratedEndpoint<T extends IEndpoint, FullPath extends string> {
   method: Uppercase<T['method']>;
 
-  getUrl: (params?: TExtractRouteParams<FullPath>) => FullPath;
+  url: TUrl<FullPath>;
 }
 
 export type TGenerateRoutes<T, ParentPath extends string = ''> = {

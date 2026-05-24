@@ -90,10 +90,11 @@ export const createRouteHelper = <T extends Record<string, unknown>>(
       if (isEndpoint(value)) {
         const fullPath = joinPaths(...currentBase, value.path);
 
-        result[key] = {
-          method: value.method.toUpperCase() as Uppercase<typeof value.method>,
+        const hasParams = fullPath.includes(':');
 
-          getUrl: (params?: TParams) => buildDynamicUrl(fullPath, params),
+        result[key] = {
+          method: value.method.toUpperCase(),
+          url: hasParams ? (params: TParams) => buildDynamicUrl(fullPath, params) : fullPath,
         };
 
         return;
