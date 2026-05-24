@@ -41,7 +41,10 @@ interface IGeneratedEndpoint<T extends IEndpoint, FullPath extends string> {
   url: TUrl<FullPath>;
 }
 
-export type TGenerateRoutes<T, ParentPath extends string = ''> = {
+export type TGenerateRoutes<
+  T,
+  ParentPath extends string = T extends { base: infer B } ? (B extends string ? B : '') : '',
+> = {
   [K in keyof T as K extends 'base' ? never : K]: T[K] extends IEndpoint
     ? IGeneratedEndpoint<T[K], `${ParentPath}${T[K]['path']}`>
     : T[K] extends Record<string, unknown>
@@ -61,7 +64,7 @@ export type TGenerateRoutes<T, ParentPath extends string = ''> = {
 export interface ICreateHeaders {
   user?: Partial<TUser>;
   token?: string;
-  loginRole?: string;
+  loginRole?: TRole;
   contentType?: string;
   serviceSecret?: keyof typeof SERVICES_BASE_URLS;
 }
