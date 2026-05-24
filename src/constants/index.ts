@@ -19,8 +19,6 @@ export const SERVICE_SECRET_MAP: Record<TService, string> = {
 
 export const ORIGINS = Object.values(envs.url.frontend);
 
-export const METHODS = ['get', 'post', 'put', 'patch', 'delete'] as const;
-
 export const METHOD_MAP = {
   GET: 'get',
   POST: 'post',
