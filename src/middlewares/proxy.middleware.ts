@@ -6,7 +6,7 @@ import { getUser } from '../utils';
 import { logger } from './logger.middleware';
 
 const mediaProxy = proxy.createProxyServer<Request, Response>({
-  target: SERVICES_BASE_URLS['media-service'],
+  target: `${SERVICES_BASE_URLS['media-service']}/api/v1`,
   changeOrigin: true,
   xfwd: true,
   proxyTimeout: 30000,
