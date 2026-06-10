@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 import proxy from 'http-proxy';
 import type { ServerResponse } from 'node:http';
-import { HEADERS_KEYS, SERVICES_BASE_URLS } from '../constants';
+import { HEADERS_KEYS, SERVICES_BASE_URLS, SERVICE_SECRET_MAP } from '../constants';
 import { getUser } from '../utils';
 import { logger } from './logger.middleware';
 
@@ -18,6 +18,8 @@ const isServerResponse = (res: ServerResponse | unknown): res is ServerResponse 
 
 mediaProxy.on('proxyReq', (proxyReq, req) => {
   const { _id, role } = getUser(req);
+
+  proxyReq.setHeader(HEADERS_KEYS.serviceSecret, SERVICE_SECRET_MAP['media-service']);
   proxyReq.setHeader(HEADERS_KEYS.userId, _id);
   proxyReq.setHeader(HEADERS_KEYS.userRole, role);
 });
