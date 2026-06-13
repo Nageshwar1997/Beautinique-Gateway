@@ -9,7 +9,6 @@ class CategoryService extends BaseProductService {
   /* ================== POST METHODS ================== */
 
   public addCategory({ user, data }: { data: TCategory } & IUser) {
-    // const test = this.
     return this.request({ ...this.routes.add, data, user });
   }
 
