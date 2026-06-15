@@ -76,13 +76,13 @@ app.use(successResponse);
 /* ---------------- ROUTES ---------------- */
 
 // Home Route
-router.get('/', (_, res) => res.success(200, 'Welcome to Beautinique Gateway!'));
+app.get('/', (_, res) => res.success(200, 'Welcome to Beautinique Gateway!'));
 
 // Health Route
-router.get('/health', (_, res) => res.success(200, 'Beautinique Gateway is healthy'));
+app.get('/health', (_, res) => res.success(200, 'Beautinique Gateway is healthy'));
 
 // Wake Up Route
-router.get('/wake-up', wakeUpController);
+app.get('/wake-up', wakeUpController);
 
 app.use(base, router);
 
