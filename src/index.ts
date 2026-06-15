@@ -12,6 +12,7 @@ import type { Socket } from 'node:net';
 import path from 'path';
 import { parse } from 'qs';
 import { HEADERS_KEYS, METHODS_AND_PATHS, ORIGINS } from './constants';
+import { wakeUpController } from './controllers';
 import { envs } from './envs';
 import {
   authenticate,
@@ -73,6 +74,15 @@ app.use(express.json({ limit: '10mb' }));
 app.use(successResponse);
 
 /* ---------------- ROUTES ---------------- */
+
+// Home Route
+router.get('/', (_, res) => res.success(200, 'Welcome to Beautinique Gateway!'));
+
+// Health Route
+router.get('/health', (_, res) => res.success(200, 'Beautinique Gateway is healthy'));
+
+// Wake Up Route
+router.get('/wake-up', wakeUpController);
 
 app.use(base, router);
 

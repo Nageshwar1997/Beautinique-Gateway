@@ -30,9 +30,6 @@ export const METHOD_MAP = {
 export const METHODS_AND_PATHS = {
   base: '/api/v1',
   gateway: {
-    home: { method: METHOD_MAP.GET, path: '/' },
-    health: { method: METHOD_MAP.GET, path: '/health' },
-    wakeUp: { method: METHOD_MAP.GET, path: '/wake-up' },
     refreshAccessToken: { method: METHOD_MAP.POST, path: '/refresh-access-token' },
   },
   user_service: {
