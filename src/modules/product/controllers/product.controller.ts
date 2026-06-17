@@ -12,3 +12,11 @@ export const saveDraftProductController = async (req: Request, res: Response) =>
 
   res.success(statusCode, message, { draft });
 };
+
+export const publishDraftProductController = async (req: Request, res: Response) => {
+  const user = getUser(req);
+
+  const { message, statusCode } = await productService.publishDraftProduct({ user });
+
+  res.success(statusCode, message);
+};
