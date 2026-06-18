@@ -3,6 +3,7 @@ import { Router } from 'express';
 import { METHODS_AND_PATHS } from '../../../constants';
 import { authorize } from '../../../middlewares';
 import {
+  getDraftProductController,
   publishDraftProductController,
   saveDraftProductController,
 } from '../controllers/product.controller';
@@ -18,5 +19,7 @@ draftRouter[draft.save.method](
 );
 
 draftRouter[draft.save.method](draft.save.path, tryCatchResponse(publishDraftProductController));
+
+draftRouter[draft.get.method](draft.get.path, tryCatchResponse(getDraftProductController));
 
 productRouter.use(draft.base, authorize(['ADMIN', 'SELLER', 'MASTER']), draftRouter);

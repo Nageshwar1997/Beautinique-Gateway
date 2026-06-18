@@ -20,6 +20,10 @@ class ProductService extends BaseProductService {
   /* ================== DELETE METHODS ================== */
 
   /* ================== GET METHODS ================== */
+
+  public getDraftProduct({ user }: IUser) {
+    return this.request({ ...this.routes.draft.get, user });
+  }
 }
 
 export const productService = new ProductService();

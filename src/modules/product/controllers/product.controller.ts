@@ -20,3 +20,11 @@ export const publishDraftProductController = async (req: Request, res: Response)
 
   res.success(statusCode, message);
 };
+
+export const getDraftProductController = async (req: Request, res: Response) => {
+  const user = getUser(req);
+
+  const { message, statusCode } = await productService.getDraftProduct({ user });
+
+  res.success(statusCode, message);
+};
