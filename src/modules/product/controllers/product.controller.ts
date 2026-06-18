@@ -24,7 +24,7 @@ export const publishDraftProductController = async (req: Request, res: Response)
 export const getDraftProductController = async (req: Request, res: Response) => {
   const user = getUser(req);
 
-  const { message, statusCode } = await productService.getDraftProduct({ user });
+  const { message, statusCode, draft } = await productService.getDraftProduct({ user });
 
-  res.success(statusCode, message);
+  res.success(statusCode, message, { draft });
 };

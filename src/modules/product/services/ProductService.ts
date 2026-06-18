@@ -11,11 +11,11 @@ class ProductService extends BaseProductService {
     return this.request({ ...this.routes.draft.save, data, user });
   }
 
+  /* ================== PATCH METHODS ================== */
+
   public publishDraftProduct({ user }: IUser) {
     return this.request({ ...this.routes.draft.publish, user });
   }
-
-  /* ================== PATCH METHODS ================== */
 
   /* ================== DELETE METHODS ================== */
 

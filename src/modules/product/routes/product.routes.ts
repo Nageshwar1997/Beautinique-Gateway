@@ -18,7 +18,7 @@ draftRouter[draft.save.method](
   tryCatchResponse(saveDraftProductController),
 );
 
-draftRouter[draft.save.method](draft.save.path, tryCatchResponse(publishDraftProductController));
+draftRouter[draft.publish.method](draft.publish.path, tryCatchResponse(publishDraftProductController));
 
 draftRouter[draft.get.method](draft.get.path, tryCatchResponse(getDraftProductController));
 
