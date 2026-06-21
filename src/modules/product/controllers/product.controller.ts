@@ -42,23 +42,6 @@ export const getDashboardProductsController = async (req: Request, res: Response
   res.success(statusCode, message, { data });
 };
 
-export const getDashboardProductsSuggestionsController = async (req: Request, res: Response) => {
-  const user = getUser(req);
-  const query = req.query as { search?: string };
-
-  if (!query.search?.trim()) {
-    return res.success(200, 'Suggestions fetched successfully', { suggestions: [] });
-  }
-
-  const { message, statusCode, suggestions } = await productService.getDashboardProductsSuggestions(
-    {
-      user,
-      params: query,
-    },
-  );
-
-  res.success(statusCode, message, { suggestions });
-};
 
 export const getProductsSuggestionsController = async (req: Request, res: Response) => {
   const query = req.query as { search?: string };

@@ -4,7 +4,6 @@ import { METHODS_AND_PATHS } from '../../../constants';
 import { authorize } from '../../../middlewares';
 import {
   getDashboardProductsController,
-  getDashboardProductsSuggestionsController,
   getDraftProductController,
   getProductsSuggestionsController,
   publishDraftProductController,
@@ -36,11 +35,6 @@ draftRouter[draft.get.method](draft.get.path, tryCatchResponse(getDraftProductCo
 dashboardRouter[get.dashboard.products.method](
   get.dashboard.products.path,
   tryCatchResponse(getDashboardProductsController),
-);
-
-dashboardRouter[get.dashboard.suggestions.method](
-  get.dashboard.suggestions.path,
-  tryCatchResponse(getDashboardProductsSuggestionsController),
 );
 
 /* ================== PRODUCTS ROUTES ================ */

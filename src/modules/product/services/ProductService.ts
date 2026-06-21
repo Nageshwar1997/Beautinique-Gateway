@@ -29,12 +29,7 @@ class ProductService extends BaseProductService {
     return this.request({ ...this.routes.get.dashboard.products, user, params });
   }
 
-  public getDashboardProductsSuggestions({
-    user,
-    params,
-  }: IUser & { params?: Record<string, string> }) {
-    return this.request({ ...this.routes.get.dashboard.suggestions, user, params });
-  }
+
 
   public getProductsSuggestions(params: Record<string, string>) {
     return this.request({ ...this.routes.get.suggestions, params });

@@ -109,7 +109,6 @@ export const METHODS_AND_PATHS = {
         dashboard: {
           base: '/dashboard',
           products: { method: METHOD_MAP.GET, path: '/products' },
-          suggestions: { method: METHOD_MAP.GET, path: '/suggestions' },
         },
         suggestions: { method: METHOD_MAP.GET, path: '/suggestions' },
         products: { method: METHOD_MAP.GET, path: '/products' },
