@@ -24,6 +24,21 @@ class ProductService extends BaseProductService {
   public getDraftProduct({ user }: IUser) {
     return this.request({ ...this.routes.draft.get, user });
   }
+
+  public getDashboardProducts({ user, params }: IUser & { params?: Record<string, string> }) {
+    return this.request({ ...this.routes.get.dashboard.products, user, params });
+  }
+
+  public getDashboardProductsSuggestions({
+    user,
+    params,
+  }: IUser & { params?: Record<string, string> }) {
+    return this.request({ ...this.routes.get.dashboard.products, user, params });
+  }
+
+  public getProductsSuggestions(params: Record<string, string>) {
+    return this.request({ ...this.routes.get.suggestions, params });
+  }
 }
 
 export const productService = new ProductService();

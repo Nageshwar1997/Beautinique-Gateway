@@ -105,6 +105,16 @@ export const METHODS_AND_PATHS = {
         update: { method: METHOD_MAP.PATCH, path: '/' }, // For already published product and seller again made some changes
       },
       publish: { method: METHOD_MAP.PATCH, path: '/publish' }, // For publish existing Product
+      get: {
+        dashboard: {
+          base: '/dashboard',
+          products: { method: METHOD_MAP.GET, path: '/products' },
+          suggestions: { method: METHOD_MAP.GET, path: '/suggestions' },
+        },
+        suggestions: { method: METHOD_MAP.GET, path: '/suggestions' },
+        products: { method: METHOD_MAP.GET, path: '/products' },
+        bySlug: { method: METHOD_MAP.GET, path: '/:slug' },
+      },
     },
   },
 } as const;

@@ -3,14 +3,20 @@ import { Router } from 'express';
 import { METHODS_AND_PATHS } from '../../../constants';
 import { authorize } from '../../../middlewares';
 import {
+  getDashboardProductsController,
+  getDashboardProductsSuggestionsController,
   getDraftProductController,
+  getProductsSuggestionsController,
   publishDraftProductController,
   saveDraftProductController,
 } from '../controllers/product.controller';
 
 export const productRouter = Router();
 const draftRouter = Router();
-const { draft } = METHODS_AND_PATHS.product_service.product;
+const dashboardRouter = Router();
+const { draft, get } = METHODS_AND_PATHS.product_service.product;
+
+/* ================== DRAFT ROUTES ================ */
 
 draftRouter[draft.save.method](
   draft.save.path,
@@ -18,8 +24,31 @@ draftRouter[draft.save.method](
   tryCatchResponse(saveDraftProductController),
 );
 
-draftRouter[draft.publish.method](draft.publish.path, tryCatchResponse(publishDraftProductController));
+draftRouter[draft.publish.method](
+  draft.publish.path,
+  tryCatchResponse(publishDraftProductController),
+);
 
 draftRouter[draft.get.method](draft.get.path, tryCatchResponse(getDraftProductController));
 
+/* ================== DASHBOARD ROUTES ================ */
+
+dashboardRouter[get.dashboard.products.method](
+  get.dashboard.products.path,
+  tryCatchResponse(getDashboardProductsController),
+);
+
+dashboardRouter[get.dashboard.suggestions.method](
+  get.dashboard.suggestions.path,
+  tryCatchResponse(getDashboardProductsSuggestionsController),
+);
+
+/* ================== PRODUCTS ROUTES ================ */
+
 productRouter.use(draft.base, authorize(['ADMIN', 'SELLER', 'MASTER']), draftRouter);
+productRouter.use(get.dashboard.base, authorize(['ADMIN', 'SELLER', 'MASTER']), dashboardRouter);
+
+productRouter[get.products.method](
+  get.products.path,
+  tryCatchResponse(getProductsSuggestionsController),
+);
