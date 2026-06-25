@@ -10,6 +10,7 @@ import type {
   TGenerateRoutes,
   TParams,
   TRouteNode,
+  TUser,
 } from '../types';
 
 export const generateAccessToken = (payload: IJwtPayload) => {
@@ -49,12 +50,13 @@ export const clearAuthCookies = (res: Response) => {
 };
 
 /* ========== GET AUTH USER ========== */
-export const getUser = (req: Request) => {
+export const getUser = (req: Request): TUser => {
   const user = req.user;
 
-  if (!user) throw new AppError({ message: 'You are not logged in g', code: 'AUTHENTICATION_ERROR' });
+  if (!user)
+    throw new AppError({ message: 'You are not logged in g', code: 'AUTHENTICATION_ERROR' });
 
-  return user;
+  return { _id: user._id, role: user.role };
 };
 
 const joinPaths = (...paths: (string | undefined)[]) =>

@@ -16,7 +16,7 @@ export const saveDraftProductController = async (req: Request, res: Response) =>
 export const publishDraftProductController = async (req: Request, res: Response) => {
   const user = getUser(req);
 
-  const { message, statusCode } = await productService.publishDraftProduct({ user });
+  const { message, statusCode } = await productService.publishDraftProduct(user);
 
   res.success(statusCode, message);
 };
@@ -24,7 +24,7 @@ export const publishDraftProductController = async (req: Request, res: Response)
 export const getDraftProductController = async (req: Request, res: Response) => {
   const user = getUser(req);
 
-  const { message, statusCode, draft } = await productService.getDraftProduct({ user });
+  const { message, statusCode, draft } = await productService.getDraftProduct(user);
 
   res.success(statusCode, message, { draft });
 };
@@ -56,8 +56,12 @@ export const getProductsSuggestionsController = async (req: Request, res: Respon
 
 export const getDashboardProductBySlugController = async (req: Request, res: Response) => {
   const slug = req.params.slug as string;
+  const user = getUser(req);
 
-  const { message, statusCode, product } = await productService.getDashboardProductBySlug(slug);
+  const { message, statusCode, product } = await productService.getDashboardProductBySlug(
+    slug,
+    user,
+  );
 
   res.success(statusCode, message, { product });
 };

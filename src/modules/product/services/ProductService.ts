@@ -1,6 +1,6 @@
 import { BaseProductService } from '../../../classes';
 import { API_METHODS_AND_URLS } from '../../../constants';
-import type { IUser } from '../../../types';
+import type { IUser, TUser } from '../../../types';
 
 class ProductService extends BaseProductService {
   private readonly routes = API_METHODS_AND_URLS.product_service.product;
@@ -13,7 +13,7 @@ class ProductService extends BaseProductService {
 
   /* ================== PATCH METHODS ================== */
 
-  public publishDraftProduct({ user }: IUser) {
+  public publishDraftProduct(user: TUser) {
     return this.request({ ...this.routes.draft.publish, user });
   }
 
@@ -21,7 +21,7 @@ class ProductService extends BaseProductService {
 
   /* ================== GET METHODS ================== */
 
-  public getDraftProduct({ user }: IUser) {
+  public getDraftProduct(user: TUser) {
     return this.request({ ...this.routes.draft.get, user });
   }
 
@@ -29,9 +29,9 @@ class ProductService extends BaseProductService {
     return this.request({ ...this.routes.get.dashboard.products, user, params });
   }
 
-  public getDashboardProductBySlug(slug: string) {
-    const { method, url } = this.routes.get.bySlug;
-    return this.request({ method, url: url({ slug }) });
+  public getDashboardProductBySlug(slug: string, user: TUser) {
+    const { method, url } = this.routes.get.dashboard.bySlug;
+    return this.request({ method, url: url({ slug }), user });
   }
 
   public getProductBySlug(slug: string) {
