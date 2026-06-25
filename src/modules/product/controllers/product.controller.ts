@@ -42,7 +42,6 @@ export const getDashboardProductsController = async (req: Request, res: Response
   res.success(statusCode, message, { data });
 };
 
-
 export const getProductsSuggestionsController = async (req: Request, res: Response) => {
   const query = req.query as { search?: string };
 
@@ -53,4 +52,20 @@ export const getProductsSuggestionsController = async (req: Request, res: Respon
   const { message, statusCode, suggestions } = await productService.getProductsSuggestions(query);
 
   res.success(statusCode, message, { suggestions });
+};
+
+export const getDashboardProductBySlugController = async (req: Request, res: Response) => {
+  const slug = req.params.slug as string;
+
+  const { message, statusCode, product } = await productService.getDashboardProductBySlug(slug);
+
+  res.success(statusCode, message, { product });
+};
+
+export const getProductBySlugController = async (req: Request, res: Response) => {
+  const slug = req.params.slug as string;
+
+  const { message, statusCode, product } = await productService.getProductBySlug(slug);
+
+  res.success(statusCode, message, { product });
 };

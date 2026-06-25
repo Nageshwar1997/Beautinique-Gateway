@@ -3,8 +3,10 @@ import { Router } from 'express';
 import { METHODS_AND_PATHS } from '../../../constants';
 import { authorize } from '../../../middlewares';
 import {
+  getDashboardProductBySlugController,
   getDashboardProductsController,
   getDraftProductController,
+  getProductBySlugController,
   getProductsSuggestionsController,
   publishDraftProductController,
   saveDraftProductController,
@@ -37,10 +39,17 @@ dashboardRouter[get.dashboard.products.method](
   tryCatchResponse(getDashboardProductsController),
 );
 
+dashboardRouter[get.dashboard.bySlug.method](
+  get.dashboard.bySlug.path,
+  tryCatchResponse(getDashboardProductBySlugController),
+);
+
 /* ================== PRODUCTS ROUTES ================ */
 
 productRouter.use(draft.base, authorize(['ADMIN', 'SELLER', 'MASTER']), draftRouter);
 productRouter.use(get.dashboard.base, authorize(['ADMIN', 'SELLER', 'MASTER']), dashboardRouter);
+
+productRouter[get.bySlug.method](get.bySlug.path, tryCatchResponse(getProductBySlugController));
 
 productRouter[get.products.method](
   get.products.path,

@@ -29,7 +29,15 @@ class ProductService extends BaseProductService {
     return this.request({ ...this.routes.get.dashboard.products, user, params });
   }
 
+  public getDashboardProductBySlug(slug: string) {
+    const { method, url } = this.routes.get.bySlug;
+    return this.request({ method, url: url({ slug }) });
+  }
 
+  public getProductBySlug(slug: string) {
+    const { method, url } = this.routes.get.bySlug;
+    return this.request({ method, url: url({ slug }) });
+  }
 
   public getProductsSuggestions(params: Record<string, string>) {
     return this.request({ ...this.routes.get.suggestions, params });
