@@ -27,6 +27,7 @@ export const METHODS_AND_PATHS = {
   base: '/api/v1',
   home: { method: GET, path: '/' },
   health: { method: GET, path: '/health' },
+  wakeUp: { method: GET, path: '/wake-up' },
   gateway: {
     refreshAccessToken: { method: POST, path: '/refresh-access-token' },
   },
@@ -135,3 +136,8 @@ export const COOKIES_DATA = {
 } as const;
 
 export const API_METHODS_AND_URLS = createRouteHelper(METHODS_AND_PATHS);
+
+export const LOGGER_BASE_OPTIONS = {
+  level: envs.is_dev ? 'debug' : 'info',
+  pretty: envs.is_dev,
+} as const;

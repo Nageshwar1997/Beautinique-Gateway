@@ -1,5 +1,5 @@
+import type { TUserRole } from '@beautinique/backend-types';
 import { AppError } from '@beautinique/be-classes';
-import type { TRole } from '@beautinique/be-constants';
 import { USER_ROLE_MAP } from '@beautinique/shared-constants';
 import type { NextFunction, Request, Response } from 'express';
 
@@ -37,7 +37,7 @@ export const authenticate = async (req: Request, _res: Response, next: NextFunct
 };
 
 export const authorize =
-  (allowedRoles: TRole[]) => (req: Request, _res: Response, next: NextFunction) => {
+  (allowedRoles: readonly TUserRole[]) => (req: Request, _res: Response, next: NextFunction) => {
     try {
       const token = req.cookies[COOKIES_DATA.access_token.name] as string | undefined;
 
