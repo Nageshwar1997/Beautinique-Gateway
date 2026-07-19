@@ -1,6 +1,7 @@
 import { createHttpLogger } from '@beautinique/backend-logger';
 import { errorResponse, notFoundResponse, successResponse } from '@beautinique/backend-response';
 import { SERVICE_NAMES_MAP, USER_ROLES } from '@beautinique/shared-constants';
+import cookieParser from 'cookie-parser';
 import express from 'express';
 import path from 'path';
 import { parse } from 'qs';
@@ -29,6 +30,24 @@ export const app = express();
 app.set('query parser', (str: string) => parse(str));
 
 /**
+ * Parses cookies on incoming requests into `req.cookies` - needed by
+ * `authenticate`/`authorize` below, so it must run before them.
+ */
+app.use(cookieParser());
+
+/**
+ * Logs every incoming request.
+ */
+app.use(createHttpLogger({ ...LOGGER_BASE_OPTIONS, logger: logger }));
+
+/**
+ * Proxies media-service traffic (file uploads) before the body parsers
+ * below - `http-proxy` streams the raw request body through, so it must
+ * run before anything that would consume/buffer that stream.
+ */
+app.use(`${base}${media_service.default}`, authenticate, authorize(USER_ROLES), mediaServiceProxy);
+
+/**
  * Parses incoming JSON payloads.
  */
 app.use(express.json({ limit: '10mb' }));
@@ -42,13 +61,6 @@ app.use(express.urlencoded({ extended: true }));
  * Serves static assets.
  */
 app.use(express.static(path.resolve('public'), { index: false }));
-
-/**
- * Logs every incoming request.
- */
-app.use(createHttpLogger({ ...LOGGER_BASE_OPTIONS, logger: logger }));
-
-app.use(`${base}${media_service.default}`, authenticate, authorize(USER_ROLES), mediaServiceProxy);
 
 /**
  * Adds success response helpers.
