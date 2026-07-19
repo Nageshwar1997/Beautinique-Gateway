@@ -1,7 +1,8 @@
 import { checkEmptyRequest, tryCatchResponse } from '@beautinique/be-middlewares';
 import { Router } from 'express';
-import { METHODS_AND_PATHS } from '../../../constants';
-import { authorize } from '../../../middlewares';
+
+import { METHODS_AND_PATHS } from '../../../constants/index.js';
+import { authorize } from '../../../middlewares/index.js';
 import {
   getDashboardProductBySlugController,
   getDashboardProductsController,
@@ -10,7 +11,7 @@ import {
   getProductsSuggestionsController,
   publishDraftProductController,
   saveDraftProductController,
-} from '../controllers/product.controller';
+} from '../controllers/product.controller.js';
 
 export const productRouter = Router();
 const draftRouter = Router();

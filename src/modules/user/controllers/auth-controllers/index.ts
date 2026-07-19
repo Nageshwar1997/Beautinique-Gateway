@@ -9,11 +9,17 @@ import type {
   TRegister,
   TSetPassword,
 } from '@beautinique/be-zod';
+import { HEADERS_MAP } from '@beautinique/shared-constants';
 import type { Request, Response } from 'express';
-import { HEADERS_KEYS } from '../../../../constants';
-import { clearAuthCookies, generateAuthTokens, getUser, setAuthCookies } from '../../../../utils';
-import { CLIENT_OAUTH_REDIRECT_URL } from '../../constants';
-import { authService } from '../../services';
+
+import {
+  clearAuthCookies,
+  generateAuthTokens,
+  getAuthUser,
+  setAuthCookies,
+} from '../../../../utils/index.js';
+import { CLIENT_OAUTH_REDIRECT_URL } from '../../constants/index.js';
+import { authService } from '../../services/index.js';
 
 /* ================================ REGISTER CONTROLLERS ================================ */
 
@@ -24,7 +30,7 @@ export const registerSendOtpController = async (req: Request, res: Response) => 
 };
 
 export const registerResendOtpController = async (req: Request, res: Response) => {
-  const token = req.get(HEADERS_KEYS.authorization) || '';
+  const token = req.get(HEADERS_MAP.authorization);
 
   if (!token) {
     throw new AppError({ message: 'Invalid or expired session', code: 'BAD_REQUEST' });
@@ -35,7 +41,7 @@ export const registerResendOtpController = async (req: Request, res: Response) =
 };
 
 export const registerVerifyOtpController = async (req: Request, res: Response) => {
-  const token = req.get(HEADERS_KEYS.authorization) || '';
+  const token = req.get(HEADERS_MAP.authorization);
 
   if (!token) {
     throw new AppError({ message: 'Invalid or expired session', code: 'BAD_REQUEST' });
@@ -48,7 +54,7 @@ export const registerVerifyOtpController = async (req: Request, res: Response) =
 };
 
 export const registerAndSaveController = async (req: Request, res: Response) => {
-  const token = req.get(HEADERS_KEYS.authorization) || '';
+  const token = req.get(HEADERS_MAP.authorization);
 
   if (!token) {
     throw new AppError({ message: 'Invalid or expired session', code: 'BAD_REQUEST' });
@@ -69,7 +75,7 @@ export const registerAndSaveController = async (req: Request, res: Response) => 
 
 export const manualLoginController = async (req: Request, res: Response) => {
   const body = req.body as TLogin;
-  const role = req.get(HEADERS_KEYS.loginRole) as TRole | undefined;
+  const role = req.get(HEADERS_MAP.loginRole) as TRole | undefined;
 
   const { message, statusCode, user } = await authService.manualLogin(body, role);
 
@@ -93,14 +99,14 @@ export const googleRedirectController = async (_req: Request, res: Response) => 
 };
 
 export const googleCallbackController = async (req: Request, res: Response) => {
-  const { code } = req.query;
+  const code = req.query.code as string;
 
   if (!code) {
     throw new AppError({ message: 'No code returned from Google', code: 'BAD_REQUEST' });
   }
 
   try {
-    const { user } = await authService.handleGoogleCallback(String(code));
+    const { user } = await authService.handleGoogleCallback(code);
 
     const { accessToken, refreshToken } = generateAuthTokens({ _id: user._id, role: user.role });
 
@@ -127,14 +133,14 @@ export const linkedinRedirectController = async (_req: Request, res: Response) =
 };
 
 export const linkedinCallbackController = async (req: Request, res: Response) => {
-  const { code } = req.query;
+  const code = req.query.code as string;
 
   if (!code) {
     throw new AppError({ message: 'No code returned from Linkedin', code: 'BAD_REQUEST' });
   }
 
   try {
-    const { user } = await authService.handleLinkedinCallback(String(code));
+    const { user } = await authService.handleLinkedinCallback(code);
 
     const { accessToken, refreshToken } = generateAuthTokens({ _id: user._id, role: user.role });
 
@@ -161,14 +167,14 @@ export const githubRedirectController = async (_req: Request, res: Response) => 
 };
 
 export const githubCallbackController = async (req: Request, res: Response) => {
-  const { code } = req.query;
+  const code = req.query.code as string;
 
   if (!code) {
     throw new AppError({ message: 'No code returned from Github', code: 'BAD_REQUEST' });
   }
 
   try {
-    const { user } = await authService.handleGithubCallback(String(code));
+    const { user } = await authService.handleGithubCallback(code);
 
     const { accessToken, refreshToken } = generateAuthTokens({ _id: user._id, role: user.role });
 
@@ -191,7 +197,7 @@ export const forgotPasswordSendOtpController = async (req: Request, res: Respons
 };
 
 export const forgotPasswordResendOtpController = async (req: Request, res: Response) => {
-  const token = req.get(HEADERS_KEYS.authorization) || '';
+  const token = req.get(HEADERS_MAP.authorization);
 
   if (!token) {
     throw new AppError({ message: 'Invalid or expired session', code: 'BAD_REQUEST' });
@@ -202,7 +208,7 @@ export const forgotPasswordResendOtpController = async (req: Request, res: Respo
 };
 
 export const forgotPasswordVerifyOtpController = async (req: Request, res: Response) => {
-  const token = req.get(HEADERS_KEYS.authorization) || '';
+  const token = req.get(HEADERS_MAP.authorization);
 
   if (!token) {
     throw new AppError({ message: 'Invalid or expired session', code: 'BAD_REQUEST' });
@@ -215,7 +221,7 @@ export const forgotPasswordVerifyOtpController = async (req: Request, res: Respo
 };
 
 export const forgotPasswordSaveController = async (req: Request, res: Response) => {
-  const token = req.get(HEADERS_KEYS.authorization) || '';
+  const token = req.get(HEADERS_MAP.authorization);
 
   if (!token) {
     throw new AppError({ message: 'Invalid or expired session', code: 'BAD_REQUEST' });
@@ -235,7 +241,7 @@ export const forgotPasswordSaveController = async (req: Request, res: Response) 
 /* ================================ CHANGE PASSWORD CONTROLLERS ================================ */
 
 export const changePasswordController = async (req: Request, res: Response) => {
-  const _user = getUser(req);
+  const _user = getAuthUser(req.user);
 
   const body = req.body as TChangePassword;
 
@@ -251,7 +257,7 @@ export const changePasswordController = async (req: Request, res: Response) => {
 /* ================================ SET PASSWORD CONTROLLERS ================================ */
 
 export const setPasswordController = async (req: Request, res: Response) => {
-  const _user = getUser(req);
+  const _user = getAuthUser(req.user);
 
   const body = req.body as TSetPassword;
 
@@ -267,7 +273,7 @@ export const setPasswordController = async (req: Request, res: Response) => {
 /* ================================ LOGOUT CONTROLLERS ================================ */
 
 export const logoutController = async (req: Request, res: Response) => {
-  const user = getUser(req);
+  const user = getAuthUser(req.user);
 
   const { message, statusCode } = await authService.logout(user);
   clearAuthCookies(res);

@@ -1,9 +1,10 @@
 import type { Request, Response } from 'express';
-import { getUser } from '../../../utils';
-import { productService } from '../services/ProductService';
+
+import { getAuthUser } from '../../../utils/index.js';
+import { productService } from '../services/index.js';
 
 export const saveDraftProductController = async (req: Request, res: Response) => {
-  const user = getUser(req);
+  const user = getAuthUser(req.user);
 
   const { message, statusCode, draft } = await productService.saveDraftProduct({
     user,
@@ -14,7 +15,7 @@ export const saveDraftProductController = async (req: Request, res: Response) =>
 };
 
 export const publishDraftProductController = async (req: Request, res: Response) => {
-  const user = getUser(req);
+  const user = getAuthUser(req.user);
 
   const { message, statusCode } = await productService.publishDraftProduct(user);
 
@@ -22,7 +23,7 @@ export const publishDraftProductController = async (req: Request, res: Response)
 };
 
 export const getDraftProductController = async (req: Request, res: Response) => {
-  const user = getUser(req);
+  const user = getAuthUser(req.user);
 
   const { message, statusCode, draft } = await productService.getDraftProduct(user);
 
@@ -30,7 +31,7 @@ export const getDraftProductController = async (req: Request, res: Response) => 
 };
 
 export const getDashboardProductsController = async (req: Request, res: Response) => {
-  const user = getUser(req);
+  const user = getAuthUser(req.user);
 
   const query = req.query;
 
@@ -46,7 +47,8 @@ export const getProductsSuggestionsController = async (req: Request, res: Respon
   const query = req.query as { search?: string };
 
   if (!query.search?.trim()) {
-    return res.success(200, 'Suggestions fetched successfully', { suggestions: [] });
+    res.success(200, 'Suggestions fetched successfully', { suggestions: [] });
+    return;
   }
 
   const { message, statusCode, suggestions } = await productService.getProductsSuggestions(query);
@@ -56,7 +58,7 @@ export const getProductsSuggestionsController = async (req: Request, res: Respon
 
 export const getDashboardProductBySlugController = async (req: Request, res: Response) => {
   const slug = req.params.slug as string;
-  const user = getUser(req);
+  const user = getAuthUser(req.user);
 
   const { message, statusCode, product } = await productService.getDashboardProductBySlug(
     slug,

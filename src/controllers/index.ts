@@ -1,8 +1,9 @@
 import { AppError } from '@beautinique/be-classes';
 import type { Request, Response } from 'express';
-import { COOKIES_DATA } from '../constants';
-import { envs } from '../envs';
-import { generateAccessToken, verifyRefreshToken } from '../utils';
+
+import { COOKIES_DATA } from '../constants/index.js';
+import { envs } from '../envs/index.js';
+import { generateAccessToken, verifyRefreshToken } from '../utils/index.js';
 
 export const wakeUpController = async (_req: Request, res: Response) => {
   try {
@@ -49,8 +50,9 @@ export const wakeUpController = async (_req: Request, res: Response) => {
 
 /* ================================ REFRESH CONTROLLERS ================================ */
 
+// eslint-disable-next-line @typescript-eslint/require-await
 export const refreshAccessTokenController = async (req: Request, res: Response) => {
-  const token = req.cookies?.[COOKIES_DATA.refresh_token.name];
+  const token = req.cookies[COOKIES_DATA.refresh_token.name] as string | undefined;
 
   if (!token) {
     throw new AppError({ message: 'Refresh token missing', code: 'AUTHENTICATION_ERROR' });

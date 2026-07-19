@@ -1,3 +1,7 @@
+import 'dotenv/config';
+
+import type { Socket } from 'node:net';
+
 import {
   checkCors,
   errorResponse,
@@ -5,15 +9,15 @@ import {
   setRequestId,
   successResponse,
 } from '@beautinique/be-middlewares';
+import { HEADERS_MAP } from '@beautinique/shared-constants';
 import cookieParser from 'cookie-parser';
-import 'dotenv/config';
 import express from 'express';
-import type { Socket } from 'node:net';
 import path from 'path';
 import { parse } from 'qs';
-import { HEADERS_KEYS, METHODS_AND_PATHS, ORIGINS } from './constants';
-import { wakeUpController } from './controllers';
-import { envs } from './envs';
+
+import { METHODS_AND_PATHS, ORIGINS } from './constants/index.js';
+import { wakeUpController } from './controllers/index.js';
+import { envs } from './envs/index.js';
 import {
   authenticate,
   authorize,
@@ -21,8 +25,8 @@ import {
   logger,
   mediaServiceProxy,
   requestLogs,
-} from './middlewares';
-import { router } from './routes';
+} from './middlewares/index.js';
+import { router } from './routes/index.js';
 
 const { base, media_service } = METHODS_AND_PATHS;
 
@@ -45,7 +49,7 @@ app.use(setRequestId);
 app.use(
   checkCors({
     origins: ORIGINS,
-    allowedHeaders: [HEADERS_KEYS.contentType, HEADERS_KEYS.authorization, HEADERS_KEYS.loginRole],
+    allowedHeaders: [HEADERS_MAP.contentType, HEADERS_MAP.authorization, HEADERS_MAP.loginRole],
     credentials: true,
   }),
 );
@@ -76,10 +80,14 @@ app.use(successResponse);
 /* ---------------- ROUTES ---------------- */
 
 // Home Route
-app.get('/', (_, res) => res.success(200, 'Welcome to Beautinique Gateway!'));
+app.get('/', (_, res) => {
+  res.success(200, 'Welcome to Beautinique Gateway!');
+});
 
 // Health Route
-app.get('/health', (_, res) => res.success(200, 'Beautinique Gateway is healthy'));
+app.get('/health', (_, res) => {
+  res.success(200, 'Beautinique Gateway is healthy');
+});
 
 // Wake Up Route
 app.get('/wake-up', wakeUpController);
@@ -103,7 +111,7 @@ async function start() {
 
       const httpServer = app.listen(envs.port, () => {
         httpServer.off('error', onError);
-        logger.info(`🚀 Server running on port: ${envs.port}`);
+        logger.info(`🚀 Server running on port: ${String(envs.port)}`);
         resolve();
       });
 
@@ -160,7 +168,10 @@ async function shutdown(signal: string) {
         server?.close((err) => {
           clearTimeout(forceCloseTimer);
 
-          if (err) return reject(err);
+          if (err) {
+            reject(err);
+            return;
+          }
 
           logger.info('🌐 HTTP server closed');
           resolve();
@@ -178,8 +189,8 @@ async function shutdown(signal: string) {
 
 /* ---------------- PROCESS SIGNALS ---------------- */
 
-process.on('SIGINT', () => shutdown('SIGINT'));
-process.on('SIGTERM', () => shutdown('SIGTERM'));
+process.on('SIGINT', () => void shutdown('SIGINT'));
+process.on('SIGTERM', () => void shutdown('SIGTERM'));
 
 /* ---------------- BOOTSTRAP ---------------- */
 

@@ -1,11 +1,12 @@
 import { tryCatchResponse } from '@beautinique/be-middlewares';
 import { Router } from 'express';
-import { METHODS_AND_PATHS } from '../../../../constants';
-import { authenticate } from '../../../../middlewares';
-import { logoutController } from '../../controllers';
-import { loginRouter } from './login.route';
-import { passwordRouter } from './password.route';
-import { registerRouter } from './register.route';
+
+import { METHODS_AND_PATHS } from '../../../../constants/index.js';
+import { authenticate } from '../../../../middlewares/index.js';
+import { logoutController } from '../../controllers/index.js';
+import { loginRouter } from './login.route.js';
+import { passwordRouter } from './password.route.js';
+import { registerRouter } from './register.route.js';
 
 export const authRouter = Router();
 

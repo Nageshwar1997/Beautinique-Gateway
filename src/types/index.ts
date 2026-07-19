@@ -1,6 +1,5 @@
-import type { TServiceName, TUserRole } from '@beautinique/backend-types';
+import type { TApiMethod, TServiceName, TUserRole } from '@beautinique/backend-types';
 
-import type { METHOD_MAP } from '../constants/index.js';
 
 export interface IJwtPayload {
   _id: string;
@@ -13,7 +12,6 @@ export interface IUser {
   user: IJwtPayload;
 }
 
-export type TApiMethod = (typeof METHOD_MAP)[keyof typeof METHOD_MAP];
 
 export type TRouteNode = Record<string, unknown> & { base?: string };
 
@@ -36,7 +34,7 @@ type TUrl<FullPath extends string> =
     : (params: TExtractRouteParams<FullPath>) => FullPath;
 
 interface IGeneratedEndpoint<T extends IEndpoint, FullPath extends string> {
-  method: Uppercase<T['method']>;
+  method: T['method'];
 
   url: TUrl<FullPath>;
 }

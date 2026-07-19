@@ -1,8 +1,10 @@
-import { createError } from '@beautinique/backend-classes';
-import type { Request, Response } from 'express';
+import { AuthenticationError } from '@beautinique/backend-classes';
+import { getUser } from '@beautinique/backend-utils';
+import { HEADERS_MAP } from '@beautinique/shared-constants';
+import type { Response } from 'express';
 import jwt from 'jsonwebtoken';
 
-import { COOKIES_DATA, HEADERS_KEYS, SERVICE_SECRET_MAP } from '../constants/index.js';
+import { COOKIES_DATA, SERVICE_SECRET_MAP } from '../constants/index.js';
 import { envs } from '../envs/index.js';
 import type {
   ICreateHeaders,
@@ -51,16 +53,14 @@ export const clearAuthCookies = (res: Response) => {
 };
 
 /* ========== GET AUTH USER ========== */
-export const getUser = (req: Request): TUser => {
-  const user = req.user;
+export const getAuthUser = (payload?: IJwtPayload): TUser => {
+  if (!payload?._id) {
+    throw new AuthenticationError("User doesn't exist.");
+  }
 
-  if (!user)
-    throw createError({
-      message: 'You are not logged in g',
-      payload: { code: 'AUTHENTICATION_ERROR' },
-    });
+  const user = getUser(payload);
 
-  return { _id: user._id, role: user.role };
+  return user;
 };
 
 const joinPaths = (...paths: (string | undefined)[]) =>
@@ -99,7 +99,7 @@ export const createRouteHelper = <T extends Record<string, unknown>>(
         const hasParams = fullPath.includes(':');
 
         result[key] = {
-          method: value.method.toUpperCase(),
+          method: value.method,
           url: hasParams ? (params: TParams) => buildDynamicUrl(fullPath, params) : fullPath,
         };
 
@@ -125,14 +125,14 @@ export const createHeaders = ({
   serviceSecret,
 }: ICreateHeaders = {}) => {
   return {
-    ...(serviceSecret && { [HEADERS_KEYS.serviceSecret]: SERVICE_SECRET_MAP[serviceSecret] }),
+    ...(serviceSecret && { [HEADERS_MAP.serviceSecret]: SERVICE_SECRET_MAP[serviceSecret] }),
 
-    ...(user && { [HEADERS_KEYS.userId]: user._id, [HEADERS_KEYS.userRole]: user.role }),
+    ...(user && { [HEADERS_MAP.userId]: user._id, [HEADERS_MAP.userRole]: user.role }),
 
-    ...(token && { [HEADERS_KEYS.authorization]: token }),
+    ...(token && { [HEADERS_MAP.authorization]: token }),
 
-    ...(loginRole && { [HEADERS_KEYS.loginRole]: loginRole }),
+    ...(loginRole && { [HEADERS_MAP.loginRole]: loginRole }),
 
-    ...(contentType && { [HEADERS_KEYS.contentType]: contentType }),
+    ...(contentType && { [HEADERS_MAP.contentType]: contentType }),
   };
 };

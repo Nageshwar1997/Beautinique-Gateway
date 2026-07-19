@@ -1,7 +1,8 @@
 import type { TCategory, TUpdateCategory } from '@beautinique/be-zod';
-import { BaseProductService } from '../../../classes';
-import { API_METHODS_AND_URLS } from '../../../constants';
-import type { IUser } from '../../../types';
+
+import { BaseProductService } from '../../../classes/index.js';
+import { API_METHODS_AND_URLS } from '../../../constants/index.js';
+import type { IUser } from '../../../types/index.js';
 
 class CategoryService extends BaseProductService {
   private readonly routes = API_METHODS_AND_URLS.product_service.category;

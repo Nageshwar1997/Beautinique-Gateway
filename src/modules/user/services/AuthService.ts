@@ -8,9 +8,10 @@ import type {
   TRegister,
   TSetPassword,
 } from '@beautinique/be-zod';
-import { BaseUserService } from '../../../classes';
-import { API_METHODS_AND_URLS } from '../../../constants';
-import type { TUser } from '../../../types';
+
+import { BaseUserService } from '../../../classes/index.js';
+import { API_METHODS_AND_URLS } from '../../../constants/index.js';
+import type { TUser } from '../../../types/index.js';
 
 class AuthService extends BaseUserService {
   private routes = API_METHODS_AND_URLS.user_service.auth;

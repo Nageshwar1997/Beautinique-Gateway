@@ -1,14 +1,15 @@
 import { checkEmptyRequest, tryCatchResponse } from '@beautinique/be-middlewares';
 import { Router } from 'express';
-import { METHODS_AND_PATHS } from '../../../constants';
-import { authorize } from '../../../middlewares';
+
+import { METHODS_AND_PATHS } from '../../../constants/index.js';
+import { authorize } from '../../../middlewares/index.js';
 import {
   addCategoryController,
   deleteCategoryController,
   getCategoriesByHierarchyController,
   getCategoriesByParentLevelController,
   updateCategoryController,
-} from '../controllers';
+} from '../controllers/index.js';
 
 export const categoryRouter = Router();
 
