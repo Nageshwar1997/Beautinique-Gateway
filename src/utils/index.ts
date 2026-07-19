@@ -1,4 +1,5 @@
 import { AuthenticationError } from '@beautinique/backend-classes';
+import type { TApiMethod } from '@beautinique/backend-types';
 import { getUser } from '@beautinique/backend-utils';
 import { HEADERS_MAP } from '@beautinique/shared-constants';
 import type { Response } from 'express';
@@ -99,7 +100,7 @@ export const createRouteHelper = <T extends Record<string, unknown>>(
         const hasParams = fullPath.includes(':');
 
         result[key] = {
-          method: value.method,
+          method: value.method.toUpperCase() as TApiMethod,
           url: hasParams ? (params: TParams) => buildDynamicUrl(fullPath, params) : fullPath,
         };
 
