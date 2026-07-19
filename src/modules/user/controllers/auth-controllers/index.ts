@@ -21,6 +21,12 @@ import {
 import { CLIENT_OAUTH_REDIRECT_URL } from '../../constants/index.js';
 import { authService } from '../../services/index.js';
 
+const buildOAuthErrorRedirectUrl = (error: unknown) => {
+  const message = (error as Error | AppError).message || 'Something went wrong!';
+
+  return `${CLIENT_OAUTH_REDIRECT_URL}?error=true&message=${encodeURIComponent(message)}`;
+};
+
 /* ================================ REGISTER CONTROLLERS ================================ */
 
 export const registerSendOtpController = async (req: Request, res: Response) => {
@@ -114,9 +120,7 @@ export const googleRedirectController = async (_req: Request, res: Response) => 
 
     res.redirect(url);
   } catch (error) {
-    res.redirect(
-      `${CLIENT_OAUTH_REDIRECT_URL}?error=true&message=${(error as Error | AppError).message || 'Something went wrong!'}`,
-    );
+    res.redirect(buildOAuthErrorRedirectUrl(error));
   }
 };
 
@@ -140,9 +144,7 @@ export const googleCallbackController = async (req: Request, res: Response) => {
 
     res.redirect(`${CLIENT_OAUTH_REDIRECT_URL}?success=true`);
   } catch (error) {
-    res.redirect(
-      `${CLIENT_OAUTH_REDIRECT_URL}?error=true&message=${(error as Error | AppError).message || 'Something went wrong!'}`,
-    );
+    res.redirect(buildOAuthErrorRedirectUrl(error));
   }
 };
 
@@ -156,9 +158,7 @@ export const linkedinRedirectController = async (_req: Request, res: Response) =
 
     res.redirect(url);
   } catch (error) {
-    res.redirect(
-      `${CLIENT_OAUTH_REDIRECT_URL}?error=true&message=${(error as Error | AppError).message || 'Something went wrong!'}`,
-    );
+    res.redirect(buildOAuthErrorRedirectUrl(error));
   }
 };
 
@@ -182,9 +182,7 @@ export const linkedinCallbackController = async (req: Request, res: Response) =>
 
     res.redirect(`${CLIENT_OAUTH_REDIRECT_URL}?success=true`);
   } catch (error) {
-    res.redirect(
-      `${CLIENT_OAUTH_REDIRECT_URL}?error=true&message=${(error as Error | AppError).message || 'Something went wrong!'}`,
-    );
+    res.redirect(buildOAuthErrorRedirectUrl(error));
   }
 };
 
@@ -198,9 +196,7 @@ export const githubRedirectController = async (_req: Request, res: Response) => 
 
     res.redirect(url);
   } catch (error) {
-    res.redirect(
-      `${CLIENT_OAUTH_REDIRECT_URL}?error=true&message=${(error as Error | AppError).message || 'Something went wrong!'}`,
-    );
+    res.redirect(buildOAuthErrorRedirectUrl(error));
   }
 };
 
@@ -227,9 +223,7 @@ export const githubCallbackController = async (req: Request, res: Response) => {
 
     res.redirect(`${CLIENT_OAUTH_REDIRECT_URL}?success=true`);
   } catch (error) {
-    res.redirect(
-      `${CLIENT_OAUTH_REDIRECT_URL}?error=true&message=${(error as Error | AppError).message || 'Something went wrong!'}`,
-    );
+    res.redirect(buildOAuthErrorRedirectUrl(error));
   }
 };
 

@@ -1,6 +1,6 @@
 import { createHttpLogger } from '@beautinique/backend-logger';
 import { errorResponse, notFoundResponse, successResponse } from '@beautinique/backend-response';
-import { SERVICE_NAMES_MAP, USER_ROLES } from '@beautinique/shared-constants';
+import { USER_ROLES } from '@beautinique/shared-constants';
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import path from 'path';
@@ -12,7 +12,7 @@ import { LOGGER_BASE_OPTIONS, METHODS_AND_PATHS } from './constants/index.js';
 import { wakeUpController } from './controllers/index.js';
 import { openApiSpec } from './docs/openapi.js';
 import { envs } from './envs/index.js';
-import { authenticate, authorize, mediaServiceProxy } from './middlewares/index.js';
+import { authorize, mediaServiceProxy } from './middlewares/index.js';
 import { router } from './routes/index.js';
 
 const { base, health, home, wakeUp, media_service } = METHODS_AND_PATHS;
@@ -45,7 +45,7 @@ app.use(createHttpLogger({ ...LOGGER_BASE_OPTIONS, logger: logger }));
  * below - `http-proxy` streams the raw request body through, so it must
  * run before anything that would consume/buffer that stream.
  */
-app.use(`${base}${media_service.default}`, authenticate, authorize(USER_ROLES), mediaServiceProxy);
+app.use(`${base}${media_service.default}`, authorize(USER_ROLES), mediaServiceProxy);
 
 /**
  * Parses incoming JSON payloads.
@@ -94,7 +94,7 @@ app.use('/docs', swaggerUi.serve, swaggerUi.setup(openApiSpec));
 app[health.method](health.path, (_, res) => {
   res.success({
     message: 'Gateway is healthy',
-    data: { service: SERVICE_NAMES_MAP['product-service'] },
+    data: { service: 'gateway' },
   });
 });
 

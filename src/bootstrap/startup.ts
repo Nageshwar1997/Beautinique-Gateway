@@ -23,7 +23,7 @@ export const startup = async (): Promise<void> => {
   try {
     await startHttpServer();
 
-    logger.info('✅ Product service initialized');
+    logger.info('✅ Gateway initialized');
 
     resetShuttingDown();
   } catch (error: unknown) {
@@ -31,7 +31,7 @@ export const startup = async (): Promise<void> => {
 
     resetShuttingDown();
 
-    logger.error(`❌ Failed to start product service: ${String(error)}`);
+    logger.error(`❌ Failed to start gateway: ${String(error)}`);
 
     process.exit(1);
   }
