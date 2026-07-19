@@ -1,22 +1,21 @@
+import { requireEnv, requirePort } from '@beautinique/shared-utils';
+
 const {
   // A
 
-  ADMIN_DEV_URL,
-  ADMIN_PROD_URL,
+  ADMIN_BASE_URL,
 
   // B
   // C
 
-  CLIENT_DEV_URL,
-  CLIENT_PROD_URL,
+  CLIENT_BASE_URL,
 
   // D
   // E
   // F
   // G
 
-  GATEWAY_DEV_URL,
-  GATEWAY_PROD_URL,
+  GATEWAY_BASE_URL,
 
   // H
   // I
@@ -32,16 +31,12 @@ const {
   // L
   // M
 
-  MAIL_SERVICE_DEV_URL,
-  MAIL_SERVICE_PROD_URL,
-
+  MAIL_SERVICE_BASE_URL,
   MAIL_SERVICE_SECRET,
 
-  MASTER_DEV_URL,
-  MASTER_PROD_URL,
+  MASTER_BASE_URL,
 
-  MEDIA_SERVICE_DEV_URL,
-  MEDIA_SERVICE_PROD_URL,
+  MEDIA_SERVICE_BASE_URL,
   MEDIA_SERVICE_SECRET,
 
   // N
@@ -50,26 +45,20 @@ const {
 
   PORT,
 
-  PRODUCT_SERVICE_DEV_URL,
-  PRODUCT_SERVICE_PROD_URL,
+  PRODUCT_SERVICE_BASE_URL,
 
   PRODUCT_SERVICE_SECRET,
-
-  PUBLIC_DEV_URL_1,
-  PUBLIC_DEV_URL_2,
 
   // Q
   // R
   // S
 
-  SELLER_DEV_URL,
-  SELLER_PROD_URL,
+  SELLER_BASE_URL,
 
   // T
   // U
 
-  USER_SERVICE_DEV_URL,
-  USER_SERVICE_PROD_URL,
+  USER_SERVICE_BASE_URL,
 
   USER_SERVICE_SECRET,
 
@@ -97,7 +86,10 @@ export const envs = {
 
   // J
 
-  jwt: { access_secret: JWT_ACCESS_SECRET, refresh_secret: JWT_REFRESH_SECRET },
+  jwt: {
+    access_secret: requireEnv(JWT_ACCESS_SECRET, 'JWT_ACCESS_SECRET'),
+    refresh_secret: requireEnv(JWT_REFRESH_SECRET, 'JWT_REFRESH_SECRET'),
+  },
 
   // K
   // L
@@ -106,17 +98,17 @@ export const envs = {
   // O
   // P
 
-  port: Number(PORT),
+  port: requirePort(PORT, 'PORT'),
 
   // Q
   // R
   // S
 
   service_secret: {
-    user: USER_SERVICE_SECRET,
-    product: PRODUCT_SERVICE_SECRET,
-    mail: MAIL_SERVICE_SECRET,
-    media: MEDIA_SERVICE_SECRET,
+    user: requireEnv(USER_SERVICE_SECRET, 'USER_SERVICE_SECRET'),
+    product: requireEnv(PRODUCT_SERVICE_SECRET, 'PRODUCT_SERVICE_SECRET'),
+    mail: requireEnv(MAIL_SERVICE_SECRET, 'MAIL_SERVICE_SECRET'),
+    media: requireEnv(MEDIA_SERVICE_SECRET, 'MEDIA_SERVICE_SECRET'),
   },
 
   // T
@@ -124,23 +116,17 @@ export const envs = {
 
   url: {
     frontend: {
-      client: is_dev ? CLIENT_DEV_URL : CLIENT_PROD_URL,
-      admin: is_dev ? ADMIN_DEV_URL : ADMIN_PROD_URL,
-      master: is_dev ? MASTER_DEV_URL : MASTER_PROD_URL,
-      seller: is_dev ? SELLER_DEV_URL : SELLER_PROD_URL,
-      public_dev_1: PUBLIC_DEV_URL_1,
-      public_dev_2: PUBLIC_DEV_URL_2,
-      client_dev: CLIENT_DEV_URL,
-      admin_dev: ADMIN_DEV_URL,
-      master_dev: MASTER_DEV_URL,
-      seller_dev: SELLER_DEV_URL,
+      client: requireEnv(CLIENT_BASE_URL, 'CLIENT_BASE_URL'),
+      admin: requireEnv(ADMIN_BASE_URL, 'ADMIN_BASE_URL'),
+      master: requireEnv(MASTER_BASE_URL, 'MASTER_BASE_URL'),
+      seller: requireEnv(SELLER_BASE_URL, 'SELLER_BASE_URL'),
     },
-    gateway: is_dev ? GATEWAY_DEV_URL : GATEWAY_PROD_URL,
+    gateway: requireEnv(GATEWAY_BASE_URL, 'GATEWAY_BASE_URL'),
     service: {
-      mail: is_dev ? MAIL_SERVICE_DEV_URL : MAIL_SERVICE_PROD_URL,
-      media: is_dev ? MEDIA_SERVICE_DEV_URL : MEDIA_SERVICE_PROD_URL,
-      product: is_dev ? PRODUCT_SERVICE_DEV_URL : PRODUCT_SERVICE_PROD_URL,
-      user: is_dev ? USER_SERVICE_DEV_URL : USER_SERVICE_PROD_URL,
+      mail: requireEnv(MAIL_SERVICE_BASE_URL, 'MAIL_SERVICE_BASE_URL'),
+      media: requireEnv(MEDIA_SERVICE_BASE_URL, 'MEDIA_SERVICE_BASE_URL'),
+      product: requireEnv(PRODUCT_SERVICE_BASE_URL, 'PRODUCT_SERVICE_BASE_URL'),
+      user: requireEnv(USER_SERVICE_BASE_URL, 'USER_SERVICE_BASE_URL'),
     },
   },
 
