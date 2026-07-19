@@ -1,4 +1,4 @@
-import type { TRole } from '@beautinique/be-constants';
+import type { TUserRole } from '@beautinique/backend-types';
 import type {
   TChangePassword,
   TEmail,
@@ -34,7 +34,7 @@ class AuthService extends BaseUserService {
   }
 
   /* ================== LOGIN METHODS ================== */
-  public async manualLogin(data: TLogin, loginRole?: TRole) {
+  public async manualLogin(data: TLogin, loginRole?: TUserRole) {
     return this.request<TUser>({ ...this.routes.login.manual, data, loginRole });
   }
 

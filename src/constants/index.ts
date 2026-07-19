@@ -1,18 +1,18 @@
-import type { TService } from '@beautinique/be-constants';
+import type { TServiceName } from '@beautinique/backend-types';
 import { API_METHODS_MAP, SERVICE_NAMES_MAP } from '@beautinique/shared-constants';
 import type { CookieOptions } from 'express';
 
 import { envs } from '../envs/index.js';
 import { createRouteHelper } from '../utils/index.js';
 
-export const SERVICES_BASE_URLS: Record<TService, string> = {
+export const SERVICES_BASE_URLS: Record<TServiceName, string> = {
   [SERVICE_NAMES_MAP['mail-service']]: envs.url.service.mail,
   [SERVICE_NAMES_MAP['media-service']]: envs.url.service.media,
   [SERVICE_NAMES_MAP['product-service']]: envs.url.service.product,
   [SERVICE_NAMES_MAP['user-service']]: envs.url.service.user,
 } as const;
 
-export const SERVICE_SECRET_MAP: Record<TService, string> = {
+export const SERVICE_SECRET_MAP: Record<TServiceName, string> = {
   [SERVICE_NAMES_MAP['mail-service']]: envs.service_secret.mail,
   [SERVICE_NAMES_MAP['media-service']]: envs.service_secret.media,
   [SERVICE_NAMES_MAP['product-service']]: envs.service_secret.product,

@@ -1,5 +1,5 @@
+import type { TUserRole } from '@beautinique/backend-types';
 import { AppError } from '@beautinique/be-classes';
-import type { TRole } from '@beautinique/be-constants';
 import type {
   TChangePassword,
   TEmail,
@@ -25,9 +25,9 @@ import { authService } from '../../services/index.js';
 
 export const registerSendOtpController = async (req: Request, res: Response) => {
   const body = req.body as TEmail;
-  
+
   const response = await authService.registerSendOtp(body);
-  
+
   res.success(response);
 };
 
@@ -86,7 +86,7 @@ export const registerAndSaveController = async (req: Request, res: Response) => 
 
 export const manualLoginController = async (req: Request, res: Response) => {
   const body = req.body as TLogin;
-  const role = req.get(HEADERS_MAP.loginRole) as TRole | undefined;
+  const role = req.get(HEADERS_MAP.loginRole) as TUserRole | undefined;
 
   const response = await authService.manualLogin(body, role);
 
