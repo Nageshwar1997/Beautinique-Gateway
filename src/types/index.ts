@@ -58,16 +58,16 @@ export type TGenerateRoutes<
 };
 
 export interface ICreateHeaders {
-  user?: Partial<TUser>;
+  user?: TUser;
   token?: string;
   loginRole?: TUserRole;
   contentType?: string;
   serviceSecret?: TServiceName;
 }
 
-export interface TApiResponse {
+export interface TApiResponse<T = unknown> {
   statusCode: number;
   message: string;
-  data?: unknown;
+  data?: T;
   [key: string]: unknown;
 }

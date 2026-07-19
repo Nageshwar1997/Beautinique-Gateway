@@ -30,36 +30,36 @@ class AuthService extends BaseUserService {
   }
 
   public async registerAndSave({ token, ...data }: TRegister & { token: string }) {
-    return this.request({ ...this.routes.register.saveUser, data, token });
+    return this.request<TUser>({ ...this.routes.register.saveUser, data, token });
   }
 
   /* ================== LOGIN METHODS ================== */
   public async manualLogin(data: TLogin, loginRole?: TRole) {
-    return this.request({ ...this.routes.login.manual, data, loginRole });
+    return this.request<TUser>({ ...this.routes.login.manual, data, loginRole });
   }
 
   public async getGoogleRedirectUrl() {
-    return this.request(this.routes.login.oauth.google.redirect);
+    return this.request<string>(this.routes.login.oauth.google.redirect);
   }
 
   public async handleGoogleCallback(code: string) {
-    return this.request({ ...this.routes.login.oauth.google.callback, params: { code } });
+    return this.request<TUser>({ ...this.routes.login.oauth.google.callback, params: { code } });
   }
 
   public async getLinkedinRedirectUrl() {
-    return this.request(this.routes.login.oauth.linkedin.redirect);
+    return this.request<string>(this.routes.login.oauth.linkedin.redirect);
   }
 
   public async handleLinkedinCallback(code: string) {
-    return this.request({ ...this.routes.login.oauth.linkedin.callback, params: { code } });
+    return this.request<TUser>({ ...this.routes.login.oauth.linkedin.callback, params: { code } });
   }
 
   public async getGithubRedirectUrl() {
-    return this.request(this.routes.login.oauth.github.redirect);
+    return this.request<string>(this.routes.login.oauth.github.redirect);
   }
 
   public async handleGithubCallback(code: string) {
-    return this.request({ ...this.routes.login.oauth.github.callback, params: { code } });
+    return this.request<TUser>({ ...this.routes.login.oauth.github.callback, params: { code } });
   }
 
   /* ================== FORGOT PASSWORD METHODS ================== */
@@ -76,7 +76,7 @@ class AuthService extends BaseUserService {
   }
 
   public async forgotPasswordSave({ token, ...data }: TPasswords & { token: string }) {
-    return this.request({ ...this.routes.password.forgot.save, data, token });
+    return this.request<TUser>({ ...this.routes.password.forgot.save, data, token });
   }
 
   /* ================== CHANGE PASSWORD METHODS ================== */

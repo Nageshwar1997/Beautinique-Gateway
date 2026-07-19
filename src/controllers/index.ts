@@ -64,5 +64,5 @@ export const refreshAccessTokenController = async (req: Request, res: Response) 
 
   res.cookie(COOKIES_DATA.access_token.name, newAccessToken, COOKIES_DATA.access_token.options);
 
-  res.success(200, 'Token refreshed');
+  res.success({ message: 'Access token refreshed' });
 };

@@ -82,9 +82,7 @@ app.use('/docs', swaggerUi.serve, swaggerUi.setup(openApiSpec));
 app[health.method](health.path, (_, res) => {
   res.success({
     message: 'Gateway is healthy',
-    data: {
-      service: SERVICE_NAMES_MAP['product-service'],
-    },
+    data: { service: SERVICE_NAMES_MAP['product-service'] },
   });
 });
 

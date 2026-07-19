@@ -30,9 +30,9 @@ export class ApiRequest {
     this.instance = axios.create({ baseURL: SERVICES_BASE_URLS[key] });
   }
 
-  protected async request<T = TApiResponse>(
+  protected async request<TData = unknown>(
     config: AxiosRequestConfig & Omit<ICreateHeaders, 'serviceSecret'>,
-  ) {
+  ): Promise<TApiResponse<TData>> {
     try {
       const { headers = {}, user, token, loginRole, contentType, ...restConfigs } = config;
 
@@ -50,7 +50,7 @@ export class ApiRequest {
 
       const response = await this.instance.request({ ...restConfigs, headers });
 
-      return response.data as T;
+      return response.data as TApiResponse<TData>;
     } catch (error) {
       if (error instanceof AxiosError) {
         const errResp: AxiosResponse<TErrorResponse> | undefined = error.response;
