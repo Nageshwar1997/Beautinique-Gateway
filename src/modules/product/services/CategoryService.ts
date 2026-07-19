@@ -1,4 +1,4 @@
-import type { TCategory, TUpdateCategory } from '@beautinique/be-zod';
+import type { TCategoryUpdateZodSchema, TCategoryZodSchema } from '@beautinique/backend-types';
 
 import { BaseProductService } from '../../../classes/index.js';
 import { API_METHODS_AND_URLS } from '../../../constants/index.js';
@@ -9,7 +9,7 @@ class CategoryService extends BaseProductService {
 
   /* ================== POST METHODS ================== */
 
-  public addCategory({ user, data }: { data: TCategory } & IUser) {
+  public addCategory({ user, data }: { data: TCategoryZodSchema } & IUser) {
     return this.request({ ...this.routes.add, data, user });
   }
 
@@ -19,7 +19,7 @@ class CategoryService extends BaseProductService {
     user,
     data,
     categoryId,
-  }: IUser & { data: TUpdateCategory; categoryId: string }) {
+  }: IUser & { data: TCategoryUpdateZodSchema; categoryId: string }) {
     const { method, url } = this.routes.update;
     return this.request({ method, url: url({ categoryId }), data, user });
   }

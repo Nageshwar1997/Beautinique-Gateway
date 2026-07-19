@@ -1,4 +1,4 @@
-import type { TCategory, TUpdateCategory } from '@beautinique/be-zod';
+import type { TCategoryUpdateZodSchema, TCategoryZodSchema } from '@beautinique/backend-types';
 import type { Request, Response } from 'express';
 
 import { getAuthUser } from '../../../utils/index.js';
@@ -6,7 +6,7 @@ import { categoryService } from '../services/index.js';
 
 export const addCategoryController = async (req: Request, res: Response) => {
   const user = getAuthUser(req.user);
-  const data = req.body as TCategory;
+  const data = req.body as TCategoryZodSchema;
 
   const response = await categoryService.addCategory({ user, data });
 
@@ -15,7 +15,7 @@ export const addCategoryController = async (req: Request, res: Response) => {
 
 export const updateCategoryController = async (req: Request, res: Response) => {
   const user = getAuthUser(req.user);
-  const data = req.body as TUpdateCategory;
+  const data = req.body as TCategoryUpdateZodSchema;
   const categoryId = req.params.categoryId as string;
 
   const response = await categoryService.updateCategory({ user, data, categoryId });

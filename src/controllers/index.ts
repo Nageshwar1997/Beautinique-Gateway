@@ -1,4 +1,4 @@
-import { AppError } from '@beautinique/be-classes';
+import { AuthenticationError } from '@beautinique/backend-classes';
 import type { Request, Response } from 'express';
 
 import { COOKIES_DATA } from '../constants/index.js';
@@ -55,7 +55,7 @@ export const refreshAccessTokenController = async (req: Request, res: Response) 
   const token = req.cookies[COOKIES_DATA.refresh_token.name] as string | undefined;
 
   if (!token) {
-    throw new AppError({ message: 'Refresh token missing', code: 'AUTHENTICATION_ERROR' });
+    throw new AuthenticationError('Refresh token missing');
   }
 
   const { _id, role } = verifyRefreshToken(token);

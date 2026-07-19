@@ -1,5 +1,6 @@
-import { checkEmptyRequest, tryCatchResponse, zodValidator } from '@beautinique/be-middlewares';
-import { loginSchema } from '@beautinique/be-zod';
+import { checkEmptyRequest } from '@beautinique/backend-request';
+import { tryCatchResponse } from '@beautinique/backend-response';
+import { loginZodSchema, validateZod } from '@beautinique/backend-zod';
 import { Router } from 'express';
 
 import { METHODS_AND_PATHS } from '../../../../constants/index.js';
@@ -22,7 +23,7 @@ const { github, google, linkedin } = oauth;
 loginRouter[manual.method](
   manual.path,
   checkEmptyRequest({ body: true }),
-  zodValidator(loginSchema),
+  validateZod({ body: loginZodSchema }),
   tryCatchResponse(manualLoginController),
 );
 

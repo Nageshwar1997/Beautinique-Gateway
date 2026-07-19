@@ -1,14 +1,14 @@
-import type { TUserRole } from '@beautinique/backend-types';
-import { AppError } from '@beautinique/be-classes';
+import { type AppError, BadRequestError } from '@beautinique/backend-classes';
 import type {
-  TChangePassword,
-  TEmail,
-  TLogin,
-  TOtp,
-  TPasswords,
-  TRegister,
-  TSetPassword,
-} from '@beautinique/be-zod';
+  TChangePasswordZodSchema,
+  TEmailZodSchema,
+  TLoginZodSchema,
+  TOtpZodSchema,
+  TPasswordsZodSchema,
+  TRegisterZodSchema,
+  TSetPasswordZodSchema,
+  TUserRole,
+} from '@beautinique/backend-types';
 import { HEADERS_MAP } from '@beautinique/shared-constants';
 import type { Request, Response } from 'express';
 
@@ -24,7 +24,7 @@ import { authService } from '../../services/index.js';
 /* ================================ REGISTER CONTROLLERS ================================ */
 
 export const registerSendOtpController = async (req: Request, res: Response) => {
-  const body = req.body as TEmail;
+  const body = req.body as TEmailZodSchema;
 
   const response = await authService.registerSendOtp(body);
 
@@ -35,7 +35,7 @@ export const registerResendOtpController = async (req: Request, res: Response) =
   const token = req.get(HEADERS_MAP.authorization);
 
   if (!token) {
-    throw new AppError({ message: 'Invalid or expired session', code: 'BAD_REQUEST' });
+    throw new BadRequestError('Invalid or expired session');
   }
 
   const response = await authService.registerResendOtp(token);
@@ -47,10 +47,10 @@ export const registerVerifyOtpController = async (req: Request, res: Response) =
   const token = req.get(HEADERS_MAP.authorization);
 
   if (!token) {
-    throw new AppError({ message: 'Invalid or expired session', code: 'BAD_REQUEST' });
+    throw new BadRequestError('Invalid or expired session');
   }
 
-  const { otp } = req.body as TOtp;
+  const { otp } = req.body as TOtpZodSchema;
 
   const response = await authService.registerVerifyOtp({ otp, token });
 
@@ -61,15 +61,15 @@ export const registerAndSaveController = async (req: Request, res: Response) => 
   const token = req.get(HEADERS_MAP.authorization);
 
   if (!token) {
-    throw new AppError({ message: 'Invalid or expired session', code: 'BAD_REQUEST' });
+    throw new BadRequestError('Invalid or expired session');
   }
 
-  const body = req.body as TRegister;
+  const body = req.body as TRegisterZodSchema;
 
   const response = await authService.registerAndSave({ ...body, token });
 
   if (!response.data) {
-    throw new AppError({ message: 'Invalid or expired session', code: 'BAD_REQUEST' });
+    throw new BadRequestError('Invalid or expired session');
   }
 
   const { accessToken, refreshToken } = generateAuthTokens({
@@ -85,13 +85,13 @@ export const registerAndSaveController = async (req: Request, res: Response) => 
 /* ================================ LOGIN CONTROLLERS ================================ */
 
 export const manualLoginController = async (req: Request, res: Response) => {
-  const body = req.body as TLogin;
+  const body = req.body as TLoginZodSchema;
   const role = req.get(HEADERS_MAP.loginRole) as TUserRole | undefined;
 
   const response = await authService.manualLogin(body, role);
 
   if (!response.data) {
-    throw new AppError({ message: 'Invalid or expired session', code: 'BAD_REQUEST' });
+    throw new BadRequestError('Invalid or expired session');
   }
 
   const { accessToken, refreshToken } = generateAuthTokens({
@@ -109,7 +109,7 @@ export const googleRedirectController = async (_req: Request, res: Response) => 
     const { data: url } = await authService.getGoogleRedirectUrl();
 
     if (!url) {
-      throw new AppError({ message: 'No redirect url returned from Google', code: 'BAD_REQUEST' });
+      throw new BadRequestError('No redirect url returned from Google');
     }
 
     res.redirect(url);
@@ -124,14 +124,14 @@ export const googleCallbackController = async (req: Request, res: Response) => {
   const code = req.query.code as string;
 
   if (!code) {
-    throw new AppError({ message: 'No code returned from Google', code: 'BAD_REQUEST' });
+    throw new BadRequestError('No code returned from Google');
   }
 
   try {
     const { data: user } = await authService.handleGoogleCallback(code);
 
     if (!user) {
-      throw new AppError({ message: 'No user returned from Google', code: 'BAD_REQUEST' });
+      throw new BadRequestError('No user returned from Google');
     }
 
     const { accessToken, refreshToken } = generateAuthTokens({ _id: user._id, role: user.role });
@@ -151,7 +151,7 @@ export const linkedinRedirectController = async (_req: Request, res: Response) =
     const { data: url } = await authService.getLinkedinRedirectUrl();
 
     if (!url) {
-      throw new AppError({ message: 'No url returned from Linkedin', code: 'BAD_REQUEST' });
+      throw new BadRequestError('No url returned from Linkedin');
     }
 
     res.redirect(url);
@@ -166,14 +166,14 @@ export const linkedinCallbackController = async (req: Request, res: Response) =>
   const code = req.query.code as string;
 
   if (!code) {
-    throw new AppError({ message: 'No code returned from Linkedin', code: 'BAD_REQUEST' });
+    throw new BadRequestError('No code returned from Linkedin');
   }
 
   try {
     const { data: user } = await authService.handleLinkedinCallback(code);
 
     if (!user) {
-      throw new AppError({ message: 'No user returned from Linkedin', code: 'BAD_REQUEST' });
+      throw new BadRequestError('No user returned from Linkedin');
     }
 
     const { accessToken, refreshToken } = generateAuthTokens({ _id: user._id, role: user.role });
@@ -193,7 +193,7 @@ export const githubRedirectController = async (_req: Request, res: Response) => 
     const { data: url } = await authService.getGithubRedirectUrl();
 
     if (!url) {
-      throw new AppError({ message: 'No redirect url returned from Github', code: 'BAD_REQUEST' });
+      throw new BadRequestError('No redirect url returned from Github');
     }
 
     res.redirect(url);
@@ -208,14 +208,14 @@ export const githubCallbackController = async (req: Request, res: Response) => {
   const code = req.query.code as string;
 
   if (!code) {
-    throw new AppError({ message: 'No code returned from Github', code: 'BAD_REQUEST' });
+    throw new BadRequestError('No code returned from Github');
   }
 
   try {
     const { data: user } = await authService.handleGithubCallback(code);
 
     if (!user) {
-      throw new AppError({ message: 'No user returned from Github', code: 'BAD_REQUEST' });
+      throw new BadRequestError('No user returned from Github');
     }
 
     const { accessToken, refreshToken } = generateAuthTokens({
@@ -236,7 +236,7 @@ export const githubCallbackController = async (req: Request, res: Response) => {
 /* ================================ FORGOT PASSWORD CONTROLLERS ================================ */
 
 export const forgotPasswordSendOtpController = async (req: Request, res: Response) => {
-  const body = req.body as TEmail;
+  const body = req.body as TEmailZodSchema;
 
   const response = await authService.forgotPasswordSendOtp(body);
 
@@ -247,7 +247,7 @@ export const forgotPasswordResendOtpController = async (req: Request, res: Respo
   const token = req.get(HEADERS_MAP.authorization);
 
   if (!token) {
-    throw new AppError({ message: 'Invalid or expired session', code: 'BAD_REQUEST' });
+    throw new BadRequestError('Invalid or expired session');
   }
 
   const response = await authService.forgotPasswordResendOtp(token);
@@ -259,10 +259,10 @@ export const forgotPasswordVerifyOtpController = async (req: Request, res: Respo
   const token = req.get(HEADERS_MAP.authorization);
 
   if (!token) {
-    throw new AppError({ message: 'Invalid or expired session', code: 'BAD_REQUEST' });
+    throw new BadRequestError('Invalid or expired session');
   }
 
-  const { otp } = req.body as TOtp;
+  const { otp } = req.body as TOtpZodSchema;
 
   const response = await authService.forgotPasswordVerifyOtp({ otp, token });
 
@@ -273,15 +273,15 @@ export const forgotPasswordSaveController = async (req: Request, res: Response) 
   const token = req.get(HEADERS_MAP.authorization);
 
   if (!token) {
-    throw new AppError({ message: 'Invalid or expired session', code: 'BAD_REQUEST' });
+    throw new BadRequestError('Invalid or expired session');
   }
 
-  const body = req.body as TPasswords;
+  const body = req.body as TPasswordsZodSchema;
 
   const response = await authService.forgotPasswordSave({ ...body, token });
 
   if (!response.data) {
-    throw new AppError({ message: 'Invalid or expired session', code: 'BAD_REQUEST' });
+    throw new BadRequestError('Invalid or expired session');
   }
 
   const { accessToken, refreshToken } = generateAuthTokens({
@@ -299,7 +299,7 @@ export const forgotPasswordSaveController = async (req: Request, res: Response) 
 export const changePasswordController = async (req: Request, res: Response) => {
   const user = getAuthUser(req.user);
 
-  const body = req.body as TChangePassword;
+  const body = req.body as TChangePasswordZodSchema;
 
   const response = await authService.changePassword(user, body);
 
@@ -315,7 +315,7 @@ export const changePasswordController = async (req: Request, res: Response) => {
 export const setPasswordController = async (req: Request, res: Response) => {
   const user = getAuthUser(req.user);
 
-  const body = req.body as TSetPassword;
+  const body = req.body as TSetPasswordZodSchema;
 
   const response = await authService.setPassword(user, body);
 

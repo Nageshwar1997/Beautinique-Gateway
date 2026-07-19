@@ -1,5 +1,5 @@
+import { AuthenticationError, AuthorizationError } from '@beautinique/backend-classes';
 import type { TUserRole } from '@beautinique/backend-types';
-import { AppError } from '@beautinique/be-classes';
 import { USER_ROLE_MAP } from '@beautinique/shared-constants';
 import type { NextFunction, Request, Response } from 'express';
 
@@ -11,7 +11,7 @@ export const authenticate = async (req: Request, _res: Response, next: NextFunct
   const token = req.cookies[COOKIES_DATA.access_token.name] as string | undefined;
 
   if (!token) {
-    throw new AppError({ message: 'Access token missing', code: 'AUTHENTICATION_ERROR' });
+    throw new AuthenticationError('Access token missing');
   }
 
   try {
@@ -20,19 +20,8 @@ export const authenticate = async (req: Request, _res: Response, next: NextFunct
     req.user = decoded;
 
     next();
-  } catch (err) {
-    if (err instanceof AppError) {
-      next(err);
-      return;
-    }
-
-    next(
-      new AppError({
-        message: err instanceof Error ? err.message : 'Something went wrong',
-        code: 'INTERNAL_SERVER_ERROR',
-      }),
-    );
-    return;
+  } catch (error) {
+    next(error);
   }
 };
 
@@ -42,7 +31,7 @@ export const authorize =
       const token = req.cookies[COOKIES_DATA.access_token.name] as string | undefined;
 
       if (!token) {
-        throw new AppError({ message: 'Access token missing', code: 'AUTHENTICATION_ERROR' });
+        throw new AuthenticationError('Access token missing');
       }
 
       const decoded = verifyAccessToken(token);
@@ -51,27 +40,13 @@ export const authorize =
       const hasAccess = allowedRoles.includes(decoded.role);
 
       if (!hasAccess && !isMaster) {
-        throw new AppError({
-          message: 'You are not authorized to perform this action',
-          code: 'AUTHORIZATION_ERROR',
-        });
+        throw new AuthorizationError('You are not authorized to perform this action');
       }
 
       req.user = decoded;
 
       next();
-    } catch (err) {
-      if (err instanceof AppError) {
-        next(err);
-        return;
-      }
-
-      next(
-        new AppError({
-          message: err instanceof Error ? err.message : 'Something went wrong',
-          code: 'INTERNAL_SERVER_ERROR',
-        }),
-      );
-      return;
+    } catch (error) {
+      next(error);
     }
   };
