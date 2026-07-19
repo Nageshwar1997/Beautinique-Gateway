@@ -1,5 +1,6 @@
 import { checkEmptyRequest } from '@beautinique/backend-request';
 import { tryCatchResponse } from '@beautinique/backend-response';
+import { categoryUpdateZodSchema, categoryZodSchema, validateZod } from '@beautinique/backend-zod';
 import { Router } from 'express';
 
 import { METHODS_AND_PATHS } from '../../../constants/index.js';
@@ -20,13 +21,15 @@ categoryRouter[add.method](
   add.path,
   authorize(['ADMIN', 'MASTER']),
   checkEmptyRequest({ body: true }),
+  validateZod({ body: categoryZodSchema }),
   tryCatchResponse(addCategoryController),
 );
 
 categoryRouter[update.method](
   update.path,
   authorize(['ADMIN', 'MASTER']),
-  checkEmptyRequest({ body: true }),
+  checkEmptyRequest({ body: true, params: true }),
+  validateZod({ body: categoryUpdateZodSchema }),
   tryCatchResponse(updateCategoryController),
 );
 
@@ -39,7 +42,7 @@ categoryRouter[remove.method](
 
 categoryRouter[get.byParentLevel.method](
   get.byParentLevel.path,
-  authorize(['ADMIN', 'SELLER', 'MASTER']),
+  authorize(['ADMIN', 'MASTER', 'SELLER']),
   tryCatchResponse(getCategoriesByParentLevelController),
 );
 

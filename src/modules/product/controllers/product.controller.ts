@@ -1,3 +1,4 @@
+import type { TDraftProductStepBodyZodSchema } from '@beautinique/backend-types';
 import type { Request, Response } from 'express';
 
 import { getAuthUser } from '../../../utils/index.js';
@@ -6,10 +7,9 @@ import { productService } from '../services/index.js';
 export const saveDraftProductController = async (req: Request, res: Response) => {
   const user = getAuthUser(req.user);
 
-  const response = await productService.saveDraftProduct({
-    user,
-    data: req.body,
-  });
+  const data = req.body as TDraftProductStepBodyZodSchema;
+
+  const response = await productService.saveDraftProduct({ user, data });
 
   res.success(response);
 };

@@ -1,5 +1,6 @@
 import { checkEmptyRequest } from '@beautinique/backend-request';
 import { tryCatchResponse } from '@beautinique/backend-response';
+import { draftProductStepBodyZodSchema, validateZod } from '@beautinique/backend-zod';
 import { Router } from 'express';
 
 import { METHODS_AND_PATHS } from '../../../constants/index.js';
@@ -24,6 +25,7 @@ const { draft, get } = METHODS_AND_PATHS.product_service.product;
 draftRouter[draft.save.method](
   draft.save.path,
   checkEmptyRequest({ body: true }),
+  validateZod({ body: draftProductStepBodyZodSchema }),
   tryCatchResponse(saveDraftProductController),
 );
 
@@ -53,7 +55,7 @@ productRouter.use(get.dashboard.base, authorize(['ADMIN', 'SELLER', 'MASTER']), 
 
 productRouter[get.bySlug.method](get.bySlug.path, tryCatchResponse(getProductBySlugController));
 
-productRouter[get.products.method](
-  get.products.path,
+productRouter[get.suggestions.method](
+  get.suggestions.path,
   tryCatchResponse(getProductsSuggestionsController),
 );
