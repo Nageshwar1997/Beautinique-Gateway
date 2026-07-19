@@ -1,6 +1,4 @@
-import { ApiRequest } from './ApiRequest';
-
-export * from './ApiRequest';
+import { ApiRequest } from './ApiRequest.js';
 
 export class BaseProductService extends ApiRequest {
   constructor() {

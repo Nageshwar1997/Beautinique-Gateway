@@ -1,43 +1,72 @@
-import { AppError, type AppSuccess } from '@beautinique/be-classes';
-import type { TService } from '@beautinique/be-constants';
-import axios, { AxiosError, type AxiosInstance, type AxiosRequestConfig } from 'axios';
-import { SERVICES_BASE_URLS } from '../constants';
-import type { ICreateHeaders } from '../types';
-import { createHeaders } from '../utils';
+import {
+  createError,
+  ERROR_CLASS_MAP,
+  type IAppError,
+  type TErrorCode,
+} from '@beautinique/backend-classes';
+import type { TServiceName } from '@beautinique/backend-types';
+import axios, {
+  AxiosError,
+  type AxiosInstance,
+  type AxiosRequestConfig,
+  type AxiosResponse,
+} from 'axios';
+
+import { SERVICES_BASE_URLS } from '../constants/index.js';
+import type { ICreateHeaders, TApiResponse } from '../types/index.js';
+import { createHeaders } from '../utils/index.js';
+
+type TErrorResponse = Omit<IAppError, 'cause' | 'isOperational'>;
+
+const isErrorCode = (code: string | undefined): code is TErrorCode =>
+  !!code && code in ERROR_CLASS_MAP;
 
 export class ApiRequest {
   private readonly instance: AxiosInstance;
-  private readonly serviceKey: TService;
+  private readonly serviceKey: TServiceName;
 
-  constructor(key: TService) {
+  constructor(key: TServiceName) {
     this.serviceKey = key;
     this.instance = axios.create({ baseURL: SERVICES_BASE_URLS[key] });
   }
 
-  protected async request(config: AxiosRequestConfig & Omit<ICreateHeaders, 'serviceSecret'>) {
+  protected async request<T = TApiResponse>(
+    config: AxiosRequestConfig & Omit<ICreateHeaders, 'serviceSecret'>,
+  ) {
     try {
-      const { headers, user, token, loginRole, contentType, ...restConfigs } = config;
+      const { headers = {}, user, token, loginRole, contentType, ...restConfigs } = config;
 
-      const { data } = await this.instance.request({
-        ...restConfigs,
-        headers: {
-          ...createHeaders({ user, token, loginRole, contentType, serviceSecret: this.serviceKey }),
-          ...headers,
-        },
+      const customHeaders = createHeaders({
+        user,
+        token,
+        loginRole,
+        contentType,
+        serviceSecret: this.serviceKey,
       });
-      return data as AppSuccess;
+
+      for (const [key, value] of Object.entries(customHeaders)) {
+        headers[key] = value;
+      }
+
+      const response = await this.instance.request({ ...restConfigs, headers });
+
+      return response.data as T;
     } catch (error) {
       if (error instanceof AxiosError) {
-        const message = error.response?.data?.message || 'API Error occurred';
-        const globalErrors = error.response?.data?.globalErrors;
-        const fieldErrors = error.response?.data?.fieldErrors;
-        const statusCode = error.response?.status || error.response?.data?.statusCode || 500;
-        const code = error.response?.data?.code;
-        throw new AppError({ message, globalErrors, fieldErrors, statusCode, code });
+        const errResp: AxiosResponse<TErrorResponse> | undefined = error.response;
+
+        const message = errResp?.data.message ?? 'API Error occurred';
+        const globalErrors = errResp?.data.globalErrors;
+        const fieldErrors = errResp?.data.fieldErrors;
+        const statusCode = errResp?.status ?? errResp?.data.statusCode ?? 500;
+        const code = isErrorCode(errResp?.data.code) ? errResp.data.code : 'INTERNAL_SERVER_ERROR';
+
+        throw createError({ message, payload: { code, statusCode, fieldErrors, globalErrors } });
       }
-      throw new AppError({
+
+      throw createError({
         message: error instanceof Error ? error.message : 'Something went wrong!',
-        code: 'INTERNAL_SERVER_ERROR',
+        payload: { code: 'INTERNAL_SERVER_ERROR' },
       });
     }
   }

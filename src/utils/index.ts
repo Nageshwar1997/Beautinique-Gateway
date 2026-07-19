@@ -1,8 +1,9 @@
-import { AppError } from '@beautinique/be-classes';
+import { createError } from '@beautinique/backend-classes';
 import type { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { COOKIES_DATA, HEADERS_KEYS, SERVICE_SECRET_MAP } from '../constants';
-import { envs } from '../envs';
+
+import { COOKIES_DATA, HEADERS_KEYS, SERVICE_SECRET_MAP } from '../constants/index.js';
+import { envs } from '../envs/index.js';
 import type {
   ICreateHeaders,
   IEndpoint,
@@ -11,7 +12,7 @@ import type {
   TParams,
   TRouteNode,
   TUser,
-} from '../types';
+} from '../types/index.js';
 
 export const generateAccessToken = (payload: IJwtPayload) => {
   return jwt.sign(payload, envs.jwt.access_secret, { expiresIn: '15m' });
@@ -54,7 +55,10 @@ export const getUser = (req: Request): TUser => {
   const user = req.user;
 
   if (!user)
-    throw new AppError({ message: 'You are not logged in g', code: 'AUTHENTICATION_ERROR' });
+    throw createError({
+      message: 'You are not logged in g',
+      payload: { code: 'AUTHENTICATION_ERROR' },
+    });
 
   return { _id: user._id, role: user.role };
 };

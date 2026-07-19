@@ -1,9 +1,10 @@
-import type { TRole, TService } from '@beautinique/be-constants';
-import type { METHOD_MAP } from '../constants';
+import type { TServiceName, TUserRole } from '@beautinique/backend-types';
+
+import type { METHOD_MAP } from '../constants/index.js';
 
 export interface IJwtPayload {
   _id: string;
-  role: TRole;
+  role: TUserRole;
 }
 
 export type TUser = IJwtPayload;
@@ -63,7 +64,14 @@ export type TGenerateRoutes<
 export interface ICreateHeaders {
   user?: Partial<TUser>;
   token?: string;
-  loginRole?: TRole;
+  loginRole?: TUserRole;
   contentType?: string;
-  serviceSecret?: TService;
+  serviceSecret?: TServiceName;
+}
+
+export interface TApiResponse {
+  statusCode: number;
+  message: string;
+  data?: unknown;
+  [key: string]: unknown;
 }
