@@ -1,4 +1,4 @@
-import { HEADERS_MAP } from '@beautinique/shared-constants';
+import { AUTH_PROVIDERS, HEADERS_MAP, USER_ROLES } from '@beautinique/shared-constants';
 
 import { COOKIES_DATA, METHODS_AND_PATHS } from '../constants/index.js';
 
@@ -52,10 +52,10 @@ const minimalUserSchema = {
     email: { type: 'string', format: 'email' },
     phoneNumber: { type: 'string' },
     avatar: { type: 'string' },
-    role: { type: 'string', enum: ['USER', 'SELLER', 'ADMIN', 'MASTER'] },
+    role: { type: 'string', enum: USER_ROLES },
     providers: {
       type: 'array',
-      items: { type: 'string', enum: ['MANUAL', 'GOOGLE', 'LINKEDIN', 'GITHUB'] },
+      items: { type: 'string', enum: AUTH_PROVIDERS },
     },
   },
 };
@@ -138,7 +138,7 @@ const draftProductStepBodySchema = {
   description:
     'One step of the multi-step draft, discriminated by the string `step` field - exactly one ' +
     'of `basicInfo` / `mediaAndGallery` / `descriptionAndContent` / `stockAndVariants` / ' +
-    '`tryOnConfiguration` per request. See product-service\'s own OpenAPI doc ' +
+    "`tryOnConfiguration` per request. See product-service's own OpenAPI doc " +
     '(`src/reference/product-service/openapi.ts` in this repo) for the full per-step shape - ' +
     'this gateway forwards the body unmodified.',
   type: 'object',
@@ -228,7 +228,7 @@ const loginRoleHeader = {
   in: 'header',
   required: false,
   description: 'If set, the logged-in user must have this role (MASTER always allowed).',
-  schema: { type: 'string', enum: ['USER', 'SELLER', 'ADMIN', 'MASTER'] },
+  schema: { type: 'string', enum: USER_ROLES },
 };
 
 export const openApiSpec = {
@@ -241,7 +241,7 @@ export const openApiSpec = {
       '(JWT `access_token`/`refresh_token` cookies) and translates it into the `X-Service-Secret`/' +
       '`X-User-Id`/`X-User-Role` headers `user-service` and `product-service` trust, or streams ' +
       'requests straight through to `media-service` for uploads. This gateway has no database of its ' +
-      "own - see the [README](/) for the full request/response flow through each downstream service.",
+      'own - see the [README](/) for the full request/response flow through each downstream service.',
   },
   servers: [{ url: '/', description: 'This service' }],
   tags: [
@@ -252,8 +252,14 @@ export const openApiSpec = {
     { name: 'Password', description: 'Forgot / change / set password' },
     { name: 'Logout', description: 'Session invalidation' },
     { name: 'User', description: 'Current session lookup' },
-    { name: 'Category', description: 'Category tree management (L1/L2/L3), proxied to product-service' },
-    { name: 'Product', description: 'Draft/dashboard/public product endpoints, proxied to product-service' },
+    {
+      name: 'Category',
+      description: 'Category tree management (L1/L2/L3), proxied to product-service',
+    },
+    {
+      name: 'Product',
+      description: 'Draft/dashboard/public product endpoints, proxied to product-service',
+    },
     { name: 'Media', description: 'File upload, streamed to media-service' },
   ],
   components: {
@@ -308,7 +314,8 @@ export const openApiSpec = {
           'in parallel and reports UP/DEGRADED overall. Not wrapped in the usual success envelope.',
         responses: {
           '200': {
-            description: 'Aggregated status (also returned with 500 if the aggregation itself throws).',
+            description:
+              'Aggregated status (also returned with 500 if the aggregation itself throws).',
             content: {
               'application/json': {
                 schema: {
@@ -631,7 +638,9 @@ export const openApiSpec = {
           },
           '400': errorResponse('Missing Authorization header, or no user returned.'),
           '404': errorResponse('No user found for the OTP session email.'),
-          '422': errorResponse('Missing/invalid token/session, or new password equals the old one.'),
+          '422': errorResponse(
+            'Missing/invalid token/session, or new password equals the old one.',
+          ),
         },
       },
     },
@@ -826,40 +835,40 @@ export const openApiSpec = {
     },
 
     [`${base}${productServiceBase}${product.base}${product.draft.base}`]: {
-        [product.draft.save.method]: {
-          tags: ['Product'],
-          summary: 'Save one step of a multi-step draft',
-          description:
-            'Requires ADMIN, SELLER, or MASTER role. Accumulates into a per-user server-side draft.',
-          security: [{ accessTokenCookie: [] }],
-          requestBody: {
-            required: true,
-            content: { 'application/json': { schema: draftProductStepBodySchema } },
-          },
-          responses: {
-            '201': {
-              description: 'Step saved; returns the accumulated draft so far.',
-              content: { 'application/json': { schema: successEnvelope() } },
-            },
-            '401': errorResponse('Missing/invalid/expired access_token cookie.'),
-            '403': errorResponse('Role not in ADMIN/SELLER/MASTER.'),
-          },
+      [product.draft.save.method]: {
+        tags: ['Product'],
+        summary: 'Save one step of a multi-step draft',
+        description:
+          'Requires ADMIN, SELLER, or MASTER role. Accumulates into a per-user server-side draft.',
+        security: [{ accessTokenCookie: [] }],
+        requestBody: {
+          required: true,
+          content: { 'application/json': { schema: draftProductStepBodySchema } },
         },
-        [product.draft.get.method]: {
-          tags: ['Product'],
-          summary: "Fetch the caller's in-progress draft",
-          description: 'Requires ADMIN, SELLER, or MASTER role.',
-          security: [{ accessTokenCookie: [] }],
-          responses: {
-            '200': {
-              description: 'The current draft, or null fields if nothing has been saved yet.',
-              content: { 'application/json': { schema: successEnvelope() } },
-            },
-            '401': errorResponse('Missing/invalid/expired access_token cookie.'),
-            '403': errorResponse('Role not in ADMIN/SELLER/MASTER.'),
+        responses: {
+          '201': {
+            description: 'Step saved; returns the accumulated draft so far.',
+            content: { 'application/json': { schema: successEnvelope() } },
           },
+          '401': errorResponse('Missing/invalid/expired access_token cookie.'),
+          '403': errorResponse('Role not in ADMIN/SELLER/MASTER.'),
         },
       },
+      [product.draft.get.method]: {
+        tags: ['Product'],
+        summary: "Fetch the caller's in-progress draft",
+        description: 'Requires ADMIN, SELLER, or MASTER role.',
+        security: [{ accessTokenCookie: [] }],
+        responses: {
+          '200': {
+            description: 'The current draft, or null fields if nothing has been saved yet.',
+            content: { 'application/json': { schema: successEnvelope() } },
+          },
+          '401': errorResponse('Missing/invalid/expired access_token cookie.'),
+          '403': errorResponse('Role not in ADMIN/SELLER/MASTER.'),
+        },
+      },
+    },
 
     [`${base}${productServiceBase}${product.base}${product.draft.base}${product.draft.publish.path}`]:
       {
