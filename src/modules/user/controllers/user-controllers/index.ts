@@ -4,9 +4,9 @@ import { getAuthUser } from '../../../../utils/index.js';
 import { userService } from '../../services/index.js';
 
 export const getSessionUserController = async (req: Request, res: Response) => {
-  const _user = getAuthUser(req.user);
+  const user = getAuthUser(req.user);
 
-  const response = await userService.getSessionUser(_user);
+  const response = await userService.getSessionUser(user);
 
   res.success(response);
 };
