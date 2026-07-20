@@ -1,8 +1,8 @@
 import { AuthenticationError } from '@beautinique/backend-classes';
-import axios from 'axios';
+import axios, { isAxiosError } from 'axios';
 import type { Request, Response } from 'express';
 
-import { COOKIES_DATA } from '../constants/index.js';
+import { COOKIES_DATA, METHODS_AND_PATHS } from '../constants/index.js';
 import { envs } from '../envs/index.js';
 import type { TApiResponse } from '../types/index.js';
 import { generateAccessToken, verifyRefreshToken } from '../utils/index.js';
@@ -14,14 +14,16 @@ export const wakeUpController = async (_req: Request, res: Response) => {
     const results = await Promise.all(
       Object.entries(services).map(async ([name, url]) => {
         try {
-          const { data } = await axios.get<TApiResponse>(`${url}/health`);
-          return { service: name, status: 'UP', response: data };
+          const { data } = await axios[METHODS_AND_PATHS.wakeUp.method]<TApiResponse>(
+            `${url}${METHODS_AND_PATHS.wakeUp.path}`,
+          );
+          return { service: name, status: 'UP', message: data.message };
         } catch (error) {
           return {
             service: name,
             status: 'DOWN',
-            response: axios.isAxiosError<TApiResponse>(error)
-              ? (error.response?.data ?? null)
+            message: isAxiosError<TApiResponse>(error)
+              ? (error.response?.data.message ?? null)
               : null,
           };
         }
@@ -34,12 +36,14 @@ export const wakeUpController = async (_req: Request, res: Response) => {
     const overallStatus = allUp ? 'UP' : allDown ? 'DOWN' : 'DEGRADED';
 
     res.status(200).json({
+      message: 'Gateway is up and running',
       status: overallStatus,
       gateway: 'UP',
       services: results,
     });
   } catch (err) {
     res.status(500).json({
+      message: 'Gateway is down',
       status: 'DOWN',
       gateway: 'DOWN',
       services: [],

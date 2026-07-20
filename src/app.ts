@@ -80,6 +80,9 @@ app[home.method](home.path, (_, res) => {
   res.sendFile(path.resolve('public', 'index.html'));
 });
 
+/**
+ * Server wake-up (All Services) endpoint.
+ */
 app[wakeUp.method](wakeUp.path, wakeUpController);
 
 /**
