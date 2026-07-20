@@ -249,22 +249,36 @@ export const openApiSpec = {
   },
   servers: [{ url: '/', description: 'This service' }],
   tags: [
-    { name: 'Health', description: 'Service health check' },
-    { name: 'Gateway', description: "This gateway's own endpoints (token refresh)" },
-    { name: 'Login', description: 'Manual and OAuth login' },
-    { name: 'Register', description: 'OTP-based registration' },
-    { name: 'Password', description: 'Forgot / change / set password' },
-    { name: 'Logout', description: 'Session invalidation' },
-    { name: 'User', description: 'Current session lookup' },
     {
-      name: 'Category',
-      description: 'Category tree management (L1/L2/L3), proxied to product-service',
+      name: 'Gateway',
+      description: "This gateway's own endpoints - health, wake-up, token refresh. Not proxied.",
+    },
+    { name: 'User Service: Login', description: 'Manual and OAuth login. Proxied to user-service.' },
+    {
+      name: 'User Service: Register',
+      description: 'OTP-based registration. Proxied to user-service.',
     },
     {
-      name: 'Product',
-      description: 'Draft/dashboard/public product endpoints, proxied to product-service',
+      name: 'User Service: Password',
+      description: 'Forgot / change / set password. Proxied to user-service.',
     },
-    { name: 'Media', description: 'File upload, streamed to media-service' },
+    { name: 'User Service: Logout', description: 'Session invalidation. Proxied to user-service.' },
+    {
+      name: 'User Service: Session',
+      description: "Current user's session lookup. Proxied to user-service.",
+    },
+    {
+      name: 'Product Service: Category',
+      description: 'Category tree management (L1/L2/L3). Proxied to product-service.',
+    },
+    {
+      name: 'Product Service: Product',
+      description: 'Draft/dashboard/public product endpoints. Proxied to product-service.',
+    },
+    {
+      name: 'Media Service: Upload',
+      description: 'File upload, streamed to media-service.',
+    },
   ],
   components: {
     securitySchemes: {
@@ -285,14 +299,14 @@ export const openApiSpec = {
   paths: {
     [home.path]: {
       [home.method]: {
-        tags: ['Health'],
+        tags: ['Gateway'],
         summary: 'This README, rendered to HTML',
         responses: { '200': { description: 'The rendered README.' } },
       },
     },
     [health.path]: {
       [health.method]: {
-        tags: ['Health'],
+        tags: ['Gateway'],
         summary: 'Liveness check',
         responses: {
           '200': {
@@ -311,7 +325,7 @@ export const openApiSpec = {
     },
     [wakeUp.path]: {
       [wakeUp.method]: {
-        tags: ['Health'],
+        tags: ['Gateway'],
         summary: 'Aggregate downstream service health',
         description:
           'Pings `{service}/health` on user-service, product-service, media-service and mail-service ' +
@@ -363,7 +377,7 @@ export const openApiSpec = {
 
     [`${base}${userServiceBase}${auth.base}${login.base}${login.manual.path}`]: {
       [login.manual.method]: {
-        tags: ['Login'],
+        tags: ['User Service: Login'],
         summary: 'Manual email/phone + password login',
         parameters: [loginRoleHeader],
         requestBody: {
@@ -404,7 +418,7 @@ export const openApiSpec = {
           ...paths,
           [`${base}${userServiceBase}${auth.base}${login.base}${redirect.path}`]: {
             [redirect.method]: {
-              tags: ['Login'],
+              tags: ['User Service: Login'],
               summary: `Redirect to the ${provider} OAuth consent screen`,
               description: 'Not a JSON response - the browser is redirected (302) to the provider.',
               responses: {
@@ -414,7 +428,7 @@ export const openApiSpec = {
           },
           [`${base}${userServiceBase}${auth.base}${login.base}${callback.path}`]: {
             [callback.method]: {
-              tags: ['Login'],
+              tags: ['User Service: Login'],
               summary: `${provider} OAuth callback`,
               parameters: [
                 {
@@ -441,7 +455,7 @@ export const openApiSpec = {
 
     [`${base}${userServiceBase}${auth.base}${logout.path}`]: {
       [logout.method]: {
-        tags: ['Logout'],
+        tags: ['User Service: Logout'],
         summary: "Invalidate the caller's session",
         security: [{ accessTokenCookie: [] }],
         responses: {
@@ -456,7 +470,7 @@ export const openApiSpec = {
 
     [`${base}${userServiceBase}${auth.base}${register.base}${register.sendOtp.path}`]: {
       [register.sendOtp.method]: {
-        tags: ['Register'],
+        tags: ['User Service: Register'],
         summary: 'Start registration: send an OTP to email',
         requestBody: {
           required: true,
@@ -478,7 +492,7 @@ export const openApiSpec = {
     },
     [`${base}${userServiceBase}${auth.base}${register.base}${register.resendOtp.path}`]: {
       [register.resendOtp.method]: {
-        tags: ['Register'],
+        tags: ['User Service: Register'],
         summary: 'Resend the registration OTP',
         parameters: [otpAuthHeader],
         responses: {
@@ -494,7 +508,7 @@ export const openApiSpec = {
     },
     [`${base}${userServiceBase}${auth.base}${register.base}${register.verifyOtp.path}`]: {
       [register.verifyOtp.method]: {
-        tags: ['Register'],
+        tags: ['User Service: Register'],
         summary: 'Verify the registration OTP',
         parameters: [otpAuthHeader],
         requestBody: {
@@ -521,7 +535,7 @@ export const openApiSpec = {
     },
     [`${base}${userServiceBase}${auth.base}${register.base}${register.saveUser.path}`]: {
       [register.saveUser.method]: {
-        tags: ['Register'],
+        tags: ['User Service: Register'],
         summary: 'Complete registration (after OTP verification)',
         parameters: [otpAuthHeader],
         requestBody: {
@@ -555,7 +569,7 @@ export const openApiSpec = {
 
     [`${base}${userServiceBase}${auth.base}${password.base}${password.forgot.sendOtp.path}`]: {
       [password.forgot.sendOtp.method]: {
-        tags: ['Password'],
+        tags: ['User Service: Password'],
         summary: 'Start forgot-password: send an OTP to email',
         requestBody: {
           required: true,
@@ -577,7 +591,7 @@ export const openApiSpec = {
     },
     [`${base}${userServiceBase}${auth.base}${password.base}${password.forgot.resendOtp.path}`]: {
       [password.forgot.resendOtp.method]: {
-        tags: ['Password'],
+        tags: ['User Service: Password'],
         summary: 'Resend the forgot-password OTP',
         parameters: [otpAuthHeader],
         responses: {
@@ -593,7 +607,7 @@ export const openApiSpec = {
     },
     [`${base}${userServiceBase}${auth.base}${password.base}${password.forgot.verifyOtp.path}`]: {
       [password.forgot.verifyOtp.method]: {
-        tags: ['Password'],
+        tags: ['User Service: Password'],
         summary: 'Verify the forgot-password OTP',
         parameters: [otpAuthHeader],
         requestBody: {
@@ -620,7 +634,7 @@ export const openApiSpec = {
     },
     [`${base}${userServiceBase}${auth.base}${password.base}${password.forgot.save.path}`]: {
       [password.forgot.save.method]: {
-        tags: ['Password'],
+        tags: ['User Service: Password'],
         summary: 'Set a new password (after OTP verification)',
         parameters: [otpAuthHeader],
         requestBody: {
@@ -650,7 +664,7 @@ export const openApiSpec = {
     },
     [`${base}${userServiceBase}${auth.base}${password.base}${password.change.path}`]: {
       [password.change.method]: {
-        tags: ['Password'],
+        tags: ['User Service: Password'],
         summary: 'Change password while logged in',
         security: [{ accessTokenCookie: [] }],
         requestBody: {
@@ -680,7 +694,7 @@ export const openApiSpec = {
     },
     [`${base}${userServiceBase}${auth.base}${password.base}${password.set.path}`]: {
       [password.set.method]: {
-        tags: ['Password'],
+        tags: ['User Service: Password'],
         summary: 'Set an initial password for an OAuth-only account',
         security: [{ accessTokenCookie: [] }],
         requestBody: {
@@ -708,7 +722,7 @@ export const openApiSpec = {
 
     [`${base}${userServiceBase}${user.base}${user.session.path}`]: {
       [user.session.method]: {
-        tags: ['User'],
+        tags: ['User Service: Session'],
         summary: "Fetch the caller's own user record",
         security: [{ accessTokenCookie: [] }],
         responses: {
@@ -724,7 +738,7 @@ export const openApiSpec = {
 
     [`${base}${productServiceBase}${category.base}`]: {
       [category.add.method]: {
-        tags: ['Category'],
+        tags: ['Product Service: Category'],
         summary: 'Create a category',
         description: 'Requires ADMIN or MASTER role.',
         security: [{ accessTokenCookie: [] }],
@@ -748,7 +762,7 @@ export const openApiSpec = {
 
     [`${base}${productServiceBase}${category.base}${category.update.path.replace(':', '{')}}`]: {
       [category.update.method]: {
-        tags: ['Category'],
+        tags: ['Product Service: Category'],
         summary: 'Update a category',
         description: 'Requires ADMIN or MASTER role. `level` is immutable.',
         security: [{ accessTokenCookie: [] }],
@@ -770,7 +784,7 @@ export const openApiSpec = {
         },
       },
       [category.delete.method]: {
-        tags: ['Category'],
+        tags: ['Product Service: Category'],
         summary: 'Delete a category',
         description:
           'Requires ADMIN or MASTER role. Only a leaf category with zero products can be deleted.',
@@ -793,7 +807,7 @@ export const openApiSpec = {
 
     [`${base}${productServiceBase}${category.base}${category.get.byParentLevel.path}`]: {
       [category.get.byParentLevel.method]: {
-        tags: ['Category'],
+        tags: ['Product Service: Category'],
         summary: 'List categories by parent + level',
         description: 'Requires ADMIN, MASTER, or SELLER role.',
         security: [{ accessTokenCookie: [] }],
@@ -823,7 +837,7 @@ export const openApiSpec = {
 
     [`${base}${productServiceBase}${category.base}${category.get.byHierarchy.path}`]: {
       [category.get.byHierarchy.method]: {
-        tags: ['Category'],
+        tags: ['Product Service: Category'],
         summary: 'Full L1 -> L2 -> L3 category tree',
         responses: {
           '200': {
@@ -840,7 +854,7 @@ export const openApiSpec = {
 
     [`${base}${productServiceBase}${product.base}${product.draft.base}`]: {
       [product.draft.save.method]: {
-        tags: ['Product'],
+        tags: ['Product Service: Product'],
         summary: 'Save one step of a multi-step draft',
         description:
           'Requires ADMIN, SELLER, or MASTER role. Accumulates into a per-user server-side draft.',
@@ -859,7 +873,7 @@ export const openApiSpec = {
         },
       },
       [product.draft.get.method]: {
-        tags: ['Product'],
+        tags: ['Product Service: Product'],
         summary: "Fetch the caller's in-progress draft",
         description: 'Requires ADMIN, SELLER, or MASTER role.',
         security: [{ accessTokenCookie: [] }],
@@ -877,7 +891,7 @@ export const openApiSpec = {
     [`${base}${productServiceBase}${product.base}${product.draft.base}${product.draft.publish.path}`]:
       {
         [product.draft.publish.method]: {
-          tags: ['Product'],
+          tags: ['Product Service: Product'],
           summary: 'Publish a completed draft as a real product',
           description:
             'Requires ADMIN, SELLER, or MASTER role. The full draft is assembled server-side from ' +
@@ -902,7 +916,7 @@ export const openApiSpec = {
     [`${base}${productServiceBase}${product.base}${product.get.dashboard.base}${product.get.dashboard.products.path}`]:
       {
         [product.get.dashboard.products.method]: {
-          tags: ['Product'],
+          tags: ['Product Service: Product'],
           summary: 'Paginated/sortable/searchable product listing',
           description:
             'Requires ADMIN, SELLER, or MASTER role. Sellers only see their own products.',
@@ -964,7 +978,7 @@ export const openApiSpec = {
     [`${base}${productServiceBase}${product.base}${product.get.dashboard.base}${product.get.dashboard.bySlug.path.replace(':', '{')}}`]:
       {
         [product.get.dashboard.bySlug.method]: {
-          tags: ['Product'],
+          tags: ['Product Service: Product'],
           summary: 'Single product lookup for the dashboard',
           description: 'Requires ADMIN, SELLER, or MASTER role.',
           security: [{ accessTokenCookie: [] }],
@@ -983,7 +997,7 @@ export const openApiSpec = {
 
     [`${base}${productServiceBase}${product.base}${product.get.bySlug.path.replace(':', '{')}}`]: {
       [product.get.bySlug.method]: {
-        tags: ['Product'],
+        tags: ['Product Service: Product'],
         summary: 'Public storefront product lookup',
         description: 'Only ever returns PUBLISHED products. No authentication required.',
         responses: {
@@ -998,7 +1012,7 @@ export const openApiSpec = {
 
     [`${base}${productServiceBase}${product.base}${product.get.suggestions.path}`]: {
       [product.get.suggestions.method]: {
-        tags: ['Product'],
+        tags: ['Product Service: Product'],
         summary: 'Autocomplete search suggestions',
         description: 'Atlas Search across title/brand/slug/shortDescription. Max 5 results.',
         parameters: [{ name: 'search', in: 'query', schema: { type: 'string' } }],
@@ -1029,7 +1043,7 @@ export const openApiSpec = {
 
     [`${base}${mediaServiceBase}/upload/single`]: {
       post: {
-        tags: ['Media'],
+        tags: ['Media Service: Upload'],
         summary: 'Upload a single image or video',
         description:
           'Streamed 1:1 to media-service via a raw HTTP proxy (see README §12) - any role is ' +
@@ -1080,7 +1094,7 @@ export const openApiSpec = {
     },
     [`${base}${mediaServiceBase}/upload/multiple`]: {
       post: {
-        tags: ['Media'],
+        tags: ['Media Service: Upload'],
         summary: 'Upload several images/videos at once',
         description: 'Streamed 1:1 to media-service via a raw HTTP proxy (see README §12).',
         security: [{ accessTokenCookie: [] }],

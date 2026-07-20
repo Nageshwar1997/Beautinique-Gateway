@@ -24,7 +24,7 @@ The Gateway is the single public entry point for the **Beautinique** platform's 
 | Outbound HTTP (typed)      | Axios (`classes/ApiRequest.ts`), one instance per downstream service     |
 | Outbound HTTP (raw stream) | `http-proxy` — used only for `media-service` (file uploads)              |
 | Session                    | `jsonwebtoken` (access/refresh JWTs) + `cookie-parser` — **no database or Redis anywhere in this service** |
-| API docs                   | OpenAPI 3.0 spec (hand-written) + `swagger-ui-express`                   |
+| API docs                   | OpenAPI 3.0.3 spec (hand-written, `src/docs/openapi.ts`) + `swagger-ui-express`, tags grouped per downstream service — see [§5.6](#56-interactive-docs-docs) |
 | README rendering           | `@beautinique/shared-markdown-to-html` (markdown → HTML)                 |
 | Shared error/response      | `@beautinique/backend-classes`, `@beautinique/backend-response`          |
 | Shared request middleware  | `@beautinique/backend-request` (`checkEmptyRequest`)                     |
@@ -175,7 +175,9 @@ Everything under this prefix is streamed 1:1 to `media-service` by `mediaService
 | POST    | `/api/v1/media-service/upload/single`       | Upload one image or video                 |
 | POST    | `/api/v1/media-service/upload/multiple`     | Upload several images/videos at once      |
 
-See `media-service`'s own README (`src/reference/media-service/README.md` in this repo) for the request/response shape — the Gateway doesn't alter it.
+Both take a `file`/`files` field plus a `folder` field in the multipart body. File-size limits (`MAX_IMAGE_SIZE`/`MAX_VIDEO_SIZE` from `@beautinique/shared-constants`, formatted via `formatFileSize`) are documented in `src/docs/openapi.ts` for reference, but **enforced only on `media-service` itself** — this gateway never inspects the file, so an oversized upload is rejected downstream (`413`), not here.
+
+See `media-service`'s own README (`src/reference/media-service/README.md` in this repo) for the full request/response shape — the Gateway doesn't alter it.
 
 ### 5.4 User — `/api/v1/user-service/*`
 
@@ -221,6 +223,19 @@ See `media-service`'s own README (`src/reference/media-service/README.md` in thi
 | GET     | `/product/suggestions`                    | None                                  | Autocomplete search suggestions                        |
 
 "Auth" here is enforced twice, independently: this gateway's own `authorize([...])` middleware checks the `access_token` cookie's role **before** forwarding, and `product-service` checks the `X-User-Role` header the Gateway attaches on the way in — a request can't reach the downstream service at all without first passing the Gateway's own check.
+
+### 5.6 Interactive Docs (`/docs`)
+
+`GET /docs` serves `swagger-ui-express` over the hand-written spec in `src/docs/openapi.ts` — every path key, method, and enum value in it is built from the *same* `METHODS_AND_PATHS`/`@beautinique/shared-constants` this service's own routing and validation use, so the docs can't silently drift from the actual routes.
+
+**Tags.** Every operation is tagged with the *service that actually handles it*, not just a generic feature name — so the sidebar groups endpoints by which downstream service owns them:
+
+- `Gateway` — health, wake-up, refresh-token (terminates here, never proxied)
+- `User Service: Login` / `Register` / `Password` / `Logout` / `Session` — all proxied to `user-service`
+- `Product Service: Category` / `Product` — proxied to `product-service`
+- `Media Service: Upload` — streamed to `media-service`
+
+**Schemas.** Enums (`CATEGORY_LEVELS`, `PRODUCT_STATUSES`, `USER_ROLES`, `AUTH_PROVIDERS`, `DRAFT_PRODUCT_STEP_MAP`, `SORT`) are pulled directly from `@beautinique/shared-constants` rather than hand-typed as string literals, and every dynamic path segment (`:categoryId`, `:slug`) is converted to OpenAPI's `{param}` syntax (`path.replace(':', '{')` + a trailing `}`) — Express uses `:param`, but the OpenAPI 3.0 spec itself requires `{param}`, so the two need this small translation to both be correct at once.
 
 ---
 

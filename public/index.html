@@ -5,175 +5,271 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gateway</title>
     <style>
-  :root {
-    color-scheme: light dark;
-    --bg: #ffffff;
-    --fg: #1f2328;
-    --muted: #59636e;
-    --border: #d1d9e0;
-    --code-bg: #f6f8fa;
-    --link: #0969da;
-  }
+      :root {
+        color-scheme: light dark;
+        --bg: #ffffff;
+        --fg: #1f2328;
+        --muted: #59636e;
+        --border: #d1d9e0;
+        --code-bg: #f6f8fa;
+        --link: #0969da;
+      }
 
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #0d1117;
-      --fg: #e6edf3;
-      --muted: #9198a1;
-      --border: #30363d;
-      --code-bg: #161b22;
-      --link: #4493f8;
-    }
-  }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #0d1117;
+          --fg: #e6edf3;
+          --muted: #9198a1;
+          --border: #30363d;
+          --code-bg: #161b22;
+          --link: #4493f8;
+        }
+      }
 
-  * { box-sizing: border-box; }
+      * {
+        box-sizing: border-box;
+      }
 
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--fg);
-    font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
-    line-height: 1.6;
-  }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--fg);
+        font-family: -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+        line-height: 1.6;
+      }
 
-  main {
-    max-width: 1024px;
-    margin: 0 auto;
-    padding: 48px 24px 96px;
-  }
+      main {
+        max-width: 1024px;
+        margin: 0 auto;
+        padding: 48px 24px 96px;
+      }
 
-  h1, h2, h3, h4 {
-    font-weight: 600;
-    line-height: 1.25;
-    margin: 1.6em 0 0.6em;
-  }
-  h1 { font-size: 2em; padding-bottom: 0.3em; border-bottom: 1px solid var(--border); }
-  h2 { font-size: 1.5em; padding-bottom: 0.3em; border-bottom: 1px solid var(--border); }
-  h3 { font-size: 1.25em; }
-  h4 { font-size: 1.05em; }
-  h1:first-child { margin-top: 0; }
+      h1,
+      h2,
+      h3,
+      h4 {
+        font-weight: 600;
+        line-height: 1.25;
+        margin: 1.6em 0 0.6em;
+      }
+      h1 {
+        font-size: 2em;
+        padding-bottom: 0.3em;
+        border-bottom: 1px solid var(--border);
+      }
+      h2 {
+        font-size: 1.5em;
+        padding-bottom: 0.3em;
+        border-bottom: 1px solid var(--border);
+      }
+      h3 {
+        font-size: 1.25em;
+      }
+      h4 {
+        font-size: 1.05em;
+      }
+      h1:first-child {
+        margin-top: 0;
+      }
 
-  p, ul, ol, table, blockquote { margin: 0 0 1em; }
-  ul, ol { padding-left: 1.6em; }
-  li + li { margin-top: 0.2em; }
+      p,
+      ul,
+      ol,
+      table,
+      blockquote {
+        margin: 0 0 1em;
+      }
+      ul,
+      ol {
+        padding-left: 1.6em;
+      }
+      li + li {
+        margin-top: 0.2em;
+      }
 
-  a { color: var(--link); text-decoration: none; }
-  a:hover { text-decoration: underline; }
+      a {
+        color: var(--link);
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
 
-  code {
-    font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
-    font-size: 0.88em;
-    background: var(--code-bg);
-    padding: 0.15em 0.4em;
-    border-radius: 6px;
-  }
+      code {
+        font-family: 'Cascadia Code', 'SFMono-Regular', Consolas, monospace;
+        font-size: 0.88em;
+        background: var(--code-bg);
+        padding: 0.15em 0.4em;
+        border-radius: 6px;
+      }
 
-  pre {
-    background: var(--code-bg);
-    border-radius: 8px;
-    padding: 16px;
-    overflow-x: auto;
-  }
-  pre code { background: none; padding: 0; font-size: 0.85em; }
+      pre {
+        background: var(--code-bg);
+        border-radius: 8px;
+        padding: 16px;
+        overflow-x: auto;
+      }
+      pre code {
+        background: none;
+        padding: 0;
+        font-size: 0.85em;
+      }
 
-  blockquote {
-    margin-left: 0;
-    padding: 0 1em;
-    color: var(--muted);
-    border-left: 0.25em solid var(--border);
-  }
+      blockquote {
+        margin-left: 0;
+        padding: 0 1em;
+        color: var(--muted);
+        border-left: 0.25em solid var(--border);
+      }
 
-  table { display: block; overflow-x: auto; border-collapse: collapse; margin: 0 0 1em; }
-  th, td { border: 1px solid var(--border); padding: 6px 13px; text-align: left; }
-  th { background: var(--code-bg); font-weight: 600; }
+      table {
+        display: block;
+        overflow-x: auto;
+        border-collapse: collapse;
+        margin: 0 0 1em;
+      }
+      th,
+      td {
+        border: 1px solid var(--border);
+        padding: 6px 13px;
+        text-align: left;
+      }
+      th {
+        background: var(--code-bg);
+        font-weight: 600;
+      }
 
-  hr { border: none; border-top: 1px solid var(--border); margin: 2em 0; }
-  img { max-width: 100%; }
-</style>
+      hr {
+        border: none;
+        border-top: 1px solid var(--border);
+        margin: 2em 0;
+      }
+      img {
+        max-width: 100%;
+      }
+    </style>
   </head>
   <body>
-    <main><h1>Gateway — Documentation</h1>
-<p><strong>Project:</strong> Beautinique (BQ-Microservices)
-<strong>Service:</strong> Gateway
-<strong>Author:</strong> Nageshwar Pawar
-<strong>Version:</strong> 1.0.0
-<strong>Port:</strong> configured via <code>PORT</code> (see <a href="#4-environment-variables">§4</a>)</p>
-<hr>
-<h2>1. Overview</h2>
-<p>The Gateway is the single public entry point for the <strong>Beautinique</strong> platform&#39;s microservices (<code>user-service</code>, <code>product-service</code>, <code>media-service</code> — plus <code>mail-service</code> indirectly, since nothing here calls it directly). It owns the browser-facing session: issuing/verifying short-lived JWT <code>access_token</code>/<code>refresh_token</code> cookies, and translating that cookie session into the <code>X-Service-Secret</code>/<code>X-User-Id</code>/<code>X-User-Role</code> headers every downstream service actually trusts. It has <strong>no database of its own</strong> — every request either gets forwarded to a downstream service via a typed Axios wrapper, or streamed through untouched via a raw HTTP proxy (media uploads). It also serves its own documentation: <code>GET /</code> renders this README as HTML, and <code>GET /docs</code> serves an interactive Swagger UI.</p>
-<hr>
-<h2>2. Technology Stack</h2>
-<table>
-<thead>
-<tr>
-<th>Layer</th>
-<th>Technology</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Runtime</td>
-<td>Node.js (ES2025, ESM)</td>
-</tr>
-<tr>
-<td>Language</td>
-<td>TypeScript 6.x (<code>strict</code>, <code>noUncheckedIndexedAccess</code>, <code>noEmitOnError</code>)</td>
-</tr>
-<tr>
-<td>Framework</td>
-<td>Express.js 5.x</td>
-</tr>
-<tr>
-<td>Outbound HTTP (typed)</td>
-<td>Axios (<code>classes/ApiRequest.ts</code>), one instance per downstream service</td>
-</tr>
-<tr>
-<td>Outbound HTTP (raw stream)</td>
-<td><code>http-proxy</code> — used only for <code>media-service</code> (file uploads)</td>
-</tr>
-<tr>
-<td>Session</td>
-<td><code>jsonwebtoken</code> (access/refresh JWTs) + <code>cookie-parser</code> — <strong>no database or Redis anywhere in this service</strong></td>
-</tr>
-<tr>
-<td>API docs</td>
-<td>OpenAPI 3.0 spec (hand-written) + <code>swagger-ui-express</code></td>
-</tr>
-<tr>
-<td>README rendering</td>
-<td><code>@beautinique/shared-markdown-to-html</code> (markdown → HTML)</td>
-</tr>
-<tr>
-<td>Shared error/response</td>
-<td><code>@beautinique/backend-classes</code>, <code>@beautinique/backend-response</code></td>
-</tr>
-<tr>
-<td>Shared request middleware</td>
-<td><code>@beautinique/backend-request</code> (<code>checkEmptyRequest</code>)</td>
-</tr>
-<tr>
-<td>Shared validation</td>
-<td><code>@beautinique/backend-zod</code> (schemas + <code>validateZod</code>, same package <code>user-service</code> uses)</td>
-</tr>
-<tr>
-<td>Shared utilities</td>
-<td><code>@beautinique/backend-utils</code>, <code>@beautinique/shared-utils</code></td>
-</tr>
-<tr>
-<td>Shared constants/types</td>
-<td><code>@beautinique/shared-constants</code>, <code>@beautinique/backend-types</code></td>
-</tr>
-<tr>
-<td>Logging</td>
-<td>Pino, via <code>@beautinique/backend-logger</code></td>
-</tr>
-<tr>
-<td>Code quality</td>
-<td>ESLint (flat config, type-checked + strict), Prettier</td>
-</tr>
-</tbody></table>
-<hr>
-<h2>3. Project Structure</h2>
-<pre><code>gateway/
+    <main>
+      <h1>Gateway — Documentation</h1>
+      <p>
+        <strong>Project:</strong> Beautinique (BQ-Microservices) <strong>Service:</strong> Gateway
+        <strong>Author:</strong> Nageshwar Pawar <strong>Version:</strong> 1.0.0
+        <strong>Port:</strong> configured via <code>PORT</code> (see
+        <a href="#4-environment-variables">§4</a>)
+      </p>
+      <hr />
+      <h2>1. Overview</h2>
+      <p>
+        The Gateway is the single public entry point for the
+        <strong>Beautinique</strong> platform&#39;s microservices (<code>user-service</code>,
+        <code>product-service</code>, <code>media-service</code> — plus
+        <code>mail-service</code> indirectly, since nothing here calls it directly). It owns the
+        browser-facing session: issuing/verifying short-lived JWT <code>access_token</code>/<code
+          >refresh_token</code
+        >
+        cookies, and translating that cookie session into the
+        <code>X-Service-Secret</code>/<code>X-User-Id</code>/<code>X-User-Role</code> headers every
+        downstream service actually trusts. It has <strong>no database of its own</strong> — every
+        request either gets forwarded to a downstream service via a typed Axios wrapper, or streamed
+        through untouched via a raw HTTP proxy (media uploads). It also serves its own
+        documentation: <code>GET /</code> renders this README as HTML, and
+        <code>GET /docs</code> serves an interactive Swagger UI.
+      </p>
+      <hr />
+      <h2>2. Technology Stack</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Layer</th>
+            <th>Technology</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Runtime</td>
+            <td>Node.js (ES2025, ESM)</td>
+          </tr>
+          <tr>
+            <td>Language</td>
+            <td>
+              TypeScript 6.x (<code>strict</code>, <code>noUncheckedIndexedAccess</code>,
+              <code>noEmitOnError</code>)
+            </td>
+          </tr>
+          <tr>
+            <td>Framework</td>
+            <td>Express.js 5.x</td>
+          </tr>
+          <tr>
+            <td>Outbound HTTP (typed)</td>
+            <td>Axios (<code>classes/ApiRequest.ts</code>), one instance per downstream service</td>
+          </tr>
+          <tr>
+            <td>Outbound HTTP (raw stream)</td>
+            <td>
+              <code>http-proxy</code> — used only for <code>media-service</code> (file uploads)
+            </td>
+          </tr>
+          <tr>
+            <td>Session</td>
+            <td>
+              <code>jsonwebtoken</code> (access/refresh JWTs) + <code>cookie-parser</code> —
+              <strong>no database or Redis anywhere in this service</strong>
+            </td>
+          </tr>
+          <tr>
+            <td>API docs</td>
+            <td>
+              OpenAPI 3.0.3 spec (hand-written, <code>src/docs/openapi.ts</code>) +
+              <code>swagger-ui-express</code>, tags grouped per downstream service — see
+              <a href="#56-interactive-docs-docs">§5.6</a>
+            </td>
+          </tr>
+          <tr>
+            <td>README rendering</td>
+            <td><code>@beautinique/shared-markdown-to-html</code> (markdown → HTML)</td>
+          </tr>
+          <tr>
+            <td>Shared error/response</td>
+            <td>
+              <code>@beautinique/backend-classes</code>, <code>@beautinique/backend-response</code>
+            </td>
+          </tr>
+          <tr>
+            <td>Shared request middleware</td>
+            <td><code>@beautinique/backend-request</code> (<code>checkEmptyRequest</code>)</td>
+          </tr>
+          <tr>
+            <td>Shared validation</td>
+            <td>
+              <code>@beautinique/backend-zod</code> (schemas + <code>validateZod</code>, same
+              package <code>user-service</code> uses)
+            </td>
+          </tr>
+          <tr>
+            <td>Shared utilities</td>
+            <td><code>@beautinique/backend-utils</code>, <code>@beautinique/shared-utils</code></td>
+          </tr>
+          <tr>
+            <td>Shared constants/types</td>
+            <td>
+              <code>@beautinique/shared-constants</code>, <code>@beautinique/backend-types</code>
+            </td>
+          </tr>
+          <tr>
+            <td>Logging</td>
+            <td>Pino, via <code>@beautinique/backend-logger</code></td>
+          </tr>
+          <tr>
+            <td>Code quality</td>
+            <td>ESLint (flat config, type-checked + strict), Prettier</td>
+          </tr>
+        </tbody>
+      </table>
+      <hr />
+      <h2>3. Project Structure</h2>
+      <pre><code>gateway/
 ├── src/
 │   ├── index.ts                       # Entry point: loads env, wires SIGINT/SIGTERM, calls startup()
 │   ├── app.ts                         # Express app: middleware chain, routes, error handlers
@@ -228,536 +324,936 @@
 ├── eslint.config.mjs
 └── .env
 </code></pre>
-<hr>
-<h2>4. Environment Variables</h2>
-<p>All environment variables are loaded via <code>dotenv</code> and validated in <code>src/envs/index.ts</code> — every one is checked with <code>requireEnv</code>/<code>requirePort</code> at startup, so a missing value throws a clear <code>Missing required environment variable: X</code> error immediately instead of failing confusingly later. There is no fallback/default for any of these — every one is required.</p>
-<h3>4.1 Server &amp; App</h3>
-<table>
-<thead>
-<tr>
-<th>Variable</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>PORT</code></td>
-<td>HTTP port to listen on</td>
-</tr>
-<tr>
-<td><code>IS_DEV</code></td>
-<td><code>&quot;true&quot;</code> enables pretty logging and stack traces in error responses; also relaxes cookie options (see <a href="#8-authentication--cookies">§8</a>)</td>
-</tr>
-</tbody></table>
-<h3>4.2 JWT</h3>
-<table>
-<thead>
-<tr>
-<th>Variable</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>JWT_ACCESS_SECRET</code></td>
-<td>Signing secret for the 15-minute access token</td>
-</tr>
-<tr>
-<td><code>JWT_REFRESH_SECRET</code></td>
-<td>Signing secret for the 7-day refresh token</td>
-</tr>
-</tbody></table>
-<h3>4.3 Downstream Service URLs &amp; Secrets</h3>
-<table>
-<thead>
-<tr>
-<th>Variable</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>USER_SERVICE_BASE_URL</code></td>
-<td>Base URL of <code>user-service</code></td>
-</tr>
-<tr>
-<td><code>USER_SERVICE_SECRET</code></td>
-<td>Value sent as <code>X-Service-Secret</code> on every request to <code>user-service</code></td>
-</tr>
-<tr>
-<td><code>PRODUCT_SERVICE_BASE_URL</code></td>
-<td>Base URL of <code>product-service</code></td>
-</tr>
-<tr>
-<td><code>PRODUCT_SERVICE_SECRET</code></td>
-<td>Value sent as <code>X-Service-Secret</code> on every request to <code>product-service</code></td>
-</tr>
-<tr>
-<td><code>MEDIA_SERVICE_BASE_URL</code></td>
-<td>Base URL of <code>media-service</code></td>
-</tr>
-<tr>
-<td><code>MEDIA_SERVICE_SECRET</code></td>
-<td>Value sent as <code>X-Service-Secret</code> on every proxied media-service request</td>
-</tr>
-<tr>
-<td><code>MAIL_SERVICE_BASE_URL</code></td>
-<td>Base URL of <code>mail-service</code></td>
-</tr>
-<tr>
-<td><code>MAIL_SERVICE_SECRET</code></td>
-<td>Reserved — nothing in this gateway currently calls <code>mail-service</code> directly (OTP email is enqueued by <code>user-service</code> onto <code>mail-queue</code>, not routed through here)</td>
-</tr>
-</tbody></table>
-<h3>4.4 Frontend Origins</h3>
-<table>
-<thead>
-<tr>
-<th>Variable</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>CLIENT_BASE_URL</code></td>
-<td>Customer-facing frontend origin — also the base for the OAuth redirect landing page (<code>{CLIENT_BASE_URL}/auth/oauth</code>, see <a href="#102-oauth-login-google--linkedin--github">§10.2</a>)</td>
-</tr>
-<tr>
-<td><code>ADMIN_BASE_URL</code></td>
-<td>Admin dashboard origin</td>
-</tr>
-<tr>
-<td><code>SELLER_BASE_URL</code></td>
-<td>Seller dashboard origin</td>
-</tr>
-<tr>
-<td><code>MASTER_BASE_URL</code></td>
-<td>Master/super-admin dashboard origin</td>
-</tr>
-</tbody></table>
-<p><code>ORIGINS</code> (<code>constants/index.ts</code>) collects all four into a single array — declared for CORS configuration, but <strong>no CORS middleware is currently wired up in <code>app.ts</code></strong> (see <a href="#14-design-notes--known-trade-offs">§14</a>).</p>
-<h3>4.5 Gateway&#39;s Own URL</h3>
-<table>
-<thead>
-<tr>
-<th>Variable</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>GATEWAY_BASE_URL</code></td>
-<td>This service&#39;s own public URL — loaded into <code>envs.url.gateway</code> but not currently read anywhere else in the codebase (kept for parity with the other services&#39; env shape / future use)</td>
-</tr>
-</tbody></table>
-<hr>
-<h2>5. API Routes</h2>
-<p>Every route below either terminates in this service (home/docs/health/wake-up/refresh) or is a thin pass-through to a downstream service — the Gateway does no business-logic validation of its own beyond auth/role checks; request bodies are validated by the same <code>@beautinique/backend-zod</code> schemas the downstream services use (imported directly into this repo, see <a href="#9-request-validation">§9</a>), so a bad request is rejected here rather than wasting a downstream round trip.</p>
-<h3>5.1 Home, Docs, Health &amp; Wake-up</h3>
-<table>
-<thead>
-<tr>
-<th>Method</th>
-<th>Path</th>
-<th>Auth</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>GET</td>
-<td><code>/</code></td>
-<td>None</td>
-<td>This README, pre-rendered to HTML by <code>scripts/generate-html.mjs</code></td>
-</tr>
-<tr>
-<td>GET</td>
-<td><code>/docs</code></td>
-<td>None</td>
-<td>Interactive Swagger UI (spec in <code>src/docs/openapi.ts</code>)</td>
-</tr>
-<tr>
-<td>GET</td>
-<td><code>/health</code></td>
-<td>None</td>
-<td>Liveness only — this service has no DB/Redis to report on</td>
-</tr>
-<tr>
-<td>GET</td>
-<td><code>/wake-up</code></td>
-<td>None</td>
-<td>Pings <code>{service}/health</code> on all four downstream services in parallel; returns <code>UP</code>/<code>DEGRADED</code> based on the results (see <a href="#11-wake-up--downstream-health-aggregation">§11</a>)</td>
-</tr>
-</tbody></table>
-<h3>5.2 Gateway&#39;s Own — <code>/api/v1</code></h3>
-<table>
-<thead>
-<tr>
-<th>Method</th>
-<th>Path</th>
-<th>Auth</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>POST</td>
-<td><code>/api/v1/refresh-access-token</code></td>
-<td>Refresh token cookie</td>
-<td>Reads <code>refresh_token</code>, issues a new <code>access_token</code> cookie</td>
-</tr>
-</tbody></table>
-<h3>5.3 Media — <code>/api/v1/media-service/**</code> (raw proxy, any authenticated role)</h3>
-<p>Everything under this prefix is streamed 1:1 to <code>media-service</code> by <code>mediaServiceProxy</code> (<code>http-proxy</code>) — the Gateway does not parse, validate, or even buffer the request body for these routes (see <a href="#12-media-upload-proxying">§12</a>). In practice this means:</p>
-<table>
-<thead>
-<tr>
-<th>Method</th>
-<th>Path</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>POST</td>
-<td><code>/api/v1/media-service/upload/single</code></td>
-<td>Upload one image or video</td>
-</tr>
-<tr>
-<td>POST</td>
-<td><code>/api/v1/media-service/upload/multiple</code></td>
-<td>Upload several images/videos at once</td>
-</tr>
-</tbody></table>
-<p>See <code>media-service</code>&#39;s own README (<code>src/reference/media-service/README.md</code> in this repo) for the request/response shape — the Gateway doesn&#39;t alter it.</p>
-<h3>5.4 User — <code>/api/v1/user-service/*</code></h3>
-<table>
-<thead>
-<tr>
-<th>Method</th>
-<th>Path</th>
-<th>Auth</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>POST</td>
-<td><code>/auth/login/manual</code></td>
-<td>None</td>
-<td>Manual email/phone + password login</td>
-</tr>
-<tr>
-<td>GET</td>
-<td><code>/auth/login/oauth/google/redirect</code></td>
-<td>None</td>
-<td>Get Google OAuth consent URL</td>
-</tr>
-<tr>
-<td>GET</td>
-<td><code>/auth/login/oauth/google/callback</code></td>
-<td>None</td>
-<td>Google OAuth callback</td>
-</tr>
-<tr>
-<td>GET</td>
-<td><code>/auth/login/oauth/linkedin/redirect</code></td>
-<td>None</td>
-<td>Get LinkedIn OAuth consent URL</td>
-</tr>
-<tr>
-<td>GET</td>
-<td><code>/auth/login/oauth/linkedin/callback</code></td>
-<td>None</td>
-<td>LinkedIn OAuth callback</td>
-</tr>
-<tr>
-<td>GET</td>
-<td><code>/auth/login/oauth/github/redirect</code></td>
-<td>None</td>
-<td>Get GitHub OAuth consent URL</td>
-</tr>
-<tr>
-<td>GET</td>
-<td><code>/auth/login/oauth/github/callback</code></td>
-<td>None</td>
-<td>GitHub OAuth callback</td>
-</tr>
-<tr>
-<td>DELETE</td>
-<td><code>/auth/logout</code></td>
-<td><code>access_token</code> cookie</td>
-<td>Clear the caller&#39;s session</td>
-</tr>
-<tr>
-<td>POST</td>
-<td><code>/auth/register/send-otp</code></td>
-<td>None</td>
-<td>Start registration: OTP to email</td>
-</tr>
-<tr>
-<td>PATCH</td>
-<td><code>/auth/register/resend-otp</code></td>
-<td>OTP session token</td>
-<td>Resend the registration OTP</td>
-</tr>
-<tr>
-<td>POST</td>
-<td><code>/auth/register/verify-otp</code></td>
-<td>OTP session token</td>
-<td>Verify the registration OTP</td>
-</tr>
-<tr>
-<td>POST</td>
-<td><code>/auth/register/save-user</code></td>
-<td>OTP session token</td>
-<td>Complete registration — sets auth cookies</td>
-</tr>
-<tr>
-<td>POST</td>
-<td><code>/auth/password/forgot-send-otp</code></td>
-<td>None</td>
-<td>Start forgot-password: OTP to email</td>
-</tr>
-<tr>
-<td>PATCH</td>
-<td><code>/auth/password/forgot-resend-otp</code></td>
-<td>OTP session token</td>
-<td>Resend the forgot-password OTP</td>
-</tr>
-<tr>
-<td>POST</td>
-<td><code>/auth/password/forgot-verify-otp</code></td>
-<td>OTP session token</td>
-<td>Verify the forgot-password OTP</td>
-</tr>
-<tr>
-<td>POST</td>
-<td><code>/auth/password/forgot-save</code></td>
-<td>OTP session token</td>
-<td>Set a new password — sets auth cookies</td>
-</tr>
-<tr>
-<td>PATCH</td>
-<td><code>/auth/password/change</code></td>
-<td><code>access_token</code> cookie</td>
-<td>Change password while logged in — re-issues auth cookies</td>
-</tr>
-<tr>
-<td>PATCH</td>
-<td><code>/auth/password/set</code></td>
-<td><code>access_token</code> cookie</td>
-<td>Set an initial password for an OAuth-only account — re-issues auth cookies</td>
-</tr>
-<tr>
-<td>GET</td>
-<td><code>/user/session</code></td>
-<td><code>access_token</code> cookie</td>
-<td>Fetch the caller&#39;s own user record</td>
-</tr>
-</tbody></table>
-<p>&quot;OTP session token&quot; means the client sends the token (returned by the corresponding <code>send-otp</code> call) via <code>Authorization: &lt;token&gt;</code> (raw or <code>Bearer &lt;token&gt;</code>) — this header passes straight through to <code>user-service</code> unmodified, it isn&#39;t a JWT this gateway issues or checks itself.</p>
-<h3>5.5 Product — <code>/api/v1/product-service/*</code></h3>
-<table>
-<thead>
-<tr>
-<th>Method</th>
-<th>Path</th>
-<th>Auth</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>POST</td>
-<td><code>/category</code></td>
-<td><code>ADMIN</code>, <code>MASTER</code></td>
-<td>Create a category (L1/L2/L3)</td>
-</tr>
-<tr>
-<td>PATCH</td>
-<td><code>/category/:categoryId</code></td>
-<td><code>ADMIN</code>, <code>MASTER</code></td>
-<td>Update a category</td>
-</tr>
-<tr>
-<td>DELETE</td>
-<td><code>/category/:categoryId</code></td>
-<td><code>ADMIN</code>, <code>MASTER</code></td>
-<td>Delete a leaf category with zero products</td>
-</tr>
-<tr>
-<td>GET</td>
-<td><code>/category/by-parent-level</code></td>
-<td><code>ADMIN</code>, <code>SELLER</code>, <code>MASTER</code></td>
-<td>List categories by <code>level</code>/<code>parent</code></td>
-</tr>
-<tr>
-<td>GET</td>
-<td><code>/category/by-hierarchy</code></td>
-<td>None</td>
-<td>Full L1→L2→L3 nested tree</td>
-</tr>
-<tr>
-<td>POST</td>
-<td><code>/product/draft</code></td>
-<td><code>ADMIN</code>, <code>SELLER</code>, <code>MASTER</code></td>
-<td>Save one step of a multi-step draft</td>
-</tr>
-<tr>
-<td>GET</td>
-<td><code>/product/draft</code></td>
-<td><code>ADMIN</code>, <code>SELLER</code>, <code>MASTER</code></td>
-<td>Fetch the caller&#39;s in-progress draft</td>
-</tr>
-<tr>
-<td>PATCH</td>
-<td><code>/product/draft/publish</code></td>
-<td><code>ADMIN</code>, <code>SELLER</code>, <code>MASTER</code></td>
-<td>Publish a completed draft as a real product</td>
-</tr>
-<tr>
-<td>GET</td>
-<td><code>/product/dashboard/products</code></td>
-<td><code>ADMIN</code>, <code>SELLER</code>, <code>MASTER</code></td>
-<td>Paginated/sortable/searchable dashboard listing</td>
-</tr>
-<tr>
-<td>GET</td>
-<td><code>/product/dashboard/:slug</code></td>
-<td><code>ADMIN</code>, <code>SELLER</code>, <code>MASTER</code></td>
-<td>Single dashboard product lookup</td>
-</tr>
-<tr>
-<td>GET</td>
-<td><code>/product/:slug</code></td>
-<td>None</td>
-<td>Public storefront product lookup</td>
-</tr>
-<tr>
-<td>GET</td>
-<td><code>/product/suggestions</code></td>
-<td>None</td>
-<td>Autocomplete search suggestions</td>
-</tr>
-</tbody></table>
-<p>&quot;Auth&quot; here is enforced twice, independently: this gateway&#39;s own <code>authorize([...])</code> middleware checks the <code>access_token</code> cookie&#39;s role <strong>before</strong> forwarding, and <code>product-service</code> checks the <code>X-User-Role</code> header the Gateway attaches on the way in — a request can&#39;t reach the downstream service at all without first passing the Gateway&#39;s own check.</p>
-<hr>
-<h2>6. Request Headers (Client → Gateway)</h2>
-<table>
-<thead>
-<tr>
-<th>Header</th>
-<th>Purpose</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>Cookie: access_token</code></td>
-<td>Short-lived (15 min) JWT — read by <code>authenticate</code>/<code>authorize</code>, required wherever &quot;Auth&quot; is listed above as a cookie</td>
-</tr>
-<tr>
-<td><code>Cookie: refresh_token</code></td>
-<td>Long-lived (7 days) JWT — read only by <code>POST /api/v1/refresh-access-token</code></td>
-</tr>
-<tr>
-<td><code>X-Login-Role</code></td>
-<td>Optional, <code>POST /auth/login/manual</code> only — the logged-in user&#39;s role must match it (<code>MASTER</code> always allowed)</td>
-</tr>
-<tr>
-<td><code>Authorization</code></td>
-<td>OTP session token — register/forgot-password OTP steps only, forwarded to <code>user-service</code> unmodified</td>
-</tr>
-</tbody></table>
-<p>Clients never send <code>X-Service-Secret</code>, <code>X-User-Id</code>, or <code>X-User-Role</code> themselves — those are headers <strong>this gateway attaches</strong> on the downstream leg (see <a href="#7-request--response-handling">§7</a>); if a client sends them anyway, they&#39;re overwritten before the request leaves this service.</p>
-<hr>
-<h2>7. Request / Response Handling (<code>classes/ApiRequest.ts</code>)</h2>
-<p>Every module service (<code>AuthService</code>, <code>UserService</code>, <code>CategoryService</code>, <code>ProductService</code>) extends <code>ApiRequest</code>, one Axios instance per downstream service (<code>baseURL</code> set from <code>SERVICES_BASE_URLS[key]</code> in the constructor).</p>
-<p><code>ApiRequest.request&lt;TData&gt;(config)</code>:</p>
-<ol>
-<li>Pulls <code>user</code>/<code>token</code>/<code>loginRole</code>/<code>contentType</code> out of the call-site config and builds the downstream headers via <code>createHeaders</code> (<code>utils/index.ts</code>) — <code>X-Service-Secret</code> (always, from <code>SERVICE_SECRET_MAP[this.serviceKey]</code>), plus <code>X-User-Id</code>/<code>X-User-Role</code> (if <code>user</code> was passed), <code>Authorization</code> (if <code>token</code> was passed), <code>X-Login-Role</code>/<code>Content-Type</code> (if given). Any caller-supplied <code>headers</code> are merged in on top.</li>
-<li>Sends the request via the service&#39;s own Axios instance, returns <code>response.data</code> typed as <code>TApiResponse&lt;TData&gt;</code> — the downstream envelope (<code>{ statusCode, message, data }</code>) is passed straight through, not unwrapped, so <code>res.success(response)</code> in a Gateway controller re-wraps it into this service&#39;s own envelope without losing <code>message</code>/<code>data</code>.</li>
-<li>On an <code>AxiosError</code> with a response, translates the downstream error body into the matching <code>@beautinique/backend-classes</code> error (<code>createError</code>/<code>ERROR_CLASS_MAP</code>, by the downstream&#39;s own <code>code</code> field, falling back to <code>INTERNAL_SERVER_ERROR</code> for an unrecognized/missing code) — so a <code>404</code>/<code>NOT_FOUND</code> from <code>product-service</code> surfaces to the Gateway&#39;s client as a <code>404</code>/<code>NOT_FOUND</code> too, not a generic <code>500</code>. Anything else (network failure, no response at all) becomes a generic <code>INTERNAL_SERVER_ERROR</code>.</li>
-</ol>
-<h3>Route Typing (<code>utils/index.ts</code> + <code>types/index.ts</code>)</h3>
-<p><code>METHODS_AND_PATHS</code> (<code>constants/index.ts</code>) is a single nested object of <code>{ method, path }</code> endpoints, mirroring every downstream route this gateway calls. <code>createRouteHelper</code> walks it once at module load and produces <code>API_METHODS_AND_URLS</code>: the same tree, but every <code>{method, path}</code> leaf becomes <code>{method: Uppercase&lt;method&gt;, url}</code>, where <code>url</code> is either the literal path (no <code>:params</code>) or a <code>(params) =&gt; path</code> function (dynamic segments, e.g. <code>:categoryId</code>/<code>:slug</code>). <code>TGenerateRoutes&lt;T&gt;</code> is the TypeScript mapped type computing this transformation at the type level — a service class does <code>this.request({ ...this.routes.category.update, url: url({categoryId}), data, user })</code> and gets full autocomplete/type-checking on both the URL params and the HTTP method, without either ever being handwritten as a raw string.</p>
-<hr>
-<h2>8. Authentication &amp; Cookies</h2>
-<p>There is no session store — the &quot;session&quot; is entirely the signed JWT inside the <code>access_token</code>/<code>refresh_token</code> cookies (<code>utils/index.ts</code>: <code>generateAccessToken</code>/<code>generateRefreshToken</code>, both <code>{ _id, role }</code> payloads).</p>
-<table>
-<thead>
-<tr>
-<th>Cookie</th>
-<th>TTL</th>
-<th>Set by</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>access_token</code></td>
-<td>15 minutes</td>
-<td>Every login/register/password-flow controller that succeeds, plus <code>POST /api/v1/refresh-access-token</code></td>
-</tr>
-<tr>
-<td><code>refresh_token</code></td>
-<td>7 days</td>
-<td>Every login/register/password-flow controller that succeeds (<strong>not</strong> reissued by the refresh endpoint — refreshing only rotates the access token)</td>
-</tr>
-</tbody></table>
-<p>Cookie options (<code>COOKIE_OPTIONS</code>, <code>constants/index.ts</code>): <code>httpOnly: true</code> always; <code>secure</code>/<code>sameSite</code> flip based on <code>envs.is_dev</code> — <code>secure: false, sameSite: &#39;lax&#39;</code> in dev (works over plain HTTP on <code>localhost</code>), <code>secure: true, sameSite: &#39;none&#39;</code> in production (required for a cross-origin frontend to send the cookie at all).</p>
-<h3><code>authenticate</code> vs <code>authorize</code> (<code>middlewares/auth.middleware.ts</code>)</h3>
-<ul>
-<li><strong><code>authenticate</code></strong> — reads <code>access_token</code>, verifies it, attaches <code>{ _id, role }</code> to <code>req.user</code>. No role check. Used wherever a route just needs &quot;is logged in&quot; (logout, change/set password, session lookup).</li>
-<li><strong><code>authorize(allowedRoles)</code></strong> — does everything <code>authenticate</code> does, plus requires <code>req.user.role</code> to be in <code>allowedRoles</code> (<code>MASTER</code> always passes, regardless of the list). Since it&#39;s a strict superset, routes never chain both — a route either needs <code>authenticate</code> alone or <code>authorize([...])</code> alone.</li>
-</ul>
-<p>A missing/invalid/expired token throws <code>AuthenticationError</code> (401); an insufficient role throws <code>AuthorizationError</code> (403) — both flow through <code>errorResponse</code> like any other error.</p>
-<hr>
-<h2>9. Request Validation</h2>
-<p>Mutating <code>user-service</code> routes (login/register/password) are validated by <code>@beautinique/backend-zod</code> schemas (<code>validateZod({ body: &lt;schema&gt; })</code>) — the <strong>same package</strong> <code>user-service</code> itself uses, imported directly here so a malformed request never reaches the network hop to <code>user-service</code> at all. <code>product-service</code> routes have no local Zod validation in this gateway — <code>checkEmptyRequest</code> guards against an empty body/params, and the rest of the validation (pricing rules, category hierarchy, etc.) happens on <code>product-service</code> itself, which returns a structured <code>422</code>/<code>fieldErrors</code> response that flows back through unchanged (see <a href="#7-request--response-handling">§7</a>).</p>
-<hr>
-<h2>10. Authentication Flows</h2>
-<h3>10.1 Manual Login / Register / Forgot-Password</h3>
-<p>Structurally identical for all three: the client calls the corresponding <code>user-service</code>-backed route through this gateway; on success, the controller (<code>modules/user/controllers/auth-controllers/index.ts</code>) calls <code>generateAuthTokens({_id, role})</code> from the response&#39;s <code>data</code> and <code>setAuthCookies(res, ...)</code> <strong>before</strong> <code>res.success(response)</code> — the cookies are set as a side effect of the same response, not a separate round trip.</p>
-<h3>10.2 OAuth Login (Google / LinkedIn / GitHub)</h3>
-<ol>
-<li><code>GET /auth/login/oauth/{provider}/redirect</code> → the controller calls the downstream service for the provider&#39;s consent URL, then <code>res.redirect(url)</code>s the browser to it directly (not a JSON response).</li>
-<li>Provider redirects back to <code>GET /auth/login/oauth/{provider}/callback?code=...</code> on this gateway.</li>
-<li>The controller forwards <code>code</code> to <code>user-service</code>, which exchanges it and returns the user. On success: <code>setAuthCookies</code> + <code>res.redirect(</code>${CLIENT_OAUTH_REDIRECT_URL}?success=true<code>)</code>. On failure: <code>res.redirect(</code>${CLIENT_OAUTH_REDIRECT_URL}?error=true&amp;message=${encodeURIComponent(message)}<code>)</code> — the error message is URL-encoded before being appended, so a message containing <code>&amp;</code>/<code>#</code>/other reserved characters can&#39;t corrupt the redirect&#39;s query string.</li>
-</ol>
-<p><code>CLIENT_OAUTH_REDIRECT_URL</code> (<code>modules/user/constants/index.ts</code>) is <code>${envs.url.frontend.client}/auth/oauth</code> — the frontend is expected to have a route there that reads <code>success</code>/<code>error</code>/<code>message</code> off the query string and reacts accordingly.</p>
-<h3>10.3 Refresh (<code>POST /api/v1/refresh-access-token</code>)</h3>
-<p>Reads <code>refresh_token</code>, verifies it, signs a fresh <code>access_token</code>, sets it as a cookie. Does <strong>not</strong> call any downstream service — the refresh token itself carries <code>{_id, role}</code>, so nothing needs to be re-fetched. Does not rotate the refresh token.</p>
-<h3>10.4 Logout</h3>
-<p><code>DELETE /auth/logout</code> — requires <code>authenticate</code>, calls <code>user-service</code> to drop the cached session there, then <code>clearAuthCookies(res)</code> regardless of whether the downstream call found anything to clear.</p>
-<hr>
-<h2>11. Wake-up — Downstream Health Aggregation</h2>
-<p><code>GET /wake-up</code> (<code>controllers/index.ts</code>) fetches <code>{url}/health</code> for all four entries in <code>envs.url.service</code> (<code>mail</code>, <code>media</code>, <code>product</code>, <code>user</code>) in parallel via <code>Promise.allSettled</code>, treating a network failure or non-<code>ok</code> response as <code>DOWN</code> for that service (never lets one slow/dead service fail the whole endpoint). Overall <code>status</code> is <code>UP</code> if every service is <code>UP</code>, <code>DEGRADED</code> if some are <code>UP</code> and some <code>DOWN</code>. Response is a plain <code>res.status(...).json(...)</code> — <strong>not</strong> wrapped in <code>res.success</code>, since <code>successResponse</code> isn&#39;t mounted yet at the point this route is registered relative to the media-service proxy (see <a href="#14-design-notes--known-trade-offs">§14</a>) and this endpoint predates that envelope convention regardless.</p>
-<hr>
-<h2>12. Media Upload Proxying (<code>middlewares/proxy.middleware.ts</code>)</h2>
-<p><code>mediaServiceProxy</code> wraps a single <code>http-proxy</code> server instance (<code>target: &#39;{MEDIA_SERVICE_BASE_URL}/api/v1&#39;</code>) and is mounted directly in <code>app.ts</code>, <strong>before</strong> <code>express.json()</code>/<code>express.urlencoded()</code>:</p>
-<pre><code class="language-ts">app.use(cookieParser());
+      <hr />
+      <h2>4. Environment Variables</h2>
+      <p>
+        All environment variables are loaded via <code>dotenv</code> and validated in
+        <code>src/envs/index.ts</code> — every one is checked with <code>requireEnv</code>/<code
+          >requirePort</code
+        >
+        at startup, so a missing value throws a clear
+        <code>Missing required environment variable: X</code> error immediately instead of failing
+        confusingly later. There is no fallback/default for any of these — every one is required.
+      </p>
+      <h3>4.1 Server &amp; App</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Variable</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>PORT</code></td>
+            <td>HTTP port to listen on</td>
+          </tr>
+          <tr>
+            <td><code>IS_DEV</code></td>
+            <td>
+              <code>&quot;true&quot;</code> enables pretty logging and stack traces in error
+              responses; also relaxes cookie options (see
+              <a href="#8-authentication--cookies">§8</a>)
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <h3>4.2 JWT</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Variable</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>JWT_ACCESS_SECRET</code></td>
+            <td>Signing secret for the 15-minute access token</td>
+          </tr>
+          <tr>
+            <td><code>JWT_REFRESH_SECRET</code></td>
+            <td>Signing secret for the 7-day refresh token</td>
+          </tr>
+        </tbody>
+      </table>
+      <h3>4.3 Downstream Service URLs &amp; Secrets</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Variable</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>USER_SERVICE_BASE_URL</code></td>
+            <td>Base URL of <code>user-service</code></td>
+          </tr>
+          <tr>
+            <td><code>USER_SERVICE_SECRET</code></td>
+            <td>
+              Value sent as <code>X-Service-Secret</code> on every request to
+              <code>user-service</code>
+            </td>
+          </tr>
+          <tr>
+            <td><code>PRODUCT_SERVICE_BASE_URL</code></td>
+            <td>Base URL of <code>product-service</code></td>
+          </tr>
+          <tr>
+            <td><code>PRODUCT_SERVICE_SECRET</code></td>
+            <td>
+              Value sent as <code>X-Service-Secret</code> on every request to
+              <code>product-service</code>
+            </td>
+          </tr>
+          <tr>
+            <td><code>MEDIA_SERVICE_BASE_URL</code></td>
+            <td>Base URL of <code>media-service</code></td>
+          </tr>
+          <tr>
+            <td><code>MEDIA_SERVICE_SECRET</code></td>
+            <td>
+              Value sent as <code>X-Service-Secret</code> on every proxied media-service request
+            </td>
+          </tr>
+          <tr>
+            <td><code>MAIL_SERVICE_BASE_URL</code></td>
+            <td>Base URL of <code>mail-service</code></td>
+          </tr>
+          <tr>
+            <td><code>MAIL_SERVICE_SECRET</code></td>
+            <td>
+              Reserved — nothing in this gateway currently calls <code>mail-service</code> directly
+              (OTP email is enqueued by <code>user-service</code> onto <code>mail-queue</code>, not
+              routed through here)
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <h3>4.4 Frontend Origins</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Variable</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>CLIENT_BASE_URL</code></td>
+            <td>
+              Customer-facing frontend origin — also the base for the OAuth redirect landing page
+              (<code>{CLIENT_BASE_URL}/auth/oauth</code>, see
+              <a href="#102-oauth-login-google--linkedin--github">§10.2</a>)
+            </td>
+          </tr>
+          <tr>
+            <td><code>ADMIN_BASE_URL</code></td>
+            <td>Admin dashboard origin</td>
+          </tr>
+          <tr>
+            <td><code>SELLER_BASE_URL</code></td>
+            <td>Seller dashboard origin</td>
+          </tr>
+          <tr>
+            <td><code>MASTER_BASE_URL</code></td>
+            <td>Master/super-admin dashboard origin</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>
+        <code>ORIGINS</code> (<code>constants/index.ts</code>) collects all four into a single array
+        — declared for CORS configuration, but
+        <strong>no CORS middleware is currently wired up in <code>app.ts</code></strong> (see
+        <a href="#14-design-notes--known-trade-offs">§14</a>).
+      </p>
+      <h3>4.5 Gateway&#39;s Own URL</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Variable</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>GATEWAY_BASE_URL</code></td>
+            <td>
+              This service&#39;s own public URL — loaded into <code>envs.url.gateway</code> but not
+              currently read anywhere else in the codebase (kept for parity with the other
+              services&#39; env shape / future use)
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <hr />
+      <h2>5. API Routes</h2>
+      <p>
+        Every route below either terminates in this service (home/docs/health/wake-up/refresh) or is
+        a thin pass-through to a downstream service — the Gateway does no business-logic validation
+        of its own beyond auth/role checks; request bodies are validated by the same
+        <code>@beautinique/backend-zod</code> schemas the downstream services use (imported directly
+        into this repo, see <a href="#9-request-validation">§9</a>), so a bad request is rejected
+        here rather than wasting a downstream round trip.
+      </p>
+      <h3>5.1 Home, Docs, Health &amp; Wake-up</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th>Path</th>
+            <th>Auth</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>GET</td>
+            <td><code>/</code></td>
+            <td>None</td>
+            <td>This README, pre-rendered to HTML by <code>scripts/generate-html.mjs</code></td>
+          </tr>
+          <tr>
+            <td>GET</td>
+            <td><code>/docs</code></td>
+            <td>None</td>
+            <td>Interactive Swagger UI (spec in <code>src/docs/openapi.ts</code>)</td>
+          </tr>
+          <tr>
+            <td>GET</td>
+            <td><code>/health</code></td>
+            <td>None</td>
+            <td>Liveness only — this service has no DB/Redis to report on</td>
+          </tr>
+          <tr>
+            <td>GET</td>
+            <td><code>/wake-up</code></td>
+            <td>None</td>
+            <td>
+              Pings <code>{service}/health</code> on all four downstream services in parallel;
+              returns <code>UP</code>/<code>DEGRADED</code> based on the results (see
+              <a href="#11-wake-up--downstream-health-aggregation">§11</a>)
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <h3>5.2 Gateway&#39;s Own — <code>/api/v1</code></h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th>Path</th>
+            <th>Auth</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>POST</td>
+            <td><code>/api/v1/refresh-access-token</code></td>
+            <td>Refresh token cookie</td>
+            <td>Reads <code>refresh_token</code>, issues a new <code>access_token</code> cookie</td>
+          </tr>
+        </tbody>
+      </table>
+      <h3>5.3 Media — <code>/api/v1/media-service/**</code> (raw proxy, any authenticated role)</h3>
+      <p>
+        Everything under this prefix is streamed 1:1 to <code>media-service</code> by
+        <code>mediaServiceProxy</code> (<code>http-proxy</code>) — the Gateway does not parse,
+        validate, or even buffer the request body for these routes (see
+        <a href="#12-media-upload-proxying">§12</a>). In practice this means:
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th>Path</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>POST</td>
+            <td><code>/api/v1/media-service/upload/single</code></td>
+            <td>Upload one image or video</td>
+          </tr>
+          <tr>
+            <td>POST</td>
+            <td><code>/api/v1/media-service/upload/multiple</code></td>
+            <td>Upload several images/videos at once</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>
+        Both take a <code>file</code>/<code>files</code> field plus a <code>folder</code> field in
+        the multipart body. File-size limits (<code>MAX_IMAGE_SIZE</code>/<code
+          >MAX_VIDEO_SIZE</code
+        >
+        from <code>@beautinique/shared-constants</code>, formatted via <code>formatFileSize</code>)
+        are documented in <code>src/docs/openapi.ts</code> for reference, but
+        <strong>enforced only on <code>media-service</code> itself</strong> — this gateway never
+        inspects the file, so an oversized upload is rejected downstream (<code>413</code>), not
+        here.
+      </p>
+      <p>
+        See <code>media-service</code>&#39;s own README (<code
+          >src/reference/media-service/README.md</code
+        >
+        in this repo) for the full request/response shape — the Gateway doesn&#39;t alter it.
+      </p>
+      <h3>5.4 User — <code>/api/v1/user-service/*</code></h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th>Path</th>
+            <th>Auth</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>POST</td>
+            <td><code>/auth/login/manual</code></td>
+            <td>None</td>
+            <td>Manual email/phone + password login</td>
+          </tr>
+          <tr>
+            <td>GET</td>
+            <td><code>/auth/login/oauth/google/redirect</code></td>
+            <td>None</td>
+            <td>Get Google OAuth consent URL</td>
+          </tr>
+          <tr>
+            <td>GET</td>
+            <td><code>/auth/login/oauth/google/callback</code></td>
+            <td>None</td>
+            <td>Google OAuth callback</td>
+          </tr>
+          <tr>
+            <td>GET</td>
+            <td><code>/auth/login/oauth/linkedin/redirect</code></td>
+            <td>None</td>
+            <td>Get LinkedIn OAuth consent URL</td>
+          </tr>
+          <tr>
+            <td>GET</td>
+            <td><code>/auth/login/oauth/linkedin/callback</code></td>
+            <td>None</td>
+            <td>LinkedIn OAuth callback</td>
+          </tr>
+          <tr>
+            <td>GET</td>
+            <td><code>/auth/login/oauth/github/redirect</code></td>
+            <td>None</td>
+            <td>Get GitHub OAuth consent URL</td>
+          </tr>
+          <tr>
+            <td>GET</td>
+            <td><code>/auth/login/oauth/github/callback</code></td>
+            <td>None</td>
+            <td>GitHub OAuth callback</td>
+          </tr>
+          <tr>
+            <td>DELETE</td>
+            <td><code>/auth/logout</code></td>
+            <td><code>access_token</code> cookie</td>
+            <td>Clear the caller&#39;s session</td>
+          </tr>
+          <tr>
+            <td>POST</td>
+            <td><code>/auth/register/send-otp</code></td>
+            <td>None</td>
+            <td>Start registration: OTP to email</td>
+          </tr>
+          <tr>
+            <td>PATCH</td>
+            <td><code>/auth/register/resend-otp</code></td>
+            <td>OTP session token</td>
+            <td>Resend the registration OTP</td>
+          </tr>
+          <tr>
+            <td>POST</td>
+            <td><code>/auth/register/verify-otp</code></td>
+            <td>OTP session token</td>
+            <td>Verify the registration OTP</td>
+          </tr>
+          <tr>
+            <td>POST</td>
+            <td><code>/auth/register/save-user</code></td>
+            <td>OTP session token</td>
+            <td>Complete registration — sets auth cookies</td>
+          </tr>
+          <tr>
+            <td>POST</td>
+            <td><code>/auth/password/forgot-send-otp</code></td>
+            <td>None</td>
+            <td>Start forgot-password: OTP to email</td>
+          </tr>
+          <tr>
+            <td>PATCH</td>
+            <td><code>/auth/password/forgot-resend-otp</code></td>
+            <td>OTP session token</td>
+            <td>Resend the forgot-password OTP</td>
+          </tr>
+          <tr>
+            <td>POST</td>
+            <td><code>/auth/password/forgot-verify-otp</code></td>
+            <td>OTP session token</td>
+            <td>Verify the forgot-password OTP</td>
+          </tr>
+          <tr>
+            <td>POST</td>
+            <td><code>/auth/password/forgot-save</code></td>
+            <td>OTP session token</td>
+            <td>Set a new password — sets auth cookies</td>
+          </tr>
+          <tr>
+            <td>PATCH</td>
+            <td><code>/auth/password/change</code></td>
+            <td><code>access_token</code> cookie</td>
+            <td>Change password while logged in — re-issues auth cookies</td>
+          </tr>
+          <tr>
+            <td>PATCH</td>
+            <td><code>/auth/password/set</code></td>
+            <td><code>access_token</code> cookie</td>
+            <td>Set an initial password for an OAuth-only account — re-issues auth cookies</td>
+          </tr>
+          <tr>
+            <td>GET</td>
+            <td><code>/user/session</code></td>
+            <td><code>access_token</code> cookie</td>
+            <td>Fetch the caller&#39;s own user record</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>
+        &quot;OTP session token&quot; means the client sends the token (returned by the
+        corresponding <code>send-otp</code> call) via <code>Authorization: &lt;token&gt;</code> (raw
+        or <code>Bearer &lt;token&gt;</code>) — this header passes straight through to
+        <code>user-service</code> unmodified, it isn&#39;t a JWT this gateway issues or checks
+        itself.
+      </p>
+      <h3>5.5 Product — <code>/api/v1/product-service/*</code></h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th>Path</th>
+            <th>Auth</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>POST</td>
+            <td><code>/category</code></td>
+            <td><code>ADMIN</code>, <code>MASTER</code></td>
+            <td>Create a category (L1/L2/L3)</td>
+          </tr>
+          <tr>
+            <td>PATCH</td>
+            <td><code>/category/:categoryId</code></td>
+            <td><code>ADMIN</code>, <code>MASTER</code></td>
+            <td>Update a category</td>
+          </tr>
+          <tr>
+            <td>DELETE</td>
+            <td><code>/category/:categoryId</code></td>
+            <td><code>ADMIN</code>, <code>MASTER</code></td>
+            <td>Delete a leaf category with zero products</td>
+          </tr>
+          <tr>
+            <td>GET</td>
+            <td><code>/category/by-parent-level</code></td>
+            <td><code>ADMIN</code>, <code>SELLER</code>, <code>MASTER</code></td>
+            <td>List categories by <code>level</code>/<code>parent</code></td>
+          </tr>
+          <tr>
+            <td>GET</td>
+            <td><code>/category/by-hierarchy</code></td>
+            <td>None</td>
+            <td>Full L1→L2→L3 nested tree</td>
+          </tr>
+          <tr>
+            <td>POST</td>
+            <td><code>/product/draft</code></td>
+            <td><code>ADMIN</code>, <code>SELLER</code>, <code>MASTER</code></td>
+            <td>Save one step of a multi-step draft</td>
+          </tr>
+          <tr>
+            <td>GET</td>
+            <td><code>/product/draft</code></td>
+            <td><code>ADMIN</code>, <code>SELLER</code>, <code>MASTER</code></td>
+            <td>Fetch the caller&#39;s in-progress draft</td>
+          </tr>
+          <tr>
+            <td>PATCH</td>
+            <td><code>/product/draft/publish</code></td>
+            <td><code>ADMIN</code>, <code>SELLER</code>, <code>MASTER</code></td>
+            <td>Publish a completed draft as a real product</td>
+          </tr>
+          <tr>
+            <td>GET</td>
+            <td><code>/product/dashboard/products</code></td>
+            <td><code>ADMIN</code>, <code>SELLER</code>, <code>MASTER</code></td>
+            <td>Paginated/sortable/searchable dashboard listing</td>
+          </tr>
+          <tr>
+            <td>GET</td>
+            <td><code>/product/dashboard/:slug</code></td>
+            <td><code>ADMIN</code>, <code>SELLER</code>, <code>MASTER</code></td>
+            <td>Single dashboard product lookup</td>
+          </tr>
+          <tr>
+            <td>GET</td>
+            <td><code>/product/:slug</code></td>
+            <td>None</td>
+            <td>Public storefront product lookup</td>
+          </tr>
+          <tr>
+            <td>GET</td>
+            <td><code>/product/suggestions</code></td>
+            <td>None</td>
+            <td>Autocomplete search suggestions</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>
+        &quot;Auth&quot; here is enforced twice, independently: this gateway&#39;s own
+        <code>authorize([...])</code> middleware checks the <code>access_token</code> cookie&#39;s
+        role <strong>before</strong> forwarding, and <code>product-service</code> checks the
+        <code>X-User-Role</code> header the Gateway attaches on the way in — a request can&#39;t
+        reach the downstream service at all without first passing the Gateway&#39;s own check.
+      </p>
+      <h3>5.6 Interactive Docs (<code>/docs</code>)</h3>
+      <p>
+        <code>GET /docs</code> serves <code>swagger-ui-express</code> over the hand-written spec in
+        <code>src/docs/openapi.ts</code> — every path key, method, and enum value in it is built
+        from the <em>same</em> <code>METHODS_AND_PATHS</code>/<code
+          >@beautinique/shared-constants</code
+        >
+        this service&#39;s own routing and validation use, so the docs can&#39;t silently drift from
+        the actual routes.
+      </p>
+      <p>
+        <strong>Tags.</strong> Every operation is tagged with the
+        <em>service that actually handles it</em>, not just a generic feature name — so the sidebar
+        groups endpoints by which downstream service owns them:
+      </p>
+      <ul>
+        <li>
+          <code>Gateway</code> — health, wake-up, refresh-token (terminates here, never proxied)
+        </li>
+        <li>
+          <code>User Service: Login</code> / <code>Register</code> / <code>Password</code> /
+          <code>Logout</code> / <code>Session</code> — all proxied to <code>user-service</code>
+        </li>
+        <li>
+          <code>Product Service: Category</code> / <code>Product</code> — proxied to
+          <code>product-service</code>
+        </li>
+        <li><code>Media Service: Upload</code> — streamed to <code>media-service</code></li>
+      </ul>
+      <p>
+        <strong>Schemas.</strong> Enums (<code>CATEGORY_LEVELS</code>,
+        <code>PRODUCT_STATUSES</code>, <code>USER_ROLES</code>, <code>AUTH_PROVIDERS</code>,
+        <code>DRAFT_PRODUCT_STEP_MAP</code>, <code>SORT</code>) are pulled directly from
+        <code>@beautinique/shared-constants</code> rather than hand-typed as string literals, and
+        every dynamic path segment (<code>:categoryId</code>, <code>:slug</code>) is converted to
+        OpenAPI&#39;s <code>{param}</code> syntax (<code
+          >path.replace(&#39;:&#39;, &#39;{&#39;)</code
+        >
+        + a trailing <code>}</code>) — Express uses <code>:param</code>, but the OpenAPI 3.0 spec
+        itself requires <code>{param}</code>, so the two need this small translation to both be
+        correct at once.
+      </p>
+      <hr />
+      <h2>6. Request Headers (Client → Gateway)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Header</th>
+            <th>Purpose</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>Cookie: access_token</code></td>
+            <td>
+              Short-lived (15 min) JWT — read by <code>authenticate</code>/<code>authorize</code>,
+              required wherever &quot;Auth&quot; is listed above as a cookie
+            </td>
+          </tr>
+          <tr>
+            <td><code>Cookie: refresh_token</code></td>
+            <td>
+              Long-lived (7 days) JWT — read only by <code>POST /api/v1/refresh-access-token</code>
+            </td>
+          </tr>
+          <tr>
+            <td><code>X-Login-Role</code></td>
+            <td>
+              Optional, <code>POST /auth/login/manual</code> only — the logged-in user&#39;s role
+              must match it (<code>MASTER</code> always allowed)
+            </td>
+          </tr>
+          <tr>
+            <td><code>Authorization</code></td>
+            <td>
+              OTP session token — register/forgot-password OTP steps only, forwarded to
+              <code>user-service</code> unmodified
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <p>
+        Clients never send <code>X-Service-Secret</code>, <code>X-User-Id</code>, or
+        <code>X-User-Role</code> themselves — those are headers
+        <strong>this gateway attaches</strong> on the downstream leg (see
+        <a href="#7-request--response-handling">§7</a>); if a client sends them anyway, they&#39;re
+        overwritten before the request leaves this service.
+      </p>
+      <hr />
+      <h2>7. Request / Response Handling (<code>classes/ApiRequest.ts</code>)</h2>
+      <p>
+        Every module service (<code>AuthService</code>, <code>UserService</code>,
+        <code>CategoryService</code>, <code>ProductService</code>) extends <code>ApiRequest</code>,
+        one Axios instance per downstream service (<code>baseURL</code> set from
+        <code>SERVICES_BASE_URLS[key]</code> in the constructor).
+      </p>
+      <p><code>ApiRequest.request&lt;TData&gt;(config)</code>:</p>
+      <ol>
+        <li>
+          Pulls <code>user</code>/<code>token</code>/<code>loginRole</code>/<code>contentType</code>
+          out of the call-site config and builds the downstream headers via
+          <code>createHeaders</code> (<code>utils/index.ts</code>) —
+          <code>X-Service-Secret</code> (always, from
+          <code>SERVICE_SECRET_MAP[this.serviceKey]</code>), plus <code>X-User-Id</code>/<code
+            >X-User-Role</code
+          >
+          (if <code>user</code> was passed), <code>Authorization</code> (if <code>token</code> was
+          passed), <code>X-Login-Role</code>/<code>Content-Type</code> (if given). Any
+          caller-supplied <code>headers</code> are merged in on top.
+        </li>
+        <li>
+          Sends the request via the service&#39;s own Axios instance, returns
+          <code>response.data</code> typed as <code>TApiResponse&lt;TData&gt;</code> — the
+          downstream envelope (<code>{ statusCode, message, data }</code>) is passed straight
+          through, not unwrapped, so <code>res.success(response)</code> in a Gateway controller
+          re-wraps it into this service&#39;s own envelope without losing
+          <code>message</code>/<code>data</code>.
+        </li>
+        <li>
+          On an <code>AxiosError</code> with a response, translates the downstream error body into
+          the matching <code>@beautinique/backend-classes</code> error
+          (<code>createError</code>/<code>ERROR_CLASS_MAP</code>, by the downstream&#39;s own
+          <code>code</code> field, falling back to <code>INTERNAL_SERVER_ERROR</code> for an
+          unrecognized/missing code) — so a <code>404</code>/<code>NOT_FOUND</code> from
+          <code>product-service</code> surfaces to the Gateway&#39;s client as a
+          <code>404</code>/<code>NOT_FOUND</code> too, not a generic <code>500</code>. Anything else
+          (network failure, no response at all) becomes a generic
+          <code>INTERNAL_SERVER_ERROR</code>.
+        </li>
+      </ol>
+      <h3>Route Typing (<code>utils/index.ts</code> + <code>types/index.ts</code>)</h3>
+      <p>
+        <code>METHODS_AND_PATHS</code> (<code>constants/index.ts</code>) is a single nested object
+        of <code>{ method, path }</code> endpoints, mirroring every downstream route this gateway
+        calls. <code>createRouteHelper</code> walks it once at module load and produces
+        <code>API_METHODS_AND_URLS</code>: the same tree, but every <code>{method, path}</code> leaf
+        becomes <code>{method: Uppercase&lt;method&gt;, url}</code>, where <code>url</code> is
+        either the literal path (no <code>:params</code>) or a
+        <code>(params) =&gt; path</code> function (dynamic segments, e.g.
+        <code>:categoryId</code>/<code>:slug</code>). <code>TGenerateRoutes&lt;T&gt;</code> is the
+        TypeScript mapped type computing this transformation at the type level — a service class
+        does
+        <code
+          >this.request({ ...this.routes.category.update, url: url({categoryId}), data, user
+          })</code
+        >
+        and gets full autocomplete/type-checking on both the URL params and the HTTP method, without
+        either ever being handwritten as a raw string.
+      </p>
+      <hr />
+      <h2>8. Authentication &amp; Cookies</h2>
+      <p>
+        There is no session store — the &quot;session&quot; is entirely the signed JWT inside the
+        <code>access_token</code>/<code>refresh_token</code> cookies (<code>utils/index.ts</code>:
+        <code>generateAccessToken</code>/<code>generateRefreshToken</code>, both
+        <code>{ _id, role }</code> payloads).
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th>Cookie</th>
+            <th>TTL</th>
+            <th>Set by</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>access_token</code></td>
+            <td>15 minutes</td>
+            <td>
+              Every login/register/password-flow controller that succeeds, plus
+              <code>POST /api/v1/refresh-access-token</code>
+            </td>
+          </tr>
+          <tr>
+            <td><code>refresh_token</code></td>
+            <td>7 days</td>
+            <td>
+              Every login/register/password-flow controller that succeeds (<strong>not</strong>
+              reissued by the refresh endpoint — refreshing only rotates the access token)
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <p>
+        Cookie options (<code>COOKIE_OPTIONS</code>, <code>constants/index.ts</code>):
+        <code>httpOnly: true</code> always; <code>secure</code>/<code>sameSite</code> flip based on
+        <code>envs.is_dev</code> — <code>secure: false, sameSite: &#39;lax&#39;</code> in dev (works
+        over plain HTTP on <code>localhost</code>),
+        <code>secure: true, sameSite: &#39;none&#39;</code> in production (required for a
+        cross-origin frontend to send the cookie at all).
+      </p>
+      <h3>
+        <code>authenticate</code> vs
+        <code>authorize</code> (<code>middlewares/auth.middleware.ts</code>)
+      </h3>
+      <ul>
+        <li>
+          <strong><code>authenticate</code></strong> — reads <code>access_token</code>, verifies it,
+          attaches <code>{ _id, role }</code> to <code>req.user</code>. No role check. Used wherever
+          a route just needs &quot;is logged in&quot; (logout, change/set password, session lookup).
+        </li>
+        <li>
+          <strong><code>authorize(allowedRoles)</code></strong> — does everything
+          <code>authenticate</code> does, plus requires <code>req.user.role</code> to be in
+          <code>allowedRoles</code> (<code>MASTER</code> always passes, regardless of the list).
+          Since it&#39;s a strict superset, routes never chain both — a route either needs
+          <code>authenticate</code> alone or <code>authorize([...])</code> alone.
+        </li>
+      </ul>
+      <p>
+        A missing/invalid/expired token throws <code>AuthenticationError</code> (401); an
+        insufficient role throws <code>AuthorizationError</code> (403) — both flow through
+        <code>errorResponse</code> like any other error.
+      </p>
+      <hr />
+      <h2>9. Request Validation</h2>
+      <p>
+        Mutating <code>user-service</code> routes (login/register/password) are validated by
+        <code>@beautinique/backend-zod</code> schemas (<code
+          >validateZod({ body: &lt;schema&gt; })</code
+        >) — the <strong>same package</strong> <code>user-service</code> itself uses, imported
+        directly here so a malformed request never reaches the network hop to
+        <code>user-service</code> at all. <code>product-service</code> routes have no local Zod
+        validation in this gateway — <code>checkEmptyRequest</code> guards against an empty
+        body/params, and the rest of the validation (pricing rules, category hierarchy, etc.)
+        happens on <code>product-service</code> itself, which returns a structured
+        <code>422</code>/<code>fieldErrors</code> response that flows back through unchanged (see
+        <a href="#7-request--response-handling">§7</a>).
+      </p>
+      <hr />
+      <h2>10. Authentication Flows</h2>
+      <h3>10.1 Manual Login / Register / Forgot-Password</h3>
+      <p>
+        Structurally identical for all three: the client calls the corresponding
+        <code>user-service</code>-backed route through this gateway; on success, the controller
+        (<code>modules/user/controllers/auth-controllers/index.ts</code>) calls
+        <code>generateAuthTokens({_id, role})</code> from the response&#39;s <code>data</code> and
+        <code>setAuthCookies(res, ...)</code> <strong>before</strong>
+        <code>res.success(response)</code> — the cookies are set as a side effect of the same
+        response, not a separate round trip.
+      </p>
+      <h3>10.2 OAuth Login (Google / LinkedIn / GitHub)</h3>
+      <ol>
+        <li>
+          <code>GET /auth/login/oauth/{provider}/redirect</code> → the controller calls the
+          downstream service for the provider&#39;s consent URL, then
+          <code>res.redirect(url)</code>s the browser to it directly (not a JSON response).
+        </li>
+        <li>
+          Provider redirects back to
+          <code>GET /auth/login/oauth/{provider}/callback?code=...</code> on this gateway.
+        </li>
+        <li>
+          The controller forwards <code>code</code> to <code>user-service</code>, which exchanges it
+          and returns the user. On success: <code>setAuthCookies</code> +
+          <code>res.redirect(</code>${CLIENT_OAUTH_REDIRECT_URL}?success=true<code>)</code>. On
+          failure:
+          <code>res.redirect(</code
+          >${CLIENT_OAUTH_REDIRECT_URL}?error=true&amp;message=${encodeURIComponent(message)}<code
+            >)</code
+          >
+          — the error message is URL-encoded before being appended, so a message containing
+          <code>&amp;</code>/<code>#</code>/other reserved characters can&#39;t corrupt the
+          redirect&#39;s query string.
+        </li>
+      </ol>
+      <p>
+        <code>CLIENT_OAUTH_REDIRECT_URL</code> (<code>modules/user/constants/index.ts</code>) is
+        <code>${envs.url.frontend.client}/auth/oauth</code> — the frontend is expected to have a
+        route there that reads <code>success</code>/<code>error</code>/<code>message</code> off the
+        query string and reacts accordingly.
+      </p>
+      <h3>10.3 Refresh (<code>POST /api/v1/refresh-access-token</code>)</h3>
+      <p>
+        Reads <code>refresh_token</code>, verifies it, signs a fresh <code>access_token</code>, sets
+        it as a cookie. Does <strong>not</strong> call any downstream service — the refresh token
+        itself carries <code>{_id, role}</code>, so nothing needs to be re-fetched. Does not rotate
+        the refresh token.
+      </p>
+      <h3>10.4 Logout</h3>
+      <p>
+        <code>DELETE /auth/logout</code> — requires <code>authenticate</code>, calls
+        <code>user-service</code> to drop the cached session there, then
+        <code>clearAuthCookies(res)</code> regardless of whether the downstream call found anything
+        to clear.
+      </p>
+      <hr />
+      <h2>11. Wake-up — Downstream Health Aggregation</h2>
+      <p>
+        <code>GET /wake-up</code> (<code>controllers/index.ts</code>) fetches
+        <code>{url}/health</code> for all four entries in
+        <code>envs.url.service</code> (<code>mail</code>, <code>media</code>, <code>product</code>,
+        <code>user</code>) in parallel via <code>Promise.allSettled</code>, treating a network
+        failure or non-<code>ok</code> response as <code>DOWN</code> for that service (never lets
+        one slow/dead service fail the whole endpoint). Overall <code>status</code> is
+        <code>UP</code> if every service is <code>UP</code>, <code>DEGRADED</code> if some are
+        <code>UP</code> and some <code>DOWN</code>. Response is a plain
+        <code>res.status(...).json(...)</code> — <strong>not</strong> wrapped in
+        <code>res.success</code>, since <code>successResponse</code> isn&#39;t mounted yet at the
+        point this route is registered relative to the media-service proxy (see
+        <a href="#14-design-notes--known-trade-offs">§14</a>) and this endpoint predates that
+        envelope convention regardless.
+      </p>
+      <hr />
+      <h2>12. Media Upload Proxying (<code>middlewares/proxy.middleware.ts</code>)</h2>
+      <p>
+        <code>mediaServiceProxy</code> wraps a single <code>http-proxy</code> server instance (<code
+          >target: &#39;{MEDIA_SERVICE_BASE_URL}/api/v1&#39;</code
+        >) and is mounted directly in <code>app.ts</code>, <strong>before</strong>
+        <code>express.json()</code>/<code>express.urlencoded()</code>:
+      </p>
+      <pre><code class="language-ts">app.use(cookieParser());
 app.use(createHttpLogger(...));
 app.use(`${base}${media_service.default}`, authorize(USER_ROLES), mediaServiceProxy);
 app.use(express.json({ limit: &#39;10mb&#39; }));
 app.use(express.urlencoded({ extended: true }));
 </code></pre>
-<p>This order matters: <code>http-proxy</code> streams the raw request body straight through to <code>media-service</code> untouched (that&#39;s how a multipart file upload survives the hop). If <code>express.json()</code>/<code>express.urlencoded()</code> ran first, they&#39;d drain the request stream for any matching <code>Content-Type</code> before <code>http-proxy</code> ever got to it, and the proxied request would arrive at <code>media-service</code> with an empty/hanging body. <code>authorize(USER_ROLES)</code> still runs first, since it only reads the <code>access_token</code> cookie (already parsed by <code>cookieParser</code>) — it never touches the body.</p>
-<p>On a proxied request, <code>mediaProxy</code>&#39;s <code>proxyReq</code> handler attaches <code>X-Service-Secret</code>/<code>X-User-Id</code>/<code>X-User-Role</code> from <code>req.user</code> (set by <code>authorize</code>) before the request leaves this service — <code>media-service</code> sees exactly the same trusted headers it would from any other typed <code>ApiRequest</code> call, even though this path never goes through <code>ApiRequest</code> at all. A downstream failure (<code>media-service</code> unreachable, timeout) is caught by <code>mediaProxy</code>&#39;s own <code>error</code> handler, which writes a <code>502</code> JSON body directly (bypassing <code>errorResponse</code>, since a raw-proxied request never reaches this gateway&#39;s own error-handling middleware).</p>
-<hr>
-<h2>13. Server Lifecycle</h2>
-<h3>Startup (<code>bootstrap/startup.ts</code>)</h3>
-<ol>
-<li>Start the HTTP server (<code>startHttpServer</code>).</li>
-</ol>
-<p>That&#39;s the entire sequence — with no database, cache, or queue connection to establish first, there&#39;s nothing else to sequence. Idempotent (<code>setStarted()</code> guards re-entry). On any failure, logs and calls <code>process.exit(1)</code>.</p>
-<h3>Graceful Shutdown (<code>bootstrap/shutdown.ts</code>, <code>SIGINT</code>/<code>SIGTERM</code>)</h3>
-<ol>
-<li>Stop accepting new HTTP requests (<code>stopHttpServer</code>, existing requests finish first).</li>
-<li>Destroy any remaining open sockets.</li>
-</ol>
-<p>Idempotent (<code>setShuttingDown()</code> guards re-entry); logs success/failure and sets <code>process.exitCode</code> accordingly before exiting.</p>
-<hr>
-<h2>14. Design Notes / Known Trade-offs</h2>
-<ul>
-<li><strong>No CORS middleware.</strong> <code>ORIGINS</code> (<code>constants/index.ts</code>) collects all four frontend URLs but nothing in <code>app.ts</code> currently uses them in a <code>cors()</code> call — cross-origin browser requests to this gateway will fail today unless something upstream (a reverse proxy, CDN) handles CORS instead.</li>
-<li><strong><code>GET /wake-up</code> doesn&#39;t use <code>res.success</code>.</strong> It&#39;s a plain <code>res.status().json()</code>, inconsistent with every other route&#39;s envelope — kept as-is since it predates <code>successResponse</code> in the middleware chain at the point it&#39;s registered, and changing its shape would be a breaking change for whatever currently polls it.</li>
-<li><strong>Role checks are duplicated by design.</strong> <code>authorize([...])</code> runs here <em>and</em> the downstream service re-checks the same <code>X-User-Role</code> header — intentionally defense-in-depth (a downstream service should never trust a header purely because &quot;the gateway already checked&quot;), not an oversight.</li>
-<li><strong><code>refresh-access-token</code> never rotates the refresh token.</strong> A single 7-day refresh token can mint unlimited 15-minute access tokens for its whole lifetime — there&#39;s no refresh-token rotation or reuse detection.</li>
-<li><strong>OAuth callback error messages are <code>encodeURIComponent</code>-escaped before being appended to the redirect URL</strong> (see <a href="#102-oauth-login-google--linkedin--github">§10.2</a>) — without this, a downstream error message containing <code>&amp;</code>, <code>#</code>, or other reserved query-string characters could corrupt the redirect or inject unintended query parameters.</li>
-<li><strong><code>GET /</code> regenerates on <code>npm run build</code>, not <code>npm run dev</code>.</strong> <code>public/index.html</code> is generated from <code>README.md</code> by the <code>postbuild</code> script (<code>scripts/generate-html.mjs</code>). Editing this file while running <code>npm run dev</code> won&#39;t update <code>GET /</code> until a build actually runs.</li>
-<li><strong><code>src/reference/</code></strong> holds read-only copies of the other four services&#39; <code>README.md</code>/<code>docs/openapi.ts</code>, used purely as a cross-service reference while working in this repo — not part of the running application (not imported by any route/build step).</li>
-</ul>
-<hr>
-<h2>15. Build &amp; Run Commands</h2>
-<pre><code class="language-bash">npm install
+      <p>
+        This order matters: <code>http-proxy</code> streams the raw request body straight through to
+        <code>media-service</code> untouched (that&#39;s how a multipart file upload survives the
+        hop). If <code>express.json()</code>/<code>express.urlencoded()</code> ran first, they&#39;d
+        drain the request stream for any matching <code>Content-Type</code> before
+        <code>http-proxy</code> ever got to it, and the proxied request would arrive at
+        <code>media-service</code> with an empty/hanging body.
+        <code>authorize(USER_ROLES)</code> still runs first, since it only reads the
+        <code>access_token</code> cookie (already parsed by <code>cookieParser</code>) — it never
+        touches the body.
+      </p>
+      <p>
+        On a proxied request, <code>mediaProxy</code>&#39;s <code>proxyReq</code> handler attaches
+        <code>X-Service-Secret</code>/<code>X-User-Id</code>/<code>X-User-Role</code> from
+        <code>req.user</code> (set by <code>authorize</code>) before the request leaves this service
+        — <code>media-service</code> sees exactly the same trusted headers it would from any other
+        typed <code>ApiRequest</code> call, even though this path never goes through
+        <code>ApiRequest</code> at all. A downstream failure (<code>media-service</code>
+        unreachable, timeout) is caught by <code>mediaProxy</code>&#39;s own
+        <code>error</code> handler, which writes a <code>502</code> JSON body directly (bypassing
+        <code>errorResponse</code>, since a raw-proxied request never reaches this gateway&#39;s own
+        error-handling middleware).
+      </p>
+      <hr />
+      <h2>13. Server Lifecycle</h2>
+      <h3>Startup (<code>bootstrap/startup.ts</code>)</h3>
+      <ol>
+        <li>Start the HTTP server (<code>startHttpServer</code>).</li>
+      </ol>
+      <p>
+        That&#39;s the entire sequence — with no database, cache, or queue connection to establish
+        first, there&#39;s nothing else to sequence. Idempotent (<code>setStarted()</code> guards
+        re-entry). On any failure, logs and calls <code>process.exit(1)</code>.
+      </p>
+      <h3>
+        Graceful Shutdown (<code>bootstrap/shutdown.ts</code>,
+        <code>SIGINT</code>/<code>SIGTERM</code>)
+      </h3>
+      <ol>
+        <li>
+          Stop accepting new HTTP requests (<code>stopHttpServer</code>, existing requests finish
+          first).
+        </li>
+        <li>Destroy any remaining open sockets.</li>
+      </ol>
+      <p>
+        Idempotent (<code>setShuttingDown()</code> guards re-entry); logs success/failure and sets
+        <code>process.exitCode</code> accordingly before exiting.
+      </p>
+      <hr />
+      <h2>14. Design Notes / Known Trade-offs</h2>
+      <ul>
+        <li>
+          <strong>No CORS middleware.</strong>
+          <code>ORIGINS</code> (<code>constants/index.ts</code>) collects all four frontend URLs but
+          nothing in <code>app.ts</code> currently uses them in a <code>cors()</code> call —
+          cross-origin browser requests to this gateway will fail today unless something upstream (a
+          reverse proxy, CDN) handles CORS instead.
+        </li>
+        <li>
+          <strong><code>GET /wake-up</code> doesn&#39;t use <code>res.success</code>.</strong>
+          It&#39;s a plain <code>res.status().json()</code>, inconsistent with every other
+          route&#39;s envelope — kept as-is since it predates <code>successResponse</code> in the
+          middleware chain at the point it&#39;s registered, and changing its shape would be a
+          breaking change for whatever currently polls it.
+        </li>
+        <li>
+          <strong>Role checks are duplicated by design.</strong> <code>authorize([...])</code> runs
+          here <em>and</em> the downstream service re-checks the same
+          <code>X-User-Role</code> header — intentionally defense-in-depth (a downstream service
+          should never trust a header purely because &quot;the gateway already checked&quot;), not
+          an oversight.
+        </li>
+        <li>
+          <strong><code>refresh-access-token</code> never rotates the refresh token.</strong> A
+          single 7-day refresh token can mint unlimited 15-minute access tokens for its whole
+          lifetime — there&#39;s no refresh-token rotation or reuse detection.
+        </li>
+        <li>
+          <strong
+            >OAuth callback error messages are <code>encodeURIComponent</code>-escaped before being
+            appended to the redirect URL</strong
+          >
+          (see <a href="#102-oauth-login-google--linkedin--github">§10.2</a>) — without this, a
+          downstream error message containing <code>&amp;</code>, <code>#</code>, or other reserved
+          query-string characters could corrupt the redirect or inject unintended query parameters.
+        </li>
+        <li>
+          <strong
+            ><code>GET /</code> regenerates on <code>npm run build</code>, not
+            <code>npm run dev</code>.</strong
+          >
+          <code>public/index.html</code> is generated from <code>README.md</code> by the
+          <code>postbuild</code> script (<code>scripts/generate-html.mjs</code>). Editing this file
+          while running <code>npm run dev</code> won&#39;t update <code>GET /</code> until a build
+          actually runs.
+        </li>
+        <li>
+          <strong><code>src/reference/</code></strong> holds read-only copies of the other four
+          services&#39; <code>README.md</code>/<code>docs/openapi.ts</code>, used purely as a
+          cross-service reference while working in this repo — not part of the running application
+          (not imported by any route/build step).
+        </li>
+      </ul>
+      <hr />
+      <h2>15. Build &amp; Run Commands</h2>
+      <pre><code class="language-bash">npm install
 npm run dev            # tsc --noEmit --watch + nodemon (tsx) — development, auto-restarts on src changes
 npm run build           # tsc → dist/, then auto-regenerates public/index.html (see &quot;postbuild&quot; below)
 npm run start            # node dist/index.js — production (run build first)
@@ -766,110 +1262,199 @@ npm run lint              # eslint src
 npm run lint:fix
 npm run clean              # remove dist/
 </code></pre>
-<p><strong><code>postbuild</code></strong> (<code>node scripts/generate-html.mjs</code>) runs automatically after every <code>npm run build</code>, via npm&#39;s <code>pre*</code>/<code>post*</code> script convention — it re-renders <code>README.md</code> → <code>public/index.html</code> using <code>@beautinique/shared-markdown-to-html</code>, so <code>GET /</code> is always in sync with the latest <code>README.md</code> after a build.</p>
-<p><strong>Note:</strong> this only fires on <code>npm run build</code> (and anything that calls it, like <code>start:dev</code>) — <code>npm run dev</code> runs <code>tsx</code> directly and never touches <code>tsc</code>/<code>postbuild</code>, so editing <code>README.md</code> during <code>npm run dev</code> won&#39;t update <code>GET /</code> until you run <code>npm run build</code> (or <code>node scripts/generate-html.mjs</code> directly).</p>
-<h3>TypeScript strictness (<code>tsconfig.json</code>)</h3>
-<p>Beyond <code>strict: true</code>: <code>noUncheckedIndexedAccess</code> (indexed access is <code>T | undefined</code>, not <code>T</code>), <code>noEmitOnError</code> (a broken build produces no <code>dist/</code> output at all), <code>noUnusedLocals</code>/<code>noUnusedParameters</code>, <code>noImplicitReturns</code>, <code>noFallthroughCasesInSwitch</code>, <code>noUncheckedSideEffectImports</code>. <code>declaration</code>/<code>declarationMap</code> are deliberately <strong>off</strong> — this is an application, not a package anything imports.</p>
-<h3>ESLint (<code>eslint.config.mjs</code>)</h3>
-<p>Flat config: <code>@eslint/js</code> recommended → <code>typescript-eslint</code> recommended/strict/stylistic → type-checked variants (<code>recommendedTypeChecked</code>/<code>strictTypeChecked</code>/<code>stylisticTypeChecked</code> via <code>projectService</code>) → <code>simple-import-sort</code> → Prettier (last, disables conflicting stylistic rules).</p>
-<hr>
-<h2>16. Shared Packages (<code>@beautinique/*</code>)</h2>
-<table>
-<thead>
-<tr>
-<th>Package</th>
-<th>Purpose</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>@beautinique/backend-classes</code></td>
-<td><code>AppError</code> subclasses, <code>createError</code>, <code>ERROR_CLASS_MAP</code> — used both for this service&#39;s own errors and to translate downstream error bodies</td>
-</tr>
-<tr>
-<td><code>@beautinique/backend-logger</code></td>
-<td><code>createLogger</code>/<code>createHttpLogger</code> (Pino-based)</td>
-</tr>
-<tr>
-<td><code>@beautinique/backend-request</code></td>
-<td><code>checkEmptyRequest</code></td>
-</tr>
-<tr>
-<td><code>@beautinique/backend-response</code></td>
-<td><code>successResponse</code>/<code>errorResponse</code>/<code>notFoundResponse</code>/<code>tryCatchResponse</code></td>
-</tr>
-<tr>
-<td><code>@beautinique/backend-types</code></td>
-<td><code>TServiceName</code>, <code>TUserRole</code>, <code>TApiMethod</code>, and every Zod-inferred request-body type (<code>TLoginZodSchema</code>, <code>TRegisterZodSchema</code>, ...)</td>
-</tr>
-<tr>
-<td><code>@beautinique/backend-utils</code></td>
-<td><code>getUser</code></td>
-</tr>
-<tr>
-<td><code>@beautinique/backend-zod</code></td>
-<td><code>validateZod</code> and every request Zod schema this gateway validates against, ahead of <code>user-service</code></td>
-</tr>
-<tr>
-<td><code>@beautinique/shared-constants</code></td>
-<td><code>HEADERS_MAP</code>, <code>SERVICE_NAMES_MAP</code>, <code>API_METHODS_MAP</code>, <code>USER_ROLES</code>, <code>USER_ROLE_MAP</code></td>
-</tr>
-<tr>
-<td><code>@beautinique/shared-markdown-to-html</code></td>
-<td><code>generateHtmlFromMarkdown</code> — used by <code>scripts/generate-html.mjs</code></td>
-</tr>
-<tr>
-<td><code>@beautinique/shared-utils</code></td>
-<td><code>requireEnv</code>/<code>requirePort</code></td>
-</tr>
-</tbody></table>
-<p>This service has <strong>no <code>@beautinique/backend-mongoose</code>, <code>backend-bullmq</code>, <code>backend-multer</code>, or Redis client dependency</strong> — it is stateless by design, unlike every other service in this platform.</p>
-<hr>
-<h2>17. Error Handling</h2>
-<p>Every error — thrown locally (<code>AuthenticationError</code>, <code>AuthorizationError</code>, <code>BadRequestError</code>, ...) or translated from a downstream response by <code>ApiRequest</code> (see <a href="#7-request--response-handling">§7</a>) — is a <code>@beautinique/backend-classes</code> <code>AppError</code> subclass, and flows through the same <code>errorResponse</code> middleware (<code>@beautinique/backend-response</code>) mounted last in <code>app.ts</code>.</p>
-<table>
-<thead>
-<tr>
-<th>Code</th>
-<th>HTTP Equivalent</th>
-<th>When Used</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>AUTHENTICATION_ERROR</code></td>
-<td>401</td>
-<td>Missing/invalid/expired <code>access_token</code>/<code>refresh_token</code> cookie</td>
-</tr>
-<tr>
-<td><code>AUTHORIZATION_ERROR</code></td>
-<td>403</td>
-<td>Role not in the route&#39;s <code>allowedRoles</code></td>
-</tr>
-<tr>
-<td><code>BAD_REQUEST</code></td>
-<td>400</td>
-<td>Missing <code>code</code>/<code>Authorization</code> where a controller checks for it directly</td>
-</tr>
-<tr>
-<td><em>(anything else)</em></td>
-<td><em>(varies)</em></td>
-<td>Translated 1:1 from whatever code the downstream service returned</td>
-</tr>
-</tbody></table>
-<p><code>envs.is_dev</code> controls whether <code>errorResponse</code> includes a stack trace.</p>
-<hr>
-<h2>18. API Response Format</h2>
-<p>All responses use <code>@beautinique/backend-response</code>&#39;s envelope, attached via <code>app.use(successResponse({ defaultMessage: &#39;Success.&#39; }))</code> (mounted after the body parsers — see <a href="#12-media-upload-proxying">§12</a> for why the media-service proxy route sits ahead of it):</p>
-<pre><code class="language-jsonc">// success
+      <p>
+        <strong><code>postbuild</code></strong> (<code>node scripts/generate-html.mjs</code>) runs
+        automatically after every <code>npm run build</code>, via npm&#39;s <code>pre*</code>/<code
+          >post*</code
+        >
+        script convention — it re-renders <code>README.md</code> →
+        <code>public/index.html</code> using <code>@beautinique/shared-markdown-to-html</code>, so
+        <code>GET /</code> is always in sync with the latest <code>README.md</code> after a build.
+      </p>
+      <p>
+        <strong>Note:</strong> this only fires on <code>npm run build</code> (and anything that
+        calls it, like <code>start:dev</code>) — <code>npm run dev</code> runs
+        <code>tsx</code> directly and never touches <code>tsc</code>/<code>postbuild</code>, so
+        editing <code>README.md</code> during <code>npm run dev</code> won&#39;t update
+        <code>GET /</code> until you run <code>npm run build</code> (or
+        <code>node scripts/generate-html.mjs</code> directly).
+      </p>
+      <h3>TypeScript strictness (<code>tsconfig.json</code>)</h3>
+      <p>
+        Beyond <code>strict: true</code>: <code>noUncheckedIndexedAccess</code> (indexed access is
+        <code>T | undefined</code>, not <code>T</code>), <code>noEmitOnError</code> (a broken build
+        produces no <code>dist/</code> output at all),
+        <code>noUnusedLocals</code>/<code>noUnusedParameters</code>, <code>noImplicitReturns</code>,
+        <code>noFallthroughCasesInSwitch</code>, <code>noUncheckedSideEffectImports</code>.
+        <code>declaration</code>/<code>declarationMap</code> are deliberately <strong>off</strong> —
+        this is an application, not a package anything imports.
+      </p>
+      <h3>ESLint (<code>eslint.config.mjs</code>)</h3>
+      <p>
+        Flat config: <code>@eslint/js</code> recommended →
+        <code>typescript-eslint</code> recommended/strict/stylistic → type-checked variants
+        (<code>recommendedTypeChecked</code>/<code>strictTypeChecked</code>/<code
+          >stylisticTypeChecked</code
+        >
+        via <code>projectService</code>) → <code>simple-import-sort</code> → Prettier (last,
+        disables conflicting stylistic rules).
+      </p>
+      <hr />
+      <h2>16. Shared Packages (<code>@beautinique/*</code>)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Package</th>
+            <th>Purpose</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>@beautinique/backend-classes</code></td>
+            <td>
+              <code>AppError</code> subclasses, <code>createError</code>,
+              <code>ERROR_CLASS_MAP</code> — used both for this service&#39;s own errors and to
+              translate downstream error bodies
+            </td>
+          </tr>
+          <tr>
+            <td><code>@beautinique/backend-logger</code></td>
+            <td><code>createLogger</code>/<code>createHttpLogger</code> (Pino-based)</td>
+          </tr>
+          <tr>
+            <td><code>@beautinique/backend-request</code></td>
+            <td><code>checkEmptyRequest</code></td>
+          </tr>
+          <tr>
+            <td><code>@beautinique/backend-response</code></td>
+            <td>
+              <code>successResponse</code
+              >/<code>errorResponse</code>/<code>notFoundResponse</code>/<code
+                >tryCatchResponse</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td><code>@beautinique/backend-types</code></td>
+            <td>
+              <code>TServiceName</code>, <code>TUserRole</code>, <code>TApiMethod</code>, and every
+              Zod-inferred request-body type (<code>TLoginZodSchema</code>,
+              <code>TRegisterZodSchema</code>, ...)
+            </td>
+          </tr>
+          <tr>
+            <td><code>@beautinique/backend-utils</code></td>
+            <td><code>getUser</code></td>
+          </tr>
+          <tr>
+            <td><code>@beautinique/backend-zod</code></td>
+            <td>
+              <code>validateZod</code> and every request Zod schema this gateway validates against,
+              ahead of <code>user-service</code>
+            </td>
+          </tr>
+          <tr>
+            <td><code>@beautinique/shared-constants</code></td>
+            <td>
+              <code>HEADERS_MAP</code>, <code>SERVICE_NAMES_MAP</code>,
+              <code>API_METHODS_MAP</code>, <code>USER_ROLES</code>, <code>USER_ROLE_MAP</code>
+            </td>
+          </tr>
+          <tr>
+            <td><code>@beautinique/shared-markdown-to-html</code></td>
+            <td>
+              <code>generateHtmlFromMarkdown</code> — used by <code>scripts/generate-html.mjs</code>
+            </td>
+          </tr>
+          <tr>
+            <td><code>@beautinique/shared-utils</code></td>
+            <td><code>requireEnv</code>/<code>requirePort</code></td>
+          </tr>
+        </tbody>
+      </table>
+      <p>
+        This service has
+        <strong
+          >no <code>@beautinique/backend-mongoose</code>, <code>backend-bullmq</code>,
+          <code>backend-multer</code>, or Redis client dependency</strong
+        >
+        — it is stateless by design, unlike every other service in this platform.
+      </p>
+      <hr />
+      <h2>17. Error Handling</h2>
+      <p>
+        Every error — thrown locally (<code>AuthenticationError</code>,
+        <code>AuthorizationError</code>, <code>BadRequestError</code>, ...) or translated from a
+        downstream response by <code>ApiRequest</code> (see
+        <a href="#7-request--response-handling">§7</a>) — is a
+        <code>@beautinique/backend-classes</code> <code>AppError</code> subclass, and flows through
+        the same <code>errorResponse</code> middleware (<code>@beautinique/backend-response</code>)
+        mounted last in <code>app.ts</code>.
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th>HTTP Equivalent</th>
+            <th>When Used</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>AUTHENTICATION_ERROR</code></td>
+            <td>401</td>
+            <td>
+              Missing/invalid/expired <code>access_token</code>/<code>refresh_token</code> cookie
+            </td>
+          </tr>
+          <tr>
+            <td><code>AUTHORIZATION_ERROR</code></td>
+            <td>403</td>
+            <td>Role not in the route&#39;s <code>allowedRoles</code></td>
+          </tr>
+          <tr>
+            <td><code>BAD_REQUEST</code></td>
+            <td>400</td>
+            <td>
+              Missing <code>code</code>/<code>Authorization</code> where a controller checks for it
+              directly
+            </td>
+          </tr>
+          <tr>
+            <td><em>(anything else)</em></td>
+            <td><em>(varies)</em></td>
+            <td>Translated 1:1 from whatever code the downstream service returned</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>
+        <code>envs.is_dev</code> controls whether <code>errorResponse</code> includes a stack trace.
+      </p>
+      <hr />
+      <h2>18. API Response Format</h2>
+      <p>
+        All responses use <code>@beautinique/backend-response</code>&#39;s envelope, attached via
+        <code>app.use(successResponse({ defaultMessage: &#39;Success.&#39; }))</code> (mounted after
+        the body parsers — see <a href="#12-media-upload-proxying">§12</a> for why the media-service
+        proxy route sits ahead of it):
+      </p>
+      <pre><code class="language-jsonc">// success
 { &quot;success&quot;: true, &quot;message&quot;: &quot;User logged in successfully&quot;, &quot;data&quot;: { &quot;_id&quot;: &quot;...&quot;, &quot;firstName&quot;: &quot;...&quot;, &quot;...&quot;: &quot;...&quot; } }
 
 // error
 { &quot;success&quot;: false, &quot;code&quot;: &quot;VALIDATION_ERROR&quot;, &quot;message&quot;: &quot;...&quot;, &quot;fieldErrors&quot;: { ... }, &quot;globalErrors&quot;: [ ... ] }
 </code></pre>
-<p><code>res.success({ statusCode, message, data })</code> — <code>data</code> is omitted entirely (not sent as <code>null</code>) when not provided; <code>statusCode</code> defaults to <code>200</code>. For proxied/forwarded calls, the Gateway controller typically passes the <em>entire</em> downstream response straight into <code>res.success(response)</code>, since it&#39;s already shaped <code>{ statusCode, message, data }</code>.</p>
-<hr>
-<h2>19. Data Flow Examples</h2>
-<h3>Manual Login</h3>
-<pre><code>Client → POST /auth/login/manual { loginMethod, email/phoneNumber, password } [X-Login-Role?]
+      <p>
+        <code>res.success({ statusCode, message, data })</code> — <code>data</code> is omitted
+        entirely (not sent as <code>null</code>) when not provided; <code>statusCode</code> defaults
+        to <code>200</code>. For proxied/forwarded calls, the Gateway controller typically passes
+        the <em>entire</em> downstream response straight into <code>res.success(response)</code>,
+        since it&#39;s already shaped <code>{ statusCode, message, data }</code>.
+      </p>
+      <hr />
+      <h2>19. Data Flow Examples</h2>
+      <h3>Manual Login</h3>
+      <pre><code>Client → POST /auth/login/manual { loginMethod, email/phoneNumber, password } [X-Login-Role?]
   Gateway → validateZod(loginZodSchema)
   Gateway → AuthService.manualLogin() → user-service POST /api/v1/auth/login/manual
     [X-Service-Secret, X-Login-Role?]
@@ -877,16 +1462,16 @@ npm run clean              # remove dist/
   Gateway → generateAuthTokens({_id, role}) → setAuthCookies(access_token, refresh_token)
   ← res.success({ message, data: user })  [Set-Cookie: access_token, refresh_token]
 </code></pre>
-<h3>Media Upload (Single)</h3>
-<pre><code>Client → POST /api/v1/media-service/upload/single [Cookie: access_token, multipart file+folder]
+      <h3>Media Upload (Single)</h3>
+      <pre><code>Client → POST /api/v1/media-service/upload/single [Cookie: access_token, multipart file+folder]
   Gateway → authorize(USER_ROLES): verify access_token → req.user
   Gateway → mediaServiceProxy: http-proxy streams the raw request through, unbuffered
     proxyReq: attaches X-Service-Secret, X-User-Id, X-User-Role from req.user
   → media-service POST /api/v1/upload/single (uploads to Cloudinary, enqueues BullMQ cleanup jobs)
   ← media-service response streamed straight back to the client, untouched by this gateway
 </code></pre>
-<h3>Product Draft Publish</h3>
-<pre><code>Client → PATCH /api/v1/product-service/product/draft/publish [Cookie: access_token]
+      <h3>Product Draft Publish</h3>
+      <pre><code>Client → PATCH /api/v1/product-service/product/draft/publish [Cookie: access_token]
   Gateway → authorize([&#39;ADMIN&#39;,&#39;SELLER&#39;,&#39;MASTER&#39;]): verify access_token → req.user
   Gateway → ProductService.publishDraftProduct(user) → product-service PATCH /api/v1/product/draft/publish
     [X-Service-Secret, X-User-Id, X-User-Role]
@@ -894,12 +1479,12 @@ npm run clean              # remove dist/
   ← returns { statusCode: 201, message: &#39;Product sent for review&#39;, data: product }
   Gateway ← res.success(response)
 </code></pre>
-<h3>Token Refresh</h3>
-<pre><code>Client → POST /api/v1/refresh-access-token [Cookie: refresh_token]
+      <h3>Token Refresh</h3>
+      <pre><code>Client → POST /api/v1/refresh-access-token [Cookie: refresh_token]
   Gateway → verifyRefreshToken(refresh_token) → { _id, role }
   Gateway → generateAccessToken({_id, role}) → res.cookie(&#39;access_token&#39;, ...)
   ← res.success({ message: &#39;Access token refreshed&#39; })  [Set-Cookie: access_token]
 </code></pre>
-</main>
+    </main>
   </body>
 </html>
