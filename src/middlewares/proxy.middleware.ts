@@ -5,11 +5,11 @@ import type { Request, Response } from 'express';
 import proxy from 'http-proxy';
 
 import { logger } from '../configs/index.js';
-import { SERVICE_SECRET_MAP, SERVICES_BASE_URLS } from '../constants/index.js';
+import { METHODS_AND_PATHS, SERVICE_SECRET_MAP, SERVICES_BASE_URLS } from '../constants/index.js';
 import { getAuthUser } from '../utils/index.js';
 
 const mediaProxy = proxy.createProxyServer<Request, Response>({
-  target: `${SERVICES_BASE_URLS['media-service']}/api/v1`,
+  target: `${SERVICES_BASE_URLS['media-service']}${METHODS_AND_PATHS.base}`,
   changeOrigin: true,
   xfwd: true,
   proxyTimeout: 30000,
