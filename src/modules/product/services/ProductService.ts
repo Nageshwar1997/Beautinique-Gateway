@@ -1,6 +1,6 @@
-import { BaseProductService } from '../../../classes';
-import { API_METHODS_AND_URLS } from '../../../constants';
-import type { IUser, TUser } from '../../../types';
+import { BaseProductService } from '../../../classes/index.js';
+import { API_METHODS_AND_URLS } from '../../../constants/index.js';
+import type { IUser, TUser } from '../../../types/index.js';
 
 class ProductService extends BaseProductService {
   private readonly routes = API_METHODS_AND_URLS.product_service.product;

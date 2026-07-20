@@ -1,9 +1,8 @@
-import type { TRole, TService } from '@beautinique/be-constants';
-import type { METHOD_MAP } from '../constants';
+import type { TApiMethod, TServiceName, TUserRole } from '@beautinique/backend-types';
 
 export interface IJwtPayload {
   _id: string;
-  role: TRole;
+  role: TUserRole;
 }
 
 export type TUser = IJwtPayload;
@@ -12,13 +11,11 @@ export interface IUser {
   user: IJwtPayload;
 }
 
-export type TApiMethod = (typeof METHOD_MAP)[keyof typeof METHOD_MAP];
-
 export type TRouteNode = Record<string, unknown> & { base?: string };
 
 export interface IEndpoint {
   path: string;
-  method: TApiMethod;
+  method: Lowercase<TApiMethod>;
 }
 
 export type TParams = Record<string, string | number>;
@@ -61,9 +58,16 @@ export type TGenerateRoutes<
 };
 
 export interface ICreateHeaders {
-  user?: Partial<TUser>;
+  user?: TUser;
   token?: string;
-  loginRole?: TRole;
+  loginRole?: TUserRole;
   contentType?: string;
-  serviceSecret?: TService;
+  serviceSecret?: TServiceName;
+}
+
+export interface TApiResponse<T = unknown> {
+  statusCode: number;
+  message: string;
+  data?: T;
+  [key: string]: unknown;
 }

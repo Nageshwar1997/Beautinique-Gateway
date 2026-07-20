@@ -1,10 +1,10 @@
+import { tryCatchResponse } from '@beautinique/backend-response';
 import { Router } from 'express';
 
-import { tryCatchResponse } from '@beautinique/be-middlewares';
-import { METHODS_AND_PATHS } from '../constants';
-import { refreshAccessTokenController } from '../controllers';
-import { productServiceRouter } from '../modules/product/routes';
-import { userServiceRouter } from '../modules/user';
+import { METHODS_AND_PATHS } from '../constants/index.js';
+import { refreshAccessTokenController } from '../controllers/index.js';
+import { productServiceRouter } from '../modules/product/index.js';
+import { userServiceRouter } from '../modules/user/index.js';
 
 export const router = Router();
 

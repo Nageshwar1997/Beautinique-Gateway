@@ -1,7 +1,11 @@
-import { checkEmptyRequest, tryCatchResponse } from '@beautinique/be-middlewares';
+import { checkEmptyRequest } from '@beautinique/backend-request';
+import { tryCatchResponse } from '@beautinique/backend-response';
+import { draftProductStepBodyZodSchema, validateZod } from '@beautinique/backend-zod';
+import { USER_ROLE_MAP } from '@beautinique/shared-constants';
 import { Router } from 'express';
-import { METHODS_AND_PATHS } from '../../../constants';
-import { authorize } from '../../../middlewares';
+
+import { METHODS_AND_PATHS } from '../../../constants/index.js';
+import { authorize } from '../../../middlewares/index.js';
 import {
   getDashboardProductBySlugController,
   getDashboardProductsController,
@@ -10,7 +14,7 @@ import {
   getProductsSuggestionsController,
   publishDraftProductController,
   saveDraftProductController,
-} from '../controllers/product.controller';
+} from '../controllers/product.controller.js';
 
 export const productRouter = Router();
 const draftRouter = Router();
@@ -22,6 +26,7 @@ const { draft, get } = METHODS_AND_PATHS.product_service.product;
 draftRouter[draft.save.method](
   draft.save.path,
   checkEmptyRequest({ body: true }),
+  validateZod({ body: draftProductStepBodyZodSchema }),
   tryCatchResponse(saveDraftProductController),
 );
 
@@ -46,12 +51,20 @@ dashboardRouter[get.dashboard.bySlug.method](
 
 /* ================== PRODUCTS ROUTES ================ */
 
-productRouter.use(draft.base, authorize(['ADMIN', 'SELLER', 'MASTER']), draftRouter);
-productRouter.use(get.dashboard.base, authorize(['ADMIN', 'SELLER', 'MASTER']), dashboardRouter);
+productRouter.use(
+  draft.base,
+  authorize([USER_ROLE_MAP.ADMIN, USER_ROLE_MAP.MASTER, USER_ROLE_MAP.SELLER]),
+  draftRouter,
+);
+productRouter.use(
+  get.dashboard.base,
+  authorize([USER_ROLE_MAP.ADMIN, USER_ROLE_MAP.MASTER, USER_ROLE_MAP.SELLER]),
+  dashboardRouter,
+);
 
 productRouter[get.bySlug.method](get.bySlug.path, tryCatchResponse(getProductBySlugController));
 
-productRouter[get.products.method](
-  get.products.path,
+productRouter[get.suggestions.method](
+  get.suggestions.path,
   tryCatchResponse(getProductsSuggestionsController),
 );

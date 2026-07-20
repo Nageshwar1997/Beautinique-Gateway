@@ -1,3 +1,2 @@
-export * from './auth.middleware';
-export * from './logger.middleware';
-export * from './proxy.middleware';
+export * from './auth.middleware.js';
+export * from './proxy.middleware.js';
