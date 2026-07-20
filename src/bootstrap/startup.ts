@@ -11,9 +11,7 @@ import { resetShuttingDown, resetStarted, setStarted, startHttpServer } from './
  * Safe to call multiple times.
  *
  * Startup order:
- * 1. Register MongoDB event listeners.
- * 2. Connect MongoDB and Redis in parallel.
- * 3. Start the HTTP server.
+ * 1. Start the HTTP server.
  */
 export const startup = async (): Promise<void> => {
   if (!setStarted()) {
@@ -26,7 +24,7 @@ export const startup = async (): Promise<void> => {
     logger.info('✅ Gateway initialized');
 
     resetShuttingDown();
-  } catch (error: unknown) {
+  } catch (error) {
     resetStarted();
 
     resetShuttingDown();

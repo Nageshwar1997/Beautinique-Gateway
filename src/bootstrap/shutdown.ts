@@ -18,11 +18,8 @@ import {
  *
  * Shutdown order:
  * 1. Stop accepting HTTP requests.
- * 2. Stop BullMQ workers.
- * 3. Close BullMQ connection.
- * 4. Disconnect MongoDB.
- * 5. Destroy any remaining sockets.
- * 6. Exit process.
+ * 2. Destroy any remaining sockets.
+ * 3. Exit process.
  */
 export const shutdown = async (signal: NodeJS.Signals): Promise<void> => {
   if (!setShuttingDown()) {
