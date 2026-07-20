@@ -1,49 +1,49 @@
 import { AuthenticationError } from '@beautinique/backend-classes';
+import axios from 'axios';
 import type { Request, Response } from 'express';
 
 import { COOKIES_DATA } from '../constants/index.js';
 import { envs } from '../envs/index.js';
+import type { TApiResponse } from '../types/index.js';
 import { generateAccessToken, verifyRefreshToken } from '../utils/index.js';
 
 export const wakeUpController = async (_req: Request, res: Response) => {
   try {
     const services = envs.url.service;
 
-    const results = await Promise.allSettled(
+    const results = await Promise.all(
       Object.entries(services).map(async ([name, url]) => {
         try {
-          const response = await fetch(`${url}/health`);
-          return { service: name, status: response.ok ? 'UP' : 'DOWN' };
-        } catch {
-          return { service: name, status: 'DOWN' };
+          const { data } = await axios.get<TApiResponse>(`${url}/health`);
+          return { service: name, status: 'UP', response: data };
+        } catch (error) {
+          return {
+            service: name,
+            status: 'DOWN',
+            response: axios.isAxiosError<TApiResponse>(error)
+              ? (error.response?.data ?? null)
+              : null,
+          };
         }
       }),
     );
 
-    const formatted = results.map((r) =>
-      r.status === 'fulfilled' ? r.value : { service: 'unknown', status: 'DOWN' },
-    );
+    const allUp = results.every((service) => service.status === 'UP');
+    const allDown = results.every((service) => service.status === 'DOWN');
 
-    const allUp = formatted.every((s) => s.status === 'UP');
-    const anyDown = formatted.some((s) => s.status === 'DOWN');
-
-    let overallStatus = 'UP';
-
-    if (!allUp && anyDown) {
-      overallStatus = 'DEGRADED';
-    }
+    const overallStatus = allUp ? 'UP' : allDown ? 'DOWN' : 'DEGRADED';
 
     res.status(200).json({
       status: overallStatus,
       gateway: 'UP',
-      services: formatted,
+      services: results,
     });
   } catch (err) {
     res.status(500).json({
       status: 'DOWN',
       gateway: 'DOWN',
       services: [],
-      error: (err as Error).message || 'Something went wrong!',
+      error: err instanceof Error ? err.message : 'Something went wrong!',
     });
   }
 };
