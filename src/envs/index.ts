@@ -19,9 +19,6 @@ const {
 
   // H
   // I
-
-  IS_DEV,
-
   // J
 
   JWT_ACCESS_SECRET,
@@ -40,6 +37,9 @@ const {
   MEDIA_SERVICE_SECRET,
 
   // N
+
+  NODE_ENV,
+
   // O
   // P
 
@@ -69,8 +69,6 @@ const {
   // Z
 } = process.env as Record<string, string>;
 
-const is_dev = IS_DEV === 'true';
-
 export const envs = {
   // A
   // B
@@ -82,7 +80,7 @@ export const envs = {
   // H
   // I
 
-  is_dev,
+  is_dev: NODE_ENV === 'development',
 
   // J
 

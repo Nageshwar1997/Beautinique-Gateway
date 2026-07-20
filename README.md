@@ -16,23 +16,23 @@ The Gateway is the single public entry point for the **Beautinique** platform's 
 
 ## 2. Technology Stack
 
-| Layer                     | Technology                                                             |
-| -------------------------- | ------------------------------------------------------------------------ |
-| Runtime                    | Node.js (ES2025, ESM)                                                    |
-| Language                   | TypeScript 6.x (`strict`, `noUncheckedIndexedAccess`, `noEmitOnError`)  |
-| Framework                  | Express.js 5.x                                                          |
-| Outbound HTTP (typed)      | Axios (`classes/ApiRequest.ts`), one instance per downstream service     |
-| Outbound HTTP (raw stream) | `http-proxy` — used only for `media-service` (file uploads)              |
-| Session                    | `jsonwebtoken` (access/refresh JWTs) + `cookie-parser` — **no database or Redis anywhere in this service** |
+| Layer                      | Technology                                                                                                                                                   |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Runtime                    | Node.js (ES2025, ESM)                                                                                                                                        |
+| Language                   | TypeScript 6.x (`strict`, `noUncheckedIndexedAccess`, `noEmitOnError`)                                                                                       |
+| Framework                  | Express.js 5.x                                                                                                                                               |
+| Outbound HTTP (typed)      | Axios (`classes/ApiRequest.ts`), one instance per downstream service                                                                                         |
+| Outbound HTTP (raw stream) | `http-proxy` — used only for `media-service` (file uploads)                                                                                                  |
+| Session                    | `jsonwebtoken` (access/refresh JWTs) + `cookie-parser` — **no database or Redis anywhere in this service**                                                   |
 | API docs                   | OpenAPI 3.0.3 spec (hand-written, `src/docs/openapi.ts`) + `swagger-ui-express`, tags grouped per downstream service — see [§5.6](#56-interactive-docs-docs) |
-| README rendering           | `@beautinique/shared-markdown-to-html` (markdown → HTML)                 |
-| Shared error/response      | `@beautinique/backend-classes`, `@beautinique/backend-response`          |
-| Shared request middleware  | `@beautinique/backend-request` (`checkEmptyRequest`)                     |
-| Shared validation          | `@beautinique/backend-zod` (schemas + `validateZod`, same package `user-service` uses) |
-| Shared utilities           | `@beautinique/backend-utils`, `@beautinique/shared-utils`                |
-| Shared constants/types     | `@beautinique/shared-constants`, `@beautinique/backend-types`            |
-| Logging                    | Pino, via `@beautinique/backend-logger`                                  |
-| Code quality                | ESLint (flat config, type-checked + strict), Prettier                    |
+| README rendering           | `@beautinique/shared-markdown-to-html` (markdown → HTML)                                                                                                     |
+| Shared error/response      | `@beautinique/backend-classes`, `@beautinique/backend-response`                                                                                              |
+| Shared request middleware  | `@beautinique/backend-request` (`checkEmptyRequest`)                                                                                                         |
+| Shared validation          | `@beautinique/backend-zod` (schemas + `validateZod`, same package `user-service` uses)                                                                       |
+| Shared utilities           | `@beautinique/backend-utils`, `@beautinique/shared-utils`                                                                                                    |
+| Shared constants/types     | `@beautinique/shared-constants`, `@beautinique/backend-types`                                                                                                |
+| Logging                    | Pino, via `@beautinique/backend-logger`                                                                                                                      |
+| Code quality               | ESLint (flat config, type-checked + strict), Prettier                                                                                                        |
 
 ---
 
@@ -103,47 +103,47 @@ All environment variables are loaded via `dotenv` and validated in `src/envs/ind
 
 ### 4.1 Server & App
 
-| Variable   | Description                                                          |
-| ------------ | ------------------------------------------------------------------------ |
-| `PORT`      | HTTP port to listen on                                                  |
-| `IS_DEV`    | `"true"` enables pretty logging and stack traces in error responses; also relaxes cookie options (see [§8](#8-authentication--cookies)) |
+| Variable   | Description                                                                                                                                    |
+| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `PORT`     | HTTP port to listen on                                                                                                                         |
+| `NODE_ENV` | `"development"` enables pretty logging and stack traces in error responses; also relaxes cookie options (see [§8](#8-authentication--cookies)) |
 
 ### 4.2 JWT
 
-| Variable              | Description                                    |
-| ----------------------- | ------------------------------------------------- |
-| `JWT_ACCESS_SECRET`    | Signing secret for the 15-minute access token     |
-| `JWT_REFRESH_SECRET`   | Signing secret for the 7-day refresh token        |
+| Variable             | Description                                   |
+| -------------------- | --------------------------------------------- |
+| `JWT_ACCESS_SECRET`  | Signing secret for the 15-minute access token |
+| `JWT_REFRESH_SECRET` | Signing secret for the 7-day refresh token    |
 
 ### 4.3 Downstream Service URLs & Secrets
 
-| Variable                    | Description                                                        |
-| ------------------------------ | ------------------------------------------------------------------------ |
-| `USER_SERVICE_BASE_URL`       | Base URL of `user-service`                                              |
-| `USER_SERVICE_SECRET`         | Value sent as `X-Service-Secret` on every request to `user-service`     |
-| `PRODUCT_SERVICE_BASE_URL`    | Base URL of `product-service`                                            |
-| `PRODUCT_SERVICE_SECRET`      | Value sent as `X-Service-Secret` on every request to `product-service`  |
-| `MEDIA_SERVICE_BASE_URL`      | Base URL of `media-service`                                              |
-| `MEDIA_SERVICE_SECRET`        | Value sent as `X-Service-Secret` on every proxied media-service request |
-| `MAIL_SERVICE_BASE_URL`       | Base URL of `mail-service`                                              |
-| `MAIL_SERVICE_SECRET`         | Reserved — nothing in this gateway currently calls `mail-service` directly (OTP email is enqueued by `user-service` onto `mail-queue`, not routed through here) |
+| Variable                   | Description                                                                                                                                                     |
+| -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `USER_SERVICE_BASE_URL`    | Base URL of `user-service`                                                                                                                                      |
+| `USER_SERVICE_SECRET`      | Value sent as `X-Service-Secret` on every request to `user-service`                                                                                             |
+| `PRODUCT_SERVICE_BASE_URL` | Base URL of `product-service`                                                                                                                                   |
+| `PRODUCT_SERVICE_SECRET`   | Value sent as `X-Service-Secret` on every request to `product-service`                                                                                          |
+| `MEDIA_SERVICE_BASE_URL`   | Base URL of `media-service`                                                                                                                                     |
+| `MEDIA_SERVICE_SECRET`     | Value sent as `X-Service-Secret` on every proxied media-service request                                                                                         |
+| `MAIL_SERVICE_BASE_URL`    | Base URL of `mail-service`                                                                                                                                      |
+| `MAIL_SERVICE_SECRET`      | Reserved — nothing in this gateway currently calls `mail-service` directly (OTP email is enqueued by `user-service` onto `mail-queue`, not routed through here) |
 
 ### 4.4 Frontend Origins
 
-| Variable            | Description                                                                    |
-| --------------------- | ------------------------------------------------------------------------------------ |
-| `CLIENT_BASE_URL`     | Customer-facing frontend origin — also the base for the OAuth redirect landing page (`{CLIENT_BASE_URL}/auth/oauth`, see [§10.2](#102-oauth-login-google--linkedin--github)) |
-| `ADMIN_BASE_URL`      | Admin dashboard origin                                                                |
-| `SELLER_BASE_URL`     | Seller dashboard origin                                                              |
-| `MASTER_BASE_URL`     | Master/super-admin dashboard origin                                                  |
+| Variable          | Description                                                                                                                                                                  |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CLIENT_BASE_URL` | Customer-facing frontend origin — also the base for the OAuth redirect landing page (`{CLIENT_BASE_URL}/auth/oauth`, see [§10.2](#102-oauth-login-google--linkedin--github)) |
+| `ADMIN_BASE_URL`  | Admin dashboard origin                                                                                                                                                       |
+| `SELLER_BASE_URL` | Seller dashboard origin                                                                                                                                                      |
+| `MASTER_BASE_URL` | Master/super-admin dashboard origin                                                                                                                                          |
 
 `ORIGINS` (`constants/index.ts`) collects all four into a single array — declared for CORS configuration, but **no CORS middleware is currently wired up in `app.ts`** (see [§14](#14-design-notes--known-trade-offs)).
 
 ### 4.5 Gateway's Own URL
 
-| Variable            | Description                                                                                    |
-| --------------------- | ---------------------------------------------------------------------------------------------------- |
-| `GATEWAY_BASE_URL`    | This service's own public URL — loaded into `envs.url.gateway` but not currently read anywhere else in the codebase (kept for parity with the other services' env shape / future use) |
+| Variable           | Description                                                                                                                                                                           |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GATEWAY_BASE_URL` | This service's own public URL — loaded into `envs.url.gateway` but not currently read anywhere else in the codebase (kept for parity with the other services' env shape / future use) |
 
 ---
 
@@ -153,27 +153,27 @@ Every route below either terminates in this service (home/docs/health/wake-up/re
 
 ### 5.1 Home, Docs, Health & Wake-up
 
-| Method | Path        | Auth | Description                                                       |
-| -------- | ------------- | ------ | ----------------------------------------------------------------------- |
-| GET     | `/`          | None  | This README, pre-rendered to HTML by `scripts/generate-html.mjs`       |
-| GET     | `/docs`      | None  | Interactive Swagger UI (spec in `src/docs/openapi.ts`)                 |
-| GET     | `/health`    | None  | Liveness only — this service has no DB/Redis to report on              |
-| GET     | `/wake-up`   | None  | Pings `{service}/health` on all four downstream services in parallel; returns `UP`/`DEGRADED` based on the results (see [§11](#11-wake-up--downstream-health-aggregation)) |
+| Method | Path       | Auth | Description                                                                                                                                                                |
+| ------ | ---------- | ---- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET    | `/`        | None | This README, pre-rendered to HTML by `scripts/generate-html.mjs`                                                                                                           |
+| GET    | `/docs`    | None | Interactive Swagger UI (spec in `src/docs/openapi.ts`)                                                                                                                     |
+| GET    | `/health`  | None | Liveness only — this service has no DB/Redis to report on                                                                                                                  |
+| GET    | `/wake-up` | None | Pings `{service}/health` on all four downstream services in parallel; returns `UP`/`DEGRADED` based on the results (see [§11](#11-wake-up--downstream-health-aggregation)) |
 
 ### 5.2 Gateway's Own — `/api/v1`
 
-| Method | Path                          | Auth | Description                                                          |
-| -------- | -------------------------------- | ------ | -------------------------------------------------------------------------- |
-| POST    | `/api/v1/refresh-access-token`  | Refresh token cookie | Reads `refresh_token`, issues a new `access_token` cookie      |
+| Method | Path                           | Auth                 | Description                                               |
+| ------ | ------------------------------ | -------------------- | --------------------------------------------------------- |
+| POST   | `/api/v1/refresh-access-token` | Refresh token cookie | Reads `refresh_token`, issues a new `access_token` cookie |
 
 ### 5.3 Media — `/api/v1/media-service/**` (raw proxy, any authenticated role)
 
 Everything under this prefix is streamed 1:1 to `media-service` by `mediaServiceProxy` (`http-proxy`) — the Gateway does not parse, validate, or even buffer the request body for these routes (see [§12](#12-media-upload-proxying)). In practice this means:
 
-| Method | Path                                      | Description                          |
-| -------- | -------------------------------------------- | ------------------------------------------ |
-| POST    | `/api/v1/media-service/upload/single`       | Upload one image or video                 |
-| POST    | `/api/v1/media-service/upload/multiple`     | Upload several images/videos at once      |
+| Method | Path                                    | Description                          |
+| ------ | --------------------------------------- | ------------------------------------ |
+| POST   | `/api/v1/media-service/upload/single`   | Upload one image or video            |
+| POST   | `/api/v1/media-service/upload/multiple` | Upload several images/videos at once |
 
 Both take a `file`/`files` field plus a `folder` field in the multipart body. File-size limits (`MAX_IMAGE_SIZE`/`MAX_VIDEO_SIZE` from `@beautinique/shared-constants`, formatted via `formatFileSize`) are documented in `src/docs/openapi.ts` for reference, but **enforced only on `media-service` itself** — this gateway never inspects the file, so an oversized upload is rejected downstream (`413`), not here.
 
@@ -181,46 +181,46 @@ See `media-service`'s own README (`src/reference/media-service/README.md` in thi
 
 ### 5.4 User — `/api/v1/user-service/*`
 
-| Method | Path                                      | Auth                    | Description                             |
-| -------- | -------------------------------------------- | -------------------------- | -------------------------------------------- |
-| POST    | `/auth/login/manual`                        | None                       | Manual email/phone + password login          |
-| GET     | `/auth/login/oauth/google/redirect`         | None                       | Get Google OAuth consent URL                 |
-| GET     | `/auth/login/oauth/google/callback`         | None                       | Google OAuth callback                        |
-| GET     | `/auth/login/oauth/linkedin/redirect`       | None                       | Get LinkedIn OAuth consent URL               |
-| GET     | `/auth/login/oauth/linkedin/callback`       | None                       | LinkedIn OAuth callback                      |
-| GET     | `/auth/login/oauth/github/redirect`         | None                       | Get GitHub OAuth consent URL                 |
-| GET     | `/auth/login/oauth/github/callback`         | None                       | GitHub OAuth callback                        |
-| DELETE  | `/auth/logout`                              | `access_token` cookie      | Clear the caller's session                   |
-| POST    | `/auth/register/send-otp`                   | None                       | Start registration: OTP to email              |
-| PATCH   | `/auth/register/resend-otp`                 | OTP session token          | Resend the registration OTP                  |
-| POST    | `/auth/register/verify-otp`                 | OTP session token          | Verify the registration OTP                  |
-| POST    | `/auth/register/save-user`                  | OTP session token          | Complete registration — sets auth cookies    |
-| POST    | `/auth/password/forgot-send-otp`            | None                       | Start forgot-password: OTP to email          |
-| PATCH   | `/auth/password/forgot-resend-otp`          | OTP session token          | Resend the forgot-password OTP               |
-| POST    | `/auth/password/forgot-verify-otp`          | OTP session token          | Verify the forgot-password OTP               |
-| POST    | `/auth/password/forgot-save`                | OTP session token          | Set a new password — sets auth cookies       |
-| PATCH   | `/auth/password/change`                     | `access_token` cookie      | Change password while logged in — re-issues auth cookies |
-| PATCH   | `/auth/password/set`                        | `access_token` cookie      | Set an initial password for an OAuth-only account — re-issues auth cookies |
-| GET     | `/user/session`                             | `access_token` cookie      | Fetch the caller's own user record            |
+| Method | Path                                  | Auth                  | Description                                                                |
+| ------ | ------------------------------------- | --------------------- | -------------------------------------------------------------------------- |
+| POST   | `/auth/login/manual`                  | None                  | Manual email/phone + password login                                        |
+| GET    | `/auth/login/oauth/google/redirect`   | None                  | Get Google OAuth consent URL                                               |
+| GET    | `/auth/login/oauth/google/callback`   | None                  | Google OAuth callback                                                      |
+| GET    | `/auth/login/oauth/linkedin/redirect` | None                  | Get LinkedIn OAuth consent URL                                             |
+| GET    | `/auth/login/oauth/linkedin/callback` | None                  | LinkedIn OAuth callback                                                    |
+| GET    | `/auth/login/oauth/github/redirect`   | None                  | Get GitHub OAuth consent URL                                               |
+| GET    | `/auth/login/oauth/github/callback`   | None                  | GitHub OAuth callback                                                      |
+| DELETE | `/auth/logout`                        | `access_token` cookie | Clear the caller's session                                                 |
+| POST   | `/auth/register/send-otp`             | None                  | Start registration: OTP to email                                           |
+| PATCH  | `/auth/register/resend-otp`           | OTP session token     | Resend the registration OTP                                                |
+| POST   | `/auth/register/verify-otp`           | OTP session token     | Verify the registration OTP                                                |
+| POST   | `/auth/register/save-user`            | OTP session token     | Complete registration — sets auth cookies                                  |
+| POST   | `/auth/password/forgot-send-otp`      | None                  | Start forgot-password: OTP to email                                        |
+| PATCH  | `/auth/password/forgot-resend-otp`    | OTP session token     | Resend the forgot-password OTP                                             |
+| POST   | `/auth/password/forgot-verify-otp`    | OTP session token     | Verify the forgot-password OTP                                             |
+| POST   | `/auth/password/forgot-save`          | OTP session token     | Set a new password — sets auth cookies                                     |
+| PATCH  | `/auth/password/change`               | `access_token` cookie | Change password while logged in — re-issues auth cookies                   |
+| PATCH  | `/auth/password/set`                  | `access_token` cookie | Set an initial password for an OAuth-only account — re-issues auth cookies |
+| GET    | `/user/session`                       | `access_token` cookie | Fetch the caller's own user record                                         |
 
 "OTP session token" means the client sends the token (returned by the corresponding `send-otp` call) via `Authorization: <token>` (raw or `Bearer <token>`) — this header passes straight through to `user-service` unmodified, it isn't a JWT this gateway issues or checks itself.
 
 ### 5.5 Product — `/api/v1/product-service/*`
 
-| Method | Path                                   | Auth                              | Description                                  |
-| -------- | ------------------------------------------ | ------------------------------------ | --------------------------------------------------- |
-| POST    | `/category`                               | `ADMIN`, `MASTER`                    | Create a category (L1/L2/L3)                        |
-| PATCH   | `/category/:categoryId`                   | `ADMIN`, `MASTER`                    | Update a category                                    |
-| DELETE  | `/category/:categoryId`                   | `ADMIN`, `MASTER`                    | Delete a leaf category with zero products            |
-| GET     | `/category/by-parent-level`               | `ADMIN`, `SELLER`, `MASTER`          | List categories by `level`/`parent`                  |
-| GET     | `/category/by-hierarchy`                  | None                                  | Full L1→L2→L3 nested tree                            |
-| POST    | `/product/draft`                          | `ADMIN`, `SELLER`, `MASTER`          | Save one step of a multi-step draft                   |
-| GET     | `/product/draft`                          | `ADMIN`, `SELLER`, `MASTER`          | Fetch the caller's in-progress draft                  |
-| PATCH   | `/product/draft/publish`                  | `ADMIN`, `SELLER`, `MASTER`          | Publish a completed draft as a real product           |
-| GET     | `/product/dashboard/products`             | `ADMIN`, `SELLER`, `MASTER`          | Paginated/sortable/searchable dashboard listing        |
-| GET     | `/product/dashboard/:slug`                | `ADMIN`, `SELLER`, `MASTER`          | Single dashboard product lookup                        |
-| GET     | `/product/:slug`                          | None                                  | Public storefront product lookup                       |
-| GET     | `/product/suggestions`                    | None                                  | Autocomplete search suggestions                        |
+| Method | Path                          | Auth                        | Description                                     |
+| ------ | ----------------------------- | --------------------------- | ----------------------------------------------- |
+| POST   | `/category`                   | `ADMIN`, `MASTER`           | Create a category (L1/L2/L3)                    |
+| PATCH  | `/category/:categoryId`       | `ADMIN`, `MASTER`           | Update a category                               |
+| DELETE | `/category/:categoryId`       | `ADMIN`, `MASTER`           | Delete a leaf category with zero products       |
+| GET    | `/category/by-parent-level`   | `ADMIN`, `SELLER`, `MASTER` | List categories by `level`/`parent`             |
+| GET    | `/category/by-hierarchy`      | None                        | Full L1→L2→L3 nested tree                       |
+| POST   | `/product/draft`              | `ADMIN`, `SELLER`, `MASTER` | Save one step of a multi-step draft             |
+| GET    | `/product/draft`              | `ADMIN`, `SELLER`, `MASTER` | Fetch the caller's in-progress draft            |
+| PATCH  | `/product/draft/publish`      | `ADMIN`, `SELLER`, `MASTER` | Publish a completed draft as a real product     |
+| GET    | `/product/dashboard/products` | `ADMIN`, `SELLER`, `MASTER` | Paginated/sortable/searchable dashboard listing |
+| GET    | `/product/dashboard/:slug`    | `ADMIN`, `SELLER`, `MASTER` | Single dashboard product lookup                 |
+| GET    | `/product/:slug`              | None                        | Public storefront product lookup                |
+| GET    | `/product/suggestions`        | None                        | Autocomplete search suggestions                 |
 
 "Auth" here is enforced twice, independently: this gateway's own `authorize([...])` middleware checks the `access_token` cookie's role **before** forwarding, and `product-service` checks the `X-User-Role` header the Gateway attaches on the way in — a request can't reach the downstream service at all without first passing the Gateway's own check.
 
@@ -241,12 +241,12 @@ See `media-service`'s own README (`src/reference/media-service/README.md` in thi
 
 ## 6. Request Headers (Client → Gateway)
 
-| Header               | Purpose                                                                              |
-| ----------------------- | ------------------------------------------------------------------------------------------ |
+| Header                  | Purpose                                                                                                             |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------- |
 | `Cookie: access_token`  | Short-lived (15 min) JWT — read by `authenticate`/`authorize`, required wherever "Auth" is listed above as a cookie |
-| `Cookie: refresh_token` | Long-lived (7 days) JWT — read only by `POST /api/v1/refresh-access-token`                  |
-| `X-Login-Role`          | Optional, `POST /auth/login/manual` only — the logged-in user's role must match it (`MASTER` always allowed) |
-| `Authorization`         | OTP session token — register/forgot-password OTP steps only, forwarded to `user-service` unmodified |
+| `Cookie: refresh_token` | Long-lived (7 days) JWT — read only by `POST /api/v1/refresh-access-token`                                          |
+| `X-Login-Role`          | Optional, `POST /auth/login/manual` only — the logged-in user's role must match it (`MASTER` always allowed)        |
+| `Authorization`         | OTP session token — register/forgot-password OTP steps only, forwarded to `user-service` unmodified                 |
 
 Clients never send `X-Service-Secret`, `X-User-Id`, or `X-User-Role` themselves — those are headers **this gateway attaches** on the downstream leg (see [§7](#7-request--response-handling)); if a client sends them anyway, they're overwritten before the request leaves this service.
 
@@ -272,10 +272,10 @@ Every module service (`AuthService`, `UserService`, `CategoryService`, `ProductS
 
 There is no session store — the "session" is entirely the signed JWT inside the `access_token`/`refresh_token` cookies (`utils/index.ts`: `generateAccessToken`/`generateRefreshToken`, both `{ _id, role }` payloads).
 
-| Cookie          | TTL       | Set by                                                                                       |
-| ------------------ | ----------- | -------------------------------------------------------------------------------------------------- |
-| `access_token`     | 15 minutes  | Every login/register/password-flow controller that succeeds, plus `POST /api/v1/refresh-access-token` |
-| `refresh_token`     | 7 days      | Every login/register/password-flow controller that succeeds (**not** reissued by the refresh endpoint — refreshing only rotates the access token) |
+| Cookie          | TTL        | Set by                                                                                                                                            |
+| --------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `access_token`  | 15 minutes | Every login/register/password-flow controller that succeeds, plus `POST /api/v1/refresh-access-token`                                             |
+| `refresh_token` | 7 days     | Every login/register/password-flow controller that succeeds (**not** reissued by the refresh endpoint — refreshing only rotates the access token) |
 
 Cookie options (`COOKIE_OPTIONS`, `constants/index.ts`): `httpOnly: true` always; `secure`/`sameSite` flip based on `envs.is_dev` — `secure: false, sameSite: 'lax'` in dev (works over plain HTTP on `localhost`), `secure: true, sameSite: 'none'` in production (required for a cross-origin frontend to send the cookie at all).
 
@@ -400,18 +400,18 @@ Flat config: `@eslint/js` recommended → `typescript-eslint` recommended/strict
 
 ## 16. Shared Packages (`@beautinique/*`)
 
-| Package                                | Purpose                                                                                          |
-| ----------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `@beautinique/backend-classes`           | `AppError` subclasses, `createError`, `ERROR_CLASS_MAP` — used both for this service's own errors and to translate downstream error bodies |
-| `@beautinique/backend-logger`            | `createLogger`/`createHttpLogger` (Pino-based)                                                          |
-| `@beautinique/backend-request`           | `checkEmptyRequest`                                                                                      |
-| `@beautinique/backend-response`          | `successResponse`/`errorResponse`/`notFoundResponse`/`tryCatchResponse`                                  |
-| `@beautinique/backend-types`             | `TServiceName`, `TUserRole`, `TApiMethod`, and every Zod-inferred request-body type (`TLoginZodSchema`, `TRegisterZodSchema`, ...) |
-| `@beautinique/backend-utils`             | `getUser`                                                                                                 |
-| `@beautinique/backend-zod`               | `validateZod` and every request Zod schema this gateway validates against, ahead of `user-service`      |
-| `@beautinique/shared-constants`          | `HEADERS_MAP`, `SERVICE_NAMES_MAP`, `API_METHODS_MAP`, `USER_ROLES`, `USER_ROLE_MAP`                     |
-| `@beautinique/shared-markdown-to-html`   | `generateHtmlFromMarkdown` — used by `scripts/generate-html.mjs`                                        |
-| `@beautinique/shared-utils`              | `requireEnv`/`requirePort`                                                                               |
+| Package                                | Purpose                                                                                                                                    |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `@beautinique/backend-classes`         | `AppError` subclasses, `createError`, `ERROR_CLASS_MAP` — used both for this service's own errors and to translate downstream error bodies |
+| `@beautinique/backend-logger`          | `createLogger`/`createHttpLogger` (Pino-based)                                                                                             |
+| `@beautinique/backend-request`         | `checkEmptyRequest`                                                                                                                        |
+| `@beautinique/backend-response`        | `successResponse`/`errorResponse`/`notFoundResponse`/`tryCatchResponse`                                                                    |
+| `@beautinique/backend-types`           | `TServiceName`, `TUserRole`, `TApiMethod`, and every Zod-inferred request-body type (`TLoginZodSchema`, `TRegisterZodSchema`, ...)         |
+| `@beautinique/backend-utils`           | `getUser`                                                                                                                                  |
+| `@beautinique/backend-zod`             | `validateZod` and every request Zod schema this gateway validates against, ahead of `user-service`                                         |
+| `@beautinique/shared-constants`        | `HEADERS_MAP`, `SERVICE_NAMES_MAP`, `API_METHODS_MAP`, `USER_ROLES`, `USER_ROLE_MAP`                                                       |
+| `@beautinique/shared-markdown-to-html` | `generateHtmlFromMarkdown` — used by `scripts/generate-html.mjs`                                                                           |
+| `@beautinique/shared-utils`            | `requireEnv`/`requirePort`                                                                                                                 |
 
 This service has **no `@beautinique/backend-mongoose`, `backend-bullmq`, `backend-multer`, or Redis client dependency** — it is stateless by design, unlike every other service in this platform.
 
@@ -421,12 +421,12 @@ This service has **no `@beautinique/backend-mongoose`, `backend-bullmq`, `backen
 
 Every error — thrown locally (`AuthenticationError`, `AuthorizationError`, `BadRequestError`, ...) or translated from a downstream response by `ApiRequest` (see [§7](#7-request--response-handling)) — is a `@beautinique/backend-classes` `AppError` subclass, and flows through the same `errorResponse` middleware (`@beautinique/backend-response`) mounted last in `app.ts`.
 
-| Code                     | HTTP Equivalent | When Used                                                          |
-| --------------------------- | ------------------ | ----------------------------------------------------------------------- |
-| `AUTHENTICATION_ERROR`     | 401                | Missing/invalid/expired `access_token`/`refresh_token` cookie           |
-| `AUTHORIZATION_ERROR`      | 403                | Role not in the route's `allowedRoles`                                  |
-| `BAD_REQUEST`               | 400                | Missing `code`/`Authorization` where a controller checks for it directly |
-| *(anything else)*           | *(varies)*          | Translated 1:1 from whatever code the downstream service returned       |
+| Code                   | HTTP Equivalent | When Used                                                                |
+| ---------------------- | --------------- | ------------------------------------------------------------------------ |
+| `AUTHENTICATION_ERROR` | 401             | Missing/invalid/expired `access_token`/`refresh_token` cookie            |
+| `AUTHORIZATION_ERROR`  | 403             | Role not in the route's `allowedRoles`                                   |
+| `BAD_REQUEST`          | 400             | Missing `code`/`Authorization` where a controller checks for it directly |
+| *(anything else)*      | *(varies)*      | Translated 1:1 from whatever code the downstream service returned        |
 
 `envs.is_dev` controls whether `errorResponse` includes a stack trace.
 
