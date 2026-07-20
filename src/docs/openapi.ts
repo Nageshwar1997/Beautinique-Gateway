@@ -1,4 +1,20 @@
-import { AUTH_PROVIDERS, HEADERS_MAP, USER_ROLES } from '@beautinique/shared-constants';
+import {
+  AUTH_PROVIDER_MAP,
+  AUTH_PROVIDERS,
+  CATEGORY_LEVELS,
+  CATEGORY_LEVELS_MAP,
+  DRAFT_PRODUCT_STEP_MAP,
+  HEADERS_MAP,
+  MAX_IMAGE_SIZE,
+  MAX_VIDEO_SIZE,
+  PRODUCT_STATUSES,
+  PRODUCT_STATUSES_MAP,
+  SORT,
+  SORT_MAP,
+  USER_ROLE_MAP,
+  USER_ROLES,
+} from '@beautinique/shared-constants';
+import { formatFileSize } from '@beautinique/shared-utils';
 
 import { COOKIES_DATA, METHODS_AND_PATHS } from '../constants/index.js';
 
@@ -52,10 +68,10 @@ const minimalUserSchema = {
     email: { type: 'string', format: 'email' },
     phoneNumber: { type: 'string' },
     avatar: { type: 'string' },
-    role: { type: 'string', enum: USER_ROLES },
+    role: { type: 'string', enum: USER_ROLES, example: USER_ROLE_MAP.USER },
     providers: {
       type: 'array',
-      items: { type: 'string', enum: AUTH_PROVIDERS },
+      items: { type: 'string', enum: AUTH_PROVIDERS, example: AUTH_PROVIDER_MAP.MANUAL },
     },
   },
 };
@@ -87,7 +103,7 @@ const categorySchema = {
     _id: { type: 'string', example: '507f1f77bcf86cd799439011' },
     name: { type: 'string', example: 'Lipstick' },
     slug: { type: 'string', example: 'lipstick' },
-    level: { type: 'integer', enum: [1, 2, 3], example: 3 },
+    level: { type: 'integer', enum: CATEGORY_LEVELS, example: CATEGORY_LEVELS_MAP.L3 },
     parent: { type: 'string', description: 'Present for level 2 and 3 categories' },
     description: { type: 'string', description: 'Only meaningful for level 3 categories' },
   },
@@ -106,7 +122,7 @@ const createCategoryBodySchema = {
   required: ['name', 'level'],
   properties: {
     name: { type: 'string', minLength: 2, maxLength: 120 },
-    level: { type: 'integer', enum: [1, 2, 3] },
+    level: { type: 'integer', enum: CATEGORY_LEVELS },
     parent: {
       type: 'string',
       description: 'Required for level 2 and 3, must be one level shallower',
@@ -122,7 +138,7 @@ const updateCategoryBodySchema = {
     name: { type: 'string', minLength: 2, maxLength: 120 },
     level: {
       type: 'integer',
-      enum: [1, 2, 3],
+      enum: CATEGORY_LEVELS,
       description: 'Must match the existing category - immutable',
     },
     parent: {
@@ -144,16 +160,7 @@ const draftProductStepBodySchema = {
   type: 'object',
   required: ['step'],
   properties: {
-    step: {
-      type: 'string',
-      enum: [
-        'basicInfo',
-        'mediaAndGallery',
-        'descriptionAndContent',
-        'stockAndVariants',
-        'tryOnConfiguration',
-      ],
-    },
+    step: { type: 'string', enum: Object.values(DRAFT_PRODUCT_STEP_MAP) },
   },
   additionalProperties: true,
 };
@@ -174,10 +181,7 @@ const productSchema = {
     category: { type: 'string', description: 'Category id (level 3)' },
     seller: { type: 'string' },
     hasVariants: { type: 'boolean' },
-    status: {
-      type: 'string',
-      enum: ['DELETED', 'PENDING', 'PUBLISHED', 'REJECTED', 'BLOCKED'],
-    },
+    status: { type: 'string', enum: PRODUCT_STATUSES },
     createdAt: { type: 'string', format: 'date-time' },
     updatedAt: { type: 'string', format: 'date-time' },
   },
@@ -197,11 +201,11 @@ const statusCountsSchema = {
   type: 'object',
   properties: {
     ALL: { type: 'integer' },
-    DELETED: { type: 'integer' },
-    PENDING: { type: 'integer' },
-    PUBLISHED: { type: 'integer' },
-    REJECTED: { type: 'integer' },
-    BLOCKED: { type: 'integer' },
+    [PRODUCT_STATUSES_MAP.DELETED]: { type: 'integer' },
+    [PRODUCT_STATUSES_MAP.PENDING]: { type: 'integer' },
+    [PRODUCT_STATUSES_MAP.PUBLISHED]: { type: 'integer' },
+    [PRODUCT_STATUSES_MAP.REJECTED]: { type: 'integer' },
+    [PRODUCT_STATUSES_MAP.BLOCKED]: { type: 'integer' },
   },
 };
 
@@ -228,7 +232,7 @@ const loginRoleHeader = {
   in: 'header',
   required: false,
   description: 'If set, the logged-in user must have this role (MASTER always allowed).',
-  schema: { type: 'string', enum: USER_ROLES },
+  schema: { type: 'string', enum: USER_ROLES, example: USER_ROLE_MAP.USER },
 };
 
 export const openApiSpec = {
@@ -742,7 +746,7 @@ export const openApiSpec = {
       },
     },
 
-    [`${base}${productServiceBase}${category.base}${category.update.path}`]: {
+    [`${base}${productServiceBase}${category.base}${category.update.path.replace(':', '{')}}`]: {
       [category.update.method]: {
         tags: ['Category'],
         summary: 'Update a category',
@@ -794,7 +798,7 @@ export const openApiSpec = {
         description: 'Requires ADMIN, MASTER, or SELLER role.',
         security: [{ accessTokenCookie: [] }],
         parameters: [
-          { name: 'level', in: 'query', schema: { type: 'integer', enum: [1, 2, 3] } },
+          { name: 'level', in: 'query', schema: { type: 'integer', enum: CATEGORY_LEVELS } },
           {
             name: 'parent',
             in: 'query',
@@ -910,10 +914,7 @@ export const openApiSpec = {
             {
               name: 'status',
               in: 'query',
-              schema: {
-                type: 'string',
-                enum: ['DELETED', 'PENDING', 'PUBLISHED', 'REJECTED', 'BLOCKED'],
-              },
+              schema: { type: 'string', enum: PRODUCT_STATUSES },
             },
             { name: 'category', in: 'query', schema: { type: 'string' } },
             {
@@ -935,7 +936,7 @@ export const openApiSpec = {
             {
               name: 'sortOrder',
               in: 'query',
-              schema: { type: 'string', enum: ['asc', 'desc'], default: 'desc' },
+              schema: { type: 'string', enum: SORT, default: SORT_MAP.desc },
             },
           ],
           responses: {
@@ -960,7 +961,7 @@ export const openApiSpec = {
         },
       },
 
-    [`${base}${productServiceBase}${product.base}${product.get.dashboard.base}${product.get.dashboard.bySlug.path}`]:
+    [`${base}${productServiceBase}${product.base}${product.get.dashboard.base}${product.get.dashboard.bySlug.path.replace(':', '{')}}`]:
       {
         [product.get.dashboard.bySlug.method]: {
           tags: ['Product'],
@@ -980,7 +981,7 @@ export const openApiSpec = {
         },
       },
 
-    [`${base}${productServiceBase}${product.base}${product.get.bySlug.path}`]: {
+    [`${base}${productServiceBase}${product.base}${product.get.bySlug.path.replace(':', '{')}}`]: {
       [product.get.bySlug.method]: {
         tags: ['Product'],
         summary: 'Public storefront product lookup',
@@ -1042,7 +1043,11 @@ export const openApiSpec = {
                 type: 'object',
                 required: ['file', 'folder'],
                 properties: {
-                  file: { type: 'string', format: 'binary', description: 'Image or video file.' },
+                  file: {
+                    type: 'string',
+                    format: 'binary',
+                    description: `Image (≤${formatFileSize(MAX_IMAGE_SIZE)}) or video (≤${formatFileSize(MAX_VIDEO_SIZE)}).`,
+                  },
                   folder: {
                     type: 'string',
                     example: 'products',
@@ -1090,7 +1095,7 @@ export const openApiSpec = {
                   files: {
                     type: 'array',
                     items: { type: 'string', format: 'binary' },
-                    description: 'Any mix of images and videos.',
+                    description: `Any mix of images (≤${formatFileSize(MAX_IMAGE_SIZE)} each) and videos (≤${formatFileSize(MAX_VIDEO_SIZE)} each).`,
                   },
                   folder: {
                     type: 'string',
