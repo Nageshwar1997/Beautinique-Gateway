@@ -9,7 +9,7 @@ import swaggerUi from 'swagger-ui-express';
 
 import { logger } from './configs/index.js';
 import { LOGGER_BASE_OPTIONS, METHODS_AND_PATHS } from './constants/index.js';
-import { wakeUpController } from './controllers/index.js';
+import { healthController, wakeUpController } from './controllers/index.js';
 import { openApiSpec } from './docs/openapi.js';
 import { envs } from './envs/index.js';
 import { authorize, mediaServiceProxy } from './middlewares/index.js';
@@ -94,12 +94,7 @@ app.use('/docs', swaggerUi.serve, swaggerUi.setup(openApiSpec));
 /**
  * Health endpoint.
  */
-app[health.method](health.path, (_, res) => {
-  res.success({
-    message: 'Gateway is healthy',
-    data: { service: 'gateway' },
-  });
-});
+app[health.method](health.path, healthController);
 
 /**
  * API routes - requires a trusted service caller and a ready DB connection.

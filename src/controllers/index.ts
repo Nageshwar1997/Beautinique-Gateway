@@ -52,6 +52,49 @@ export const wakeUpController = async (_req: Request, res: Response) => {
   }
 };
 
+export const healthController = async (_req: Request, res: Response) => {
+  try {
+    const services = envs.url.service;
+
+    const results = await Promise.all(
+      Object.entries(services).map(async ([name, url]) => {
+        try {
+          const { data } = await axios[METHODS_AND_PATHS.health.method]<TApiResponse>(
+            `${url}${METHODS_AND_PATHS.health.path}`,
+          );
+          return { service: name, status: 'HEALTHY', response: data };
+        } catch (error) {
+          return {
+            service: name,
+            status: 'UNHEALTHY',
+            response: isAxiosError<TApiResponse>(error) ? (error.response?.data ?? null) : null,
+          };
+        }
+      }),
+    );
+
+    const allHealthy = results.every((service) => service.status === 'HEALTHY');
+    const allUnhealthy = results.every((service) => service.status === 'UNHEALTHY');
+
+    const overallStatus = allHealthy ? 'HEALTHY' : allUnhealthy ? 'UNHEALTHY' : 'DEGRADED';
+
+    res.status(200).json({
+      message: 'Gateway is healthy and running',
+      status: overallStatus,
+      gateway: 'HEALTHY',
+      services: results,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: 'Gateway is unhealthy',
+      status: 'UNHEALTHY',
+      gateway: 'UNHEALTHY',
+      services: [],
+      error: err instanceof Error ? err.message : 'Something went wrong!',
+    });
+  }
+};
+
 /* ================================ REFRESH CONTROLLERS ================================ */
 
 // eslint-disable-next-line @typescript-eslint/require-await
