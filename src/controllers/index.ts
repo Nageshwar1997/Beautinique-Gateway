@@ -23,7 +23,7 @@ const HEALTH_CHECK_RETRY_DELAY = 5_000;
 
 const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
 
-const pingServiceHealth = async (url: string) => {
+const pingService = async (url: string) => {
   const target = `${url}${METHODS_AND_PATHS.health.path}`;
 
   let lastError: unknown = null;
@@ -53,7 +53,7 @@ export const wakeUpController = async (_req: Request, res: Response) => {
 
     const results = await Promise.all(
       Object.entries(services).map(async ([name, url]) => {
-        const { data, error } = await pingServiceHealth(url);
+        const { data, error } = await pingService(url);
 
         if (!error) {
           return { service: name, status: 'UP', message: data?.message ?? null };
@@ -97,7 +97,7 @@ export const healthController = async (_req: Request, res: Response) => {
 
     const results = await Promise.all(
       Object.entries(services).map(async ([name, url]) => {
-        const { data, error } = await pingServiceHealth(url);
+        const { data, error } = await pingService(url);
 
         if (!error) {
           return { service: name, status: 'HEALTHY', response: data };
