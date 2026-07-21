@@ -43,6 +43,10 @@ app.use(
     origin: ORIGINS,
     allowedHeaders: [HEADERS_MAP.contentType, HEADERS_MAP.authorization, HEADERS_MAP.loginRole],
     credentials: true,
+    // `@beautinique/backend-cors` has no default of its own for this option - passing it
+    // through as `undefined` makes the underlying `cors` package crash with
+    // `RangeError: Invalid status code: undefined` while ending a preflight response.
+    optionsSuccessStatus: 204,
     onOriginDenied: (origin) => {
       logger.warn(`Blocked CORS request from origin: ${origin}`);
     },
