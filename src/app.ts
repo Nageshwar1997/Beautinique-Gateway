@@ -1,4 +1,4 @@
-import { corsMiddleware } from '@beautinique/backend-cors';
+import { checkCors } from '@beautinique/backend-cors';
 import { createHttpLogger } from '@beautinique/backend-logger';
 import { errorResponse, notFoundResponse, successResponse } from '@beautinique/backend-response';
 import { HEADERS_MAP, USER_ROLES } from '@beautinique/shared-constants';
@@ -39,7 +39,7 @@ app.set('query parser', (str: string) => parse(str));
  * get rejected, since preflight requests never carry cookies.
  */
 app.use(
-  corsMiddleware({
+  checkCors({
     origin: ORIGINS,
     allowedHeaders: [HEADERS_MAP.contentType, HEADERS_MAP.authorization, HEADERS_MAP.loginRole],
     credentials: true,
