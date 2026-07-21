@@ -1,6 +1,7 @@
+import { corsMiddleware } from '@beautinique/backend-cors';
 import { createHttpLogger } from '@beautinique/backend-logger';
 import { errorResponse, notFoundResponse, successResponse } from '@beautinique/backend-response';
-import { USER_ROLES } from '@beautinique/shared-constants';
+import { HEADERS_MAP, USER_ROLES } from '@beautinique/shared-constants';
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import path from 'path';
@@ -8,7 +9,7 @@ import { parse } from 'qs';
 import swaggerUi from 'swagger-ui-express';
 
 import { logger } from './configs/index.js';
-import { LOGGER_BASE_OPTIONS, METHODS_AND_PATHS } from './constants/index.js';
+import { LOGGER_BASE_OPTIONS, METHODS_AND_PATHS, ORIGINS } from './constants/index.js';
 import { healthController, wakeUpController } from './controllers/index.js';
 import { openApiSpec } from './docs/openapi.js';
 import { envs } from './envs/index.js';
@@ -28,6 +29,25 @@ export const app = express();
 /* -------------------------------------------------------------------------- */
 
 app.set('query parser', (str: string) => parse(str));
+
+/**
+ * Allows only the platform's own frontends (client/admin/seller/master) to call this
+ * gateway cross-origin, with cookies included (`credentials: true`) - required since the
+ * session lives entirely in the `access_token`/`refresh_token` cookies. Mounted first so
+ * preflight (OPTIONS) requests are answered before hitting auth/proxy/routing below -
+ * without this, a preflight to the media-service proxy would hit `authorize()` first and
+ * get rejected, since preflight requests never carry cookies.
+ */
+app.use(
+  corsMiddleware({
+    origin: ORIGINS,
+    allowedHeaders: [HEADERS_MAP.contentType, HEADERS_MAP.authorization, HEADERS_MAP.loginRole],
+    credentials: true,
+    onOriginDenied: (origin) => {
+      logger.warn(`Blocked CORS request from origin: ${origin}`);
+    },
+  }),
+);
 
 /**
  * Parses cookies on incoming requests into `req.cookies` - needed by
