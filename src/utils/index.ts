@@ -1,5 +1,5 @@
 import { AuthenticationError } from '@beautinique/backend-classes';
-import type { TApiMethod } from '@beautinique/backend-types';
+import type { ICreateHeaders, TApiMethod } from '@beautinique/backend-types';
 import { getUser } from '@beautinique/backend-utils';
 import { HEADERS_MAP } from '@beautinique/shared-constants';
 import type { Response } from 'express';
@@ -8,7 +8,6 @@ import jwt from 'jsonwebtoken';
 import { COOKIES_DATA, SERVICE_SECRET_MAP } from '../constants/index.js';
 import { envs } from '../envs/index.js';
 import type {
-  ICreateHeaders,
   IEndpoint,
   IJwtPayload,
   TGenerateRoutes,
@@ -124,16 +123,12 @@ export const createHeaders = ({
   loginRole,
   contentType,
   serviceSecret,
-}: ICreateHeaders = {}) => {
+}: ICreateHeaders<TUser> = {}) => {
   return {
     ...(serviceSecret && { [HEADERS_MAP.serviceSecret]: SERVICE_SECRET_MAP[serviceSecret] }),
-
     ...(user && { [HEADERS_MAP.userId]: user._id, [HEADERS_MAP.userRole]: user.role }),
-
     ...(token && { [HEADERS_MAP.authorization]: token }),
-
     ...(loginRole && { [HEADERS_MAP.loginRole]: loginRole }),
-
     ...(contentType && { [HEADERS_MAP.contentType]: contentType }),
   };
 };

@@ -4,7 +4,7 @@ import {
   type IAppError,
   type TErrorCode,
 } from '@beautinique/backend-classes';
-import type { TServiceName } from '@beautinique/backend-types';
+import type { ICreateHeaders, TApiResponse, TServiceName } from '@beautinique/backend-types';
 import axios, {
   AxiosError,
   type AxiosInstance,
@@ -13,7 +13,7 @@ import axios, {
 } from 'axios';
 
 import { SERVICES_BASE_URLS } from '../constants/index.js';
-import type { ICreateHeaders, TApiResponse } from '../types/index.js';
+import type { TUser } from '../types/index.js';
 import { createHeaders } from '../utils/index.js';
 
 type TErrorResponse = Omit<IAppError, 'cause' | 'isOperational'>;
@@ -31,7 +31,7 @@ export class ApiRequest {
   }
 
   protected async request<TData = unknown>(
-    config: AxiosRequestConfig & Omit<ICreateHeaders, 'serviceSecret'>,
+    config: AxiosRequestConfig & Omit<ICreateHeaders<TUser>, 'serviceSecret'>,
   ): Promise<TApiResponse<TData>> {
     try {
       const { headers = {}, user, token, loginRole, contentType, ...restConfigs } = config;

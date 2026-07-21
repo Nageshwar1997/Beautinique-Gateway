@@ -1,10 +1,10 @@
 import { AuthenticationError } from '@beautinique/backend-classes';
+import type { TApiResponse } from '@beautinique/backend-types';
 import axios, { isAxiosError } from 'axios';
 import type { Request, Response } from 'express';
 
 import { COOKIES_DATA, METHODS_AND_PATHS } from '../constants/index.js';
 import { envs } from '../envs/index.js';
-import type { TApiResponse } from '../types/index.js';
 import { generateAccessToken, verifyRefreshToken } from '../utils/index.js';
 
 /**

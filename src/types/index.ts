@@ -1,4 +1,4 @@
-import type { TApiMethod, TServiceName, TUserRole } from '@beautinique/backend-types';
+import type { TApiMethod, TUserRole } from '@beautinique/backend-types';
 
 export interface IJwtPayload {
   _id: string;
@@ -33,7 +33,6 @@ type TUrl<FullPath extends string> =
 
 interface IGeneratedEndpoint<T extends IEndpoint, FullPath extends string> {
   method: Uppercase<T['method']>;
-
   url: TUrl<FullPath>;
 }
 
@@ -56,18 +55,3 @@ export type TGenerateRoutes<
         >
       : never;
 };
-
-export interface ICreateHeaders {
-  user?: TUser;
-  token?: string;
-  loginRole?: TUserRole;
-  contentType?: string;
-  serviceSecret?: TServiceName;
-}
-
-export interface TApiResponse<T = unknown> {
-  statusCode: number;
-  message: string;
-  data?: T;
-  [key: string]: unknown;
-}
