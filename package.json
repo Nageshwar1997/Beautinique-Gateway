@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "@beautinique/backend-classes": "^1.0.3",
-    "@beautinique/backend-cors": "^1.0.1",
+    "@beautinique/backend-cors": "^1.0.2",
     "@beautinique/backend-logger": "^1.0.2",
     "@beautinique/backend-request": "^1.0.1",
     "@beautinique/backend-response": "^1.0.3",
