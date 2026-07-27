@@ -27,6 +27,7 @@ export const METHODS_AND_PATHS = {
   base: '/api/v1',
   home: { method: GET, path: '/' },
   health: { method: GET, path: '/health' },
+  overall_health: { method: GET, path: '/overall-health' },
   wakeUp: { method: GET, path: '/wake-up' },
   gateway: {
     refreshAccessToken: { method: POST, path: '/refresh-access-token' },

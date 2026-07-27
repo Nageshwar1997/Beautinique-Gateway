@@ -16,7 +16,7 @@ import { envs } from './envs/index.js';
 import { authorize, mediaServiceProxy } from './middlewares/index.js';
 import { router } from './routes/index.js';
 
-const { base, health, home, wakeUp, media_service } = METHODS_AND_PATHS;
+const { base, health, home, overall_health, wakeUp, media_service } = METHODS_AND_PATHS;
 
 /* -------------------------------------------------------------------------- */
 /*                               Express App                                  */
@@ -40,7 +40,7 @@ app.set('query parser', (str: string) => parse(str));
  */
 app.use(
   checkCors({
-    origin: ORIGINS,
+    origin: [...ORIGINS, 'http://localhost:4173'],
     allowedHeaders: [HEADERS_MAP.contentType, HEADERS_MAP.authorization, HEADERS_MAP.loginRole],
     credentials: true,
     // `@beautinique/backend-cors` has no default of its own for this option - passing it
@@ -118,7 +118,14 @@ app.use('/docs', swaggerUi.serve, swaggerUi.setup(openApiSpec));
 /**
  * Health endpoint.
  */
-app[health.method](health.path, healthController);
+app[health.method](health.path, (_req, res) => {
+  res.success({
+    message: 'Gateway is Healthy',
+    data: { service: 'gateway-service', status: 'HEALTHY' },
+  });
+});
+
+app[overall_health.method](overall_health.path, healthController);
 
 /**
  * API routes - requires a trusted service caller and a ready DB connection.
