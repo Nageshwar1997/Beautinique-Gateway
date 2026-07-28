@@ -1,12 +1,20 @@
 import { tryCatchResponse } from '@beautinique/backend-response';
+import { updateUserZodSchema, validateZod } from '@beautinique/backend-zod';
 import { Router } from 'express';
 
 import { METHODS_AND_PATHS } from '../../../../constants/index.js';
 import { authenticate } from '../../../../middlewares/index.js';
-import { getSessionUserController } from '../../controllers/index.js';
+import { getSessionUserController, updateUserController } from '../../controllers/index.js';
 
 export const userRouter = Router();
 
-const { session } = METHODS_AND_PATHS.user_service.user;
+const { session, update } = METHODS_AND_PATHS.user_service.user;
 
 userRouter[session.method](session.path, authenticate, tryCatchResponse(getSessionUserController));
+
+userRouter[update.method](
+  update.path,
+  authenticate,
+  validateZod({ body: updateUserZodSchema }),
+  tryCatchResponse(updateUserController),
+);
