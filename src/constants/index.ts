@@ -10,6 +10,7 @@ export const SERVICES_BASE_URLS: Record<TServiceName, string> = {
   [SERVICE_NAMES_MAP['media-service']]: envs.url.service.media,
   [SERVICE_NAMES_MAP['product-service']]: envs.url.service.product,
   [SERVICE_NAMES_MAP['user-service']]: envs.url.service.user,
+  [SERVICE_NAMES_MAP['organization-service']]: envs.url.service.organization,
 } as const;
 
 export const SERVICE_SECRET_MAP: Record<TServiceName, string> = {
@@ -17,6 +18,7 @@ export const SERVICE_SECRET_MAP: Record<TServiceName, string> = {
   [SERVICE_NAMES_MAP['media-service']]: envs.service_secret.media,
   [SERVICE_NAMES_MAP['product-service']]: envs.service_secret.product,
   [SERVICE_NAMES_MAP['user-service']]: envs.service_secret.user,
+  [SERVICE_NAMES_MAP['organization-service']]: envs.service_secret.organization,
 } as const;
 
 export const ORIGINS = Object.values(envs.url.frontend);
@@ -33,7 +35,7 @@ export const METHODS_AND_PATHS = {
     refreshAccessToken: { method: POST, path: '/refresh-access-token' },
   },
   user_service: {
-    default: '/user-service',
+    default: `/${SERVICE_NAMES_MAP['user-service']}`,
     auth: {
       base: '/auth',
       login: {
@@ -82,9 +84,9 @@ export const METHODS_AND_PATHS = {
       update: { method: PATCH, path: '/' },
     },
   },
-  media_service: { default: '/media-service' },
+  media_service: { default: `/${SERVICE_NAMES_MAP['media-service']}` },
   product_service: {
-    default: '/product-service',
+    default: `/${SERVICE_NAMES_MAP['product-service']}`,
     category: {
       base: '/category',
       add: { method: POST, path: '/' },
@@ -116,6 +118,15 @@ export const METHODS_AND_PATHS = {
         products: { method: GET, path: '/products' },
         bySlug: { method: GET, path: '/:slug' },
       },
+    },
+  },
+  organization_service: {
+    default: `/${SERVICE_NAMES_MAP['organization-service']}`,
+    contact: {
+      base: '/contact',
+      create: { method: POST, path: '/' },
+      list: { method: GET, path: '/' },
+      updateStatus: { method: PATCH, path: '/:ticketId' },
     },
   },
 } as const;

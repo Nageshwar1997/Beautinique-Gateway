@@ -41,6 +41,11 @@ const {
   NODE_ENV,
 
   // O
+
+  ORGANIZATION_SERVICE_BASE_URL,
+
+  ORGANIZATION_SERVICE_SECRET,
+
   // P
 
   PORT,
@@ -107,6 +112,7 @@ export const envs = {
     product: requireEnv(PRODUCT_SERVICE_SECRET, 'PRODUCT_SERVICE_SECRET'),
     mail: requireEnv(MAIL_SERVICE_SECRET, 'MAIL_SERVICE_SECRET'),
     media: requireEnv(MEDIA_SERVICE_SECRET, 'MEDIA_SERVICE_SECRET'),
+    organization: requireEnv(ORGANIZATION_SERVICE_SECRET, 'ORGANIZATION_SERVICE_SECRET'),
   },
 
   // T
@@ -125,6 +131,7 @@ export const envs = {
       media: requireEnv(MEDIA_SERVICE_BASE_URL, 'MEDIA_SERVICE_BASE_URL'),
       product: requireEnv(PRODUCT_SERVICE_BASE_URL, 'PRODUCT_SERVICE_BASE_URL'),
       user: requireEnv(USER_SERVICE_BASE_URL, 'USER_SERVICE_BASE_URL'),
+      organization: requireEnv(ORGANIZATION_SERVICE_BASE_URL, 'ORGANIZATION_SERVICE_BASE_URL'),
     },
   },
 
