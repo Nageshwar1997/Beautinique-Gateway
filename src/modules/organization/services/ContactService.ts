@@ -5,11 +5,11 @@ import type {
   TUpdateContactQueryStatusZodSchema,
 } from '@beautinique/backend-types';
 
-import { BaseUserService } from '../../../classes/index.js';
+import { BaseOrganizationService } from '../../../classes/index.js';
 import { API_METHODS_AND_URLS } from '../../../constants/index.js';
 import type { TUser } from '../../../types/index.js';
 
-class ContactService extends BaseUserService {
+class ContactService extends BaseOrganizationService {
   private routes = API_METHODS_AND_URLS.organization_service.contact;
 
   /* ================== GET CONTACT QUERIES LIST ================== */

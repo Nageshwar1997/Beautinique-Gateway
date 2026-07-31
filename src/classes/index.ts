@@ -11,3 +11,9 @@ export class BaseUserService extends ApiRequest {
     super('user-service');
   }
 }
+
+export class BaseOrganizationService extends ApiRequest {
+  constructor() {
+    super('organization-service');
+  }
+}
