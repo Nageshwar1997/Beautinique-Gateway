@@ -1,0 +1,43 @@
+import { checkEmptyRequest } from '@beautinique/backend-request';
+import { tryCatchResponse } from '@beautinique/backend-response';
+import {
+  contactQueryTicketIdZodSchema,
+  createContactQueryZodSchema,
+  updateContactQueryStatusZodSchema,
+  validateZod,
+} from '@beautinique/backend-zod';
+import { USER_ROLE_MAP } from '@beautinique/shared-constants';
+import { Router } from 'express';
+
+import { METHODS_AND_PATHS } from '../../../../constants/index.js';
+import { authorize } from '../../../../middlewares/auth.middleware.js';
+import {
+  createContactQueryController,
+  getContactQueriesController,
+  updateContactQueryStatusController,
+} from '../../controllers/index.js';
+
+export const contactRouter = Router();
+
+const { create, list, updateStatus } = METHODS_AND_PATHS.organization_service.contact;
+
+contactRouter[create.method](
+  create.path,
+  checkEmptyRequest({ body: true }),
+  validateZod({ body: createContactQueryZodSchema }),
+  tryCatchResponse(createContactQueryController),
+);
+
+contactRouter[list.method](
+  list.path,
+  authorize([USER_ROLE_MAP.ADMIN, USER_ROLE_MAP.MASTER]),
+  tryCatchResponse(getContactQueriesController),
+);
+
+contactRouter[updateStatus.method](
+  updateStatus.path,
+  authorize([USER_ROLE_MAP.ADMIN, USER_ROLE_MAP.MASTER]),
+  checkEmptyRequest({ body: true, params: true }),
+  validateZod({ params: contactQueryTicketIdZodSchema, body: updateContactQueryStatusZodSchema }),
+  tryCatchResponse(updateContactQueryStatusController),
+);

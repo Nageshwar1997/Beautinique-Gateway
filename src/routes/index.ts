@@ -3,6 +3,7 @@ import { Router } from 'express';
 
 import { METHODS_AND_PATHS } from '../constants/index.js';
 import { refreshAccessTokenController } from '../controllers/index.js';
+import { organizationServiceRouter } from '../modules/organization/index.js';
 import { productServiceRouter } from '../modules/product/index.js';
 import { userServiceRouter } from '../modules/user/index.js';
 
@@ -12,6 +13,7 @@ const {
   gateway: { refreshAccessToken },
   user_service,
   product_service,
+  organization_service,
 } = METHODS_AND_PATHS;
 
 router[refreshAccessToken.method](
@@ -23,3 +25,4 @@ router[refreshAccessToken.method](
 
 router.use(user_service.default, userServiceRouter);
 router.use(product_service.default, productServiceRouter);
+router.use(organization_service.default, organizationServiceRouter);
