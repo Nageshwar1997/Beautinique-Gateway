@@ -1,4 +1,5 @@
 import { type AppError, BadRequestError } from '@beautinique/backend-classes';
+import { HEADERS_MAP } from '@beautinique/backend-constants';
 import type {
   TChangePasswordZodSchema,
   TEmailZodSchema,
@@ -9,7 +10,6 @@ import type {
   TSetPasswordZodSchema,
   TUserRole,
 } from '@beautinique/backend-types';
-import { HEADERS_MAP } from '@beautinique/shared-constants';
 import type { Request, Response } from 'express';
 
 import {

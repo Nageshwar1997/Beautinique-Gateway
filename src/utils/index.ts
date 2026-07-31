@@ -1,7 +1,7 @@
 import { AuthenticationError } from '@beautinique/backend-classes';
+import { HEADERS_MAP } from '@beautinique/backend-constants';
 import type { ICreateHeaders, TApiMethod } from '@beautinique/backend-types';
 import { getUser } from '@beautinique/backend-utils';
-import { HEADERS_MAP } from '@beautinique/shared-constants';
 import type { Response } from 'express';
 import jwt from 'jsonwebtoken';
 

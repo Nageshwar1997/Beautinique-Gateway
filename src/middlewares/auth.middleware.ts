@@ -1,6 +1,6 @@
 import { AuthenticationError, AuthorizationError } from '@beautinique/backend-classes';
+import { USER_ROLE_MAP } from '@beautinique/backend-constants';
 import type { TUserRole } from '@beautinique/backend-types';
-import { USER_ROLE_MAP } from '@beautinique/shared-constants';
 import type { NextFunction, Request, Response } from 'express';
 
 import { COOKIES_DATA } from '../constants/index.js';

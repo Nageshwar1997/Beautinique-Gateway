@@ -254,7 +254,7 @@
           <tr>
             <td>Shared constants/types</td>
             <td>
-              <code>@beautinique/shared-constants</code>, <code>@beautinique/backend-types</code>
+              <code>@beautinique/backend-constants</code>, <code>@beautinique/backend-types</code>
             </td>
           </tr>
           <tr>
@@ -591,7 +591,7 @@
         the multipart body. File-size limits (<code>MAX_IMAGE_SIZE</code>/<code
           >MAX_VIDEO_SIZE</code
         >
-        from <code>@beautinique/shared-constants</code>, formatted via <code>formatFileSize</code>)
+        from <code>@beautinique/backend-constants</code>, formatted via <code>formatFileSize</code>)
         are documented in <code>src/docs/openapi.ts</code> for reference, but
         <strong>enforced only on <code>media-service</code> itself</strong> — this gateway never
         inspects the file, so an oversized upload is rejected downstream (<code>413</code>), not
@@ -834,7 +834,7 @@
         <code>GET /docs</code> serves <code>swagger-ui-express</code> over the hand-written spec in
         <code>src/docs/openapi.ts</code> — every path key, method, and enum value in it is built
         from the <em>same</em> <code>METHODS_AND_PATHS</code>/<code
-          >@beautinique/shared-constants</code
+          >@beautinique/backend-constants</code
         >
         this service&#39;s own routing and validation use, so the docs can&#39;t silently drift from
         the actual routes.
@@ -862,7 +862,7 @@
         <strong>Schemas.</strong> Enums (<code>CATEGORY_LEVELS</code>,
         <code>PRODUCT_STATUSES</code>, <code>USER_ROLES</code>, <code>AUTH_PROVIDERS</code>,
         <code>DRAFT_PRODUCT_STEP_MAP</code>, <code>SORT</code>) are pulled directly from
-        <code>@beautinique/shared-constants</code> rather than hand-typed as string literals, and
+        <code>@beautinique/backend-constants</code> rather than hand-typed as string literals, and
         every dynamic path segment (<code>:categoryId</code>, <code>:slug</code>) is converted to
         OpenAPI&#39;s <code>{param}</code> syntax (<code
           >path.replace(&#39;:&#39;, &#39;{&#39;)</code
@@ -1354,7 +1354,7 @@ npm run clean              # remove dist/
             </td>
           </tr>
           <tr>
-            <td><code>@beautinique/shared-constants</code></td>
+            <td><code>@beautinique/backend-constants</code></td>
             <td>
               <code>HEADERS_MAP</code>, <code>SERVICE_NAMES_MAP</code>,
               <code>API_METHODS_MAP</code>, <code>USER_ROLES</code>, <code>USER_ROLE_MAP</code>

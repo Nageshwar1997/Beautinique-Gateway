@@ -30,7 +30,7 @@ The Gateway is the single public entry point for the **Beautinique** platform's 
 | Shared request middleware  | `@beautinique/backend-request` (`checkEmptyRequest`)                                                                                                         |
 | Shared validation          | `@beautinique/backend-zod` (schemas + `validateZod`, same package `user-service` uses)                                                                       |
 | Shared utilities           | `@beautinique/backend-utils`, `@beautinique/shared-utils`                                                                                                    |
-| Shared constants/types     | `@beautinique/shared-constants`, `@beautinique/backend-types`                                                                                                |
+| Shared constants/types     | `@beautinique/backend-constants`, `@beautinique/backend-types`                                                                                               |
 | Logging                    | Pino, via `@beautinique/backend-logger`                                                                                                                      |
 | Code quality               | ESLint (flat config, type-checked + strict), Prettier                                                                                                        |
 
@@ -175,7 +175,7 @@ Everything under this prefix is streamed 1:1 to `media-service` by `mediaService
 | POST   | `/api/v1/media-service/upload/single`   | Upload one image or video            |
 | POST   | `/api/v1/media-service/upload/multiple` | Upload several images/videos at once |
 
-Both take a `file`/`files` field plus a `folder` field in the multipart body. File-size limits (`MAX_IMAGE_SIZE`/`MAX_VIDEO_SIZE` from `@beautinique/shared-constants`, formatted via `formatFileSize`) are documented in `src/docs/openapi.ts` for reference, but **enforced only on `media-service` itself** — this gateway never inspects the file, so an oversized upload is rejected downstream (`413`), not here.
+Both take a `file`/`files` field plus a `folder` field in the multipart body. File-size limits (`MAX_IMAGE_SIZE`/`MAX_VIDEO_SIZE` from `@beautinique/backend-constants`, formatted via `formatFileSize`) are documented in `src/docs/openapi.ts` for reference, but **enforced only on `media-service` itself** — this gateway never inspects the file, so an oversized upload is rejected downstream (`413`), not here.
 
 See `media-service`'s own README (`src/reference/media-service/README.md` in this repo) for the full request/response shape — the Gateway doesn't alter it.
 
@@ -226,7 +226,7 @@ See `media-service`'s own README (`src/reference/media-service/README.md` in thi
 
 ### 5.6 Interactive Docs (`/docs`)
 
-`GET /docs` serves `swagger-ui-express` over the hand-written spec in `src/docs/openapi.ts` — every path key, method, and enum value in it is built from the *same* `METHODS_AND_PATHS`/`@beautinique/shared-constants` this service's own routing and validation use, so the docs can't silently drift from the actual routes.
+`GET /docs` serves `swagger-ui-express` over the hand-written spec in `src/docs/openapi.ts` — every path key, method, and enum value in it is built from the *same* `METHODS_AND_PATHS`/`@beautinique/backend-constants` this service's own routing and validation use, so the docs can't silently drift from the actual routes.
 
 **Tags.** Every operation is tagged with the *service that actually handles it*, not just a generic feature name — so the sidebar groups endpoints by which downstream service owns them:
 
@@ -235,7 +235,7 @@ See `media-service`'s own README (`src/reference/media-service/README.md` in thi
 - `Product Service: Category` / `Product` — proxied to `product-service`
 - `Media Service: Upload` — streamed to `media-service`
 
-**Schemas.** Enums (`CATEGORY_LEVELS`, `PRODUCT_STATUSES`, `USER_ROLES`, `AUTH_PROVIDERS`, `DRAFT_PRODUCT_STEP_MAP`, `SORT`) are pulled directly from `@beautinique/shared-constants` rather than hand-typed as string literals, and every dynamic path segment (`:categoryId`, `:slug`) is converted to OpenAPI's `{param}` syntax (`path.replace(':', '{')` + a trailing `}`) — Express uses `:param`, but the OpenAPI 3.0 spec itself requires `{param}`, so the two need this small translation to both be correct at once.
+**Schemas.** Enums (`CATEGORY_LEVELS`, `PRODUCT_STATUSES`, `USER_ROLES`, `AUTH_PROVIDERS`, `DRAFT_PRODUCT_STEP_MAP`, `SORT`) are pulled directly from `@beautinique/backend-constants` rather than hand-typed as string literals, and every dynamic path segment (`:categoryId`, `:slug`) is converted to OpenAPI's `{param}` syntax (`path.replace(':', '{')` + a trailing `}`) — Express uses `:param`, but the OpenAPI 3.0 spec itself requires `{param}`, so the two need this small translation to both be correct at once.
 
 ---
 
@@ -409,7 +409,7 @@ Flat config: `@eslint/js` recommended → `typescript-eslint` recommended/strict
 | `@beautinique/backend-types`           | `TServiceName`, `TUserRole`, `TApiMethod`, and every Zod-inferred request-body type (`TLoginZodSchema`, `TRegisterZodSchema`, ...)         |
 | `@beautinique/backend-utils`           | `getUser`                                                                                                                                  |
 | `@beautinique/backend-zod`             | `validateZod` and every request Zod schema this gateway validates against, ahead of `user-service`                                         |
-| `@beautinique/shared-constants`        | `HEADERS_MAP`, `SERVICE_NAMES_MAP`, `API_METHODS_MAP`, `USER_ROLES`, `USER_ROLE_MAP`                                                       |
+| `@beautinique/backend-constants`       | `HEADERS_MAP`, `SERVICE_NAMES_MAP`, `API_METHODS_MAP`, `USER_ROLES`, `USER_ROLE_MAP`                                                       |
 | `@beautinique/shared-markdown-to-html` | `generateHtmlFromMarkdown` — used by `scripts/generate-html.mjs`                                                                           |
 | `@beautinique/shared-utils`            | `requireEnv`/`requirePort`                                                                                                                 |
 

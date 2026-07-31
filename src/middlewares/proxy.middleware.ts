@@ -1,6 +1,6 @@
 import type { ServerResponse } from 'node:http';
 
-import { HEADERS_MAP } from '@beautinique/shared-constants';
+import { HEADERS_MAP } from '@beautinique/backend-constants';
 import type { Request, Response } from 'express';
 import proxy from 'http-proxy';
 

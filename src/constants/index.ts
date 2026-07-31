@@ -1,5 +1,5 @@
+import { API_METHODS_MAP, SERVICE_NAMES_MAP } from '@beautinique/backend-constants';
 import type { TServiceName } from '@beautinique/backend-types';
-import { API_METHODS_MAP, SERVICE_NAMES_MAP } from '@beautinique/shared-constants';
 import type { CookieOptions } from 'express';
 
 import { envs } from '../envs/index.js';

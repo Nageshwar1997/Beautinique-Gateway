@@ -1,3 +1,4 @@
+import { USER_ROLE_MAP } from '@beautinique/backend-constants';
 import { checkEmptyRequest } from '@beautinique/backend-request';
 import { tryCatchResponse } from '@beautinique/backend-response';
 import {
@@ -6,7 +7,6 @@ import {
   updateContactQueryStatusZodSchema,
   validateZod,
 } from '@beautinique/backend-zod';
-import { USER_ROLE_MAP } from '@beautinique/shared-constants';
 import { Router } from 'express';
 
 import { METHODS_AND_PATHS } from '../../../../constants/index.js';

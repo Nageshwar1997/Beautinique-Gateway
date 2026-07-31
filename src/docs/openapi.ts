@@ -13,7 +13,7 @@ import {
   SORT_MAP,
   USER_ROLE_MAP,
   USER_ROLES,
-} from '@beautinique/shared-constants';
+} from '@beautinique/backend-constants';
 import { formatFileSize } from '@beautinique/shared-utils';
 
 import { COOKIES_DATA, METHODS_AND_PATHS } from '../constants/index.js';
@@ -253,7 +253,10 @@ export const openApiSpec = {
       name: 'Gateway',
       description: "This gateway's own endpoints - health, wake-up, token refresh. Not proxied.",
     },
-    { name: 'User Service: Login', description: 'Manual and OAuth login. Proxied to user-service.' },
+    {
+      name: 'User Service: Login',
+      description: 'Manual and OAuth login. Proxied to user-service.',
+    },
     {
       name: 'User Service: Register',
       description: 'OTP-based registration. Proxied to user-service.',

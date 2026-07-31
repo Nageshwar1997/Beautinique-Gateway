@@ -1,7 +1,7 @@
+import { HEADERS_MAP, USER_ROLES } from '@beautinique/backend-constants';
 import { checkCors } from '@beautinique/backend-cors';
 import { createHttpLogger } from '@beautinique/backend-logger';
 import { errorResponse, notFoundResponse, successResponse } from '@beautinique/backend-response';
-import { HEADERS_MAP, USER_ROLES } from '@beautinique/shared-constants';
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import path from 'path';
