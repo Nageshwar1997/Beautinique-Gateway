@@ -40,7 +40,14 @@ app.set('query parser', (str: string) => parse(str));
  */
 app.use(
   checkCors({
-    origin: [...ORIGINS, 'http://localhost:4173'],
+    origin: [
+      ...ORIGINS,
+      'http://localhost:4173',
+      'http://localhost:3001',
+      'http://localhost:3002',
+      'http://localhost:3003',
+      'http://localhost:3004',
+    ],
     allowedHeaders: [HEADERS_MAP.contentType, HEADERS_MAP.authorization, HEADERS_MAP.loginRole],
     credentials: true,
     // `@beautinique/backend-cors` has no default of its own for this option - passing it
