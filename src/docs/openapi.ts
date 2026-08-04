@@ -665,8 +665,23 @@ export const openApiSpec = {
         },
       },
     },
-    [`${base}${userServiceBase}${auth.base}${password.base}${password.change.path}`]: {
-      [password.change.method]: {
+    [`${base}${userServiceBase}${user.base}${user.session.path}`]: {
+      [user.session.method]: {
+        tags: ['User Service: Session'],
+        summary: "Fetch the caller's own user record",
+        security: [{ accessTokenCookie: [] }],
+        responses: {
+          '200': {
+            description: 'From user-service, cache-aside over Redis on their end.',
+            content: { 'application/json': { schema: successEnvelope(minimalUserSchema) } },
+          },
+          '401': errorResponse('Missing/invalid/expired access_token cookie.'),
+          '404': errorResponse('No user found for this id.'),
+        },
+      },
+    },
+    [`${base}${userServiceBase}${user.base}${password.base}${user.password.change.path}`]: {
+      [user.password.change.method]: {
         tags: ['User Service: Password'],
         summary: 'Change password while logged in',
         security: [{ accessTokenCookie: [] }],
@@ -695,8 +710,8 @@ export const openApiSpec = {
         },
       },
     },
-    [`${base}${userServiceBase}${auth.base}${password.base}${password.set.path}`]: {
-      [password.set.method]: {
+    [`${base}${userServiceBase}${auth.base}${password.base}${user.password.set.path}`]: {
+      [user.password.set.method]: {
         tags: ['User Service: Password'],
         summary: 'Set an initial password for an OAuth-only account',
         security: [{ accessTokenCookie: [] }],
@@ -719,22 +734,6 @@ export const openApiSpec = {
           },
           '401': errorResponse('Missing/invalid/expired access_token cookie.'),
           '422': errorResponse('MANUAL provider is already linked - use forgot-password instead.'),
-        },
-      },
-    },
-
-    [`${base}${userServiceBase}${user.base}${user.session.path}`]: {
-      [user.session.method]: {
-        tags: ['User Service: Session'],
-        summary: "Fetch the caller's own user record",
-        security: [{ accessTokenCookie: [] }],
-        responses: {
-          '200': {
-            description: 'From user-service, cache-aside over Redis on their end.',
-            content: { 'application/json': { schema: successEnvelope(minimalUserSchema) } },
-          },
-          '401': errorResponse('Missing/invalid/expired access_token cookie.'),
-          '404': errorResponse('No user found for this id.'),
         },
       },
     },

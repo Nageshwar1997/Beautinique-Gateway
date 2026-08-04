@@ -1,29 +1,24 @@
 import { checkEmptyRequest } from '@beautinique/backend-request';
 import { tryCatchResponse } from '@beautinique/backend-response';
 import {
-  changePasswordZodSchema,
   emailZodSchema,
   otpZodSchema,
   passwordsZodSchema,
-  setPasswordZodSchema,
   validateZod,
 } from '@beautinique/backend-zod';
 import { Router } from 'express';
 
 import { METHODS_AND_PATHS } from '../../../../constants/index.js';
-import { authenticate } from '../../../../middlewares/index.js';
 import {
-  changePasswordController,
   forgotPasswordResendOtpController,
   forgotPasswordSaveController,
   forgotPasswordSendOtpController,
   forgotPasswordVerifyOtpController,
-  setPasswordController,
 } from '../../controllers/index.js';
 
 export const passwordRouter = Router();
 
-const { forgot, change, set } = METHODS_AND_PATHS.user_service.auth.password;
+const { forgot } = METHODS_AND_PATHS.user_service.auth.password;
 
 // Forgot Password Routes
 passwordRouter[forgot.sendOtp.method](
@@ -50,22 +45,4 @@ passwordRouter[forgot.save.method](
   checkEmptyRequest({ body: true }),
   validateZod({ body: passwordsZodSchema }),
   tryCatchResponse(forgotPasswordSaveController),
-);
-
-// Change Password Routes
-passwordRouter[change.method](
-  change.path,
-  authenticate,
-  checkEmptyRequest({ body: true }),
-  validateZod({ body: changePasswordZodSchema }),
-  tryCatchResponse(changePasswordController),
-);
-
-// Set Password Routes
-passwordRouter[set.method](
-  set.path,
-  authenticate,
-  checkEmptyRequest({ body: true }),
-  validateZod({ body: setPasswordZodSchema }),
-  tryCatchResponse(setPasswordController),
 );

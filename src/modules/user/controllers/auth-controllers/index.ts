@@ -1,13 +1,11 @@
 import { type AppError, BadRequestError } from '@beautinique/backend-classes';
 import { HEADERS_MAP } from '@beautinique/backend-constants';
 import type {
-  TChangePasswordZodSchema,
   TEmailZodSchema,
   TLoginZodSchema,
   TOtpZodSchema,
   TPasswordsZodSchema,
   TRegisterZodSchema,
-  TSetPasswordZodSchema,
   TUserRole,
 } from '@beautinique/backend-types';
 import type { Request, Response } from 'express';
@@ -282,38 +280,6 @@ export const forgotPasswordSaveController = async (req: Request, res: Response) 
     _id: response.data._id,
     role: response.data.role,
   });
-
-  setAuthCookies(res, accessToken, refreshToken);
-
-  res.success(response);
-};
-
-/* ================================ CHANGE PASSWORD CONTROLLERS ================================ */
-
-export const changePasswordController = async (req: Request, res: Response) => {
-  const user = getAuthUser(req.user);
-
-  const body = req.body as TChangePasswordZodSchema;
-
-  const response = await authService.changePassword(user, body);
-
-  const { accessToken, refreshToken } = generateAuthTokens({ _id: user._id, role: user.role });
-
-  setAuthCookies(res, accessToken, refreshToken);
-
-  res.success(response);
-};
-
-/* ================================ SET PASSWORD CONTROLLERS ================================ */
-
-export const setPasswordController = async (req: Request, res: Response) => {
-  const user = getAuthUser(req.user);
-
-  const body = req.body as TSetPasswordZodSchema;
-
-  const response = await authService.setPassword(user, body);
-
-  const { accessToken, refreshToken } = generateAuthTokens({ _id: user._id, role: user.role });
 
   setAuthCookies(res, accessToken, refreshToken);
 

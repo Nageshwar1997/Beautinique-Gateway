@@ -1,4 +1,8 @@
-import type { TUpdateUserZodSchema } from '@beautinique/backend-types';
+import type {
+  TChangePasswordZodSchema,
+  TSetPasswordZodSchema,
+  TUpdateUserZodSchema,
+} from '@beautinique/backend-types';
 
 import { BaseUserService } from '../../../classes/index.js';
 import { API_METHODS_AND_URLS } from '../../../constants/index.js';
@@ -16,6 +20,16 @@ class UserService extends BaseUserService {
   /* ================== UPDATE USER ================== */
   public updateUser(user: TUser, data: TUpdateUserZodSchema) {
     return this.request({ ...this.routes.update, user, data });
+  }
+
+  /* ================== CHANGE PASSWORD METHODS ================== */
+  public async changePassword(user: TUser, data: TChangePasswordZodSchema) {
+    return this.request({ ...this.routes.password.change, data, user });
+  }
+
+  /* ================== SET PASSWORD METHODS ================== */
+  public async setPassword(user: TUser, data: TSetPasswordZodSchema) {
+    return this.request({ ...this.routes.password.set, data, user });
   }
 }
 

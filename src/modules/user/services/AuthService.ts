@@ -1,11 +1,9 @@
 import type {
-  TChangePasswordZodSchema,
   TEmailZodSchema,
   TLoginZodSchema,
   TOtpZodSchema,
   TPasswordsZodSchema,
   TRegisterZodSchema,
-  TSetPasswordZodSchema,
   TUserRole,
 } from '@beautinique/backend-types';
 
@@ -77,16 +75,6 @@ class AuthService extends BaseUserService {
 
   public async forgotPasswordSave({ token, ...data }: TPasswordsZodSchema & { token: string }) {
     return this.request<TUser>({ ...this.routes.password.forgot.save, data, token });
-  }
-
-  /* ================== CHANGE PASSWORD METHODS ================== */
-  public async changePassword(user: TUser, data: TChangePasswordZodSchema) {
-    return this.request({ ...this.routes.password.change, data, user });
-  }
-
-  /* ================== SET PASSWORD METHODS ================== */
-  public async setPassword(user: TUser, data: TSetPasswordZodSchema) {
-    return this.request({ ...this.routes.password.set, data, user });
   }
 
   /* ================== LOGOUT METHODS ================== */
