@@ -6,7 +6,7 @@ import type {
 import { getUser } from '@beautinique/backend-utils';
 import type { Request, Response } from 'express';
 
-import { contactService } from '../../services/index.js';
+import { contactService } from '../services/index.js';
 
 export const createContactQueryController = async (req: Request, res: Response) => {
   const body = req.body as TCreateContactQueryZodSchema;

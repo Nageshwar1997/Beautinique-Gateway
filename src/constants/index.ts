@@ -131,6 +131,16 @@ export const METHODS_AND_PATHS = {
       list: { method: GET, path: '/' },
       updateStatus: { method: PATCH, path: '/:ticketId' },
     },
+    seller: {
+      base: '/seller',
+      updateApprovalStatus: { method: PATCH, path: '/approval-status/:sellerId' },
+      draft: {
+        base: '/draft',
+        save: { method: POST, path: '/' }, // For saving a wizard step as draft
+        get: { method: GET, path: '/' }, // For fetching the existing draft to prefill the wizard
+        submit: { method: PATCH, path: '/submit' }, // Reassembles the draft and creates the Seller as PENDING
+      },
+    },
   },
 } as const;
 

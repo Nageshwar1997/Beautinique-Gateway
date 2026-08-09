@@ -4,13 +4,13 @@ import { tryCatchResponse } from '@beautinique/backend-response';
 import { createContactQueryZodSchema, validateZod } from '@beautinique/backend-zod';
 import { Router } from 'express';
 
-import { METHODS_AND_PATHS } from '../../../../constants/index.js';
-import { authorize } from '../../../../middlewares/auth.middleware.js';
+import { METHODS_AND_PATHS } from '../../../constants/index.js';
+import { authorize } from '../../../middlewares/auth.middleware.js';
 import {
   createContactQueryController,
   getContactQueriesController,
   updateContactQueryStatusController,
-} from '../../controllers/index.js';
+} from '../controllers/index.js';
 
 export const contactRouter = Router();
 
