@@ -1,8 +1,7 @@
 import type {
   IListContactQueriesQuery,
-  TContactQueryTicketIdZodSchema,
+  TContactQueryStatus,
   TCreateContactQueryZodSchema,
-  TUpdateContactQueryStatusZodSchema,
 } from '@beautinique/backend-types';
 
 import { BaseOrganizationService } from '../../../classes/index.js';
@@ -23,13 +22,9 @@ class ContactService extends BaseOrganizationService {
   }
 
   /* ================== UPDATE CONTACT QUERY STATUS ================== */
-  public updateContactQueryStatus(
-    params: TContactQueryTicketIdZodSchema,
-    data: TUpdateContactQueryStatusZodSchema,
-    user: TUser,
-  ) {
+  public updateContactQueryStatus(ticketId: string, status: TContactQueryStatus, user: TUser) {
     const { method, url } = this.routes.updateStatus;
-    return this.request({ method, url: url(params), data, user });
+    return this.request({ method, url: url({ ticketId }), params: { status }, user });
   }
 }
 

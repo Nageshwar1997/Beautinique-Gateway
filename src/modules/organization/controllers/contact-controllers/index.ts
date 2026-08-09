@@ -1,8 +1,7 @@
 import type {
   IListContactQueriesQuery,
-  TContactQueryTicketIdZodSchema,
+  TContactQueryStatus,
   TCreateContactQueryZodSchema,
-  TUpdateContactQueryStatusZodSchema,
 } from '@beautinique/backend-types';
 import { getUser } from '@beautinique/backend-utils';
 import type { Request, Response } from 'express';
@@ -26,11 +25,12 @@ export const getContactQueriesController = async (req: Request, res: Response) =
 };
 
 export const updateContactQueryStatusController = async (req: Request, res: Response) => {
-  const params = req.params as TContactQueryTicketIdZodSchema;
-  const data = req.body as TUpdateContactQueryStatusZodSchema;
+  const { ticketId } = req.params as { ticketId: string };
+  const { status } = req.query as { status: TContactQueryStatus };
+
   const user = getUser(req.user);
 
-  const response = await contactService.updateContactQueryStatus(params, data, user);
+  const response = await contactService.updateContactQueryStatus(ticketId, status, user);
 
   res.success(response);
 };
