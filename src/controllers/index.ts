@@ -8,21 +8,22 @@ import { envs } from '../envs/index.js';
 import { generateAccessToken, verifyRefreshToken } from '../utils/index.js';
 
 /**
- * Render's free tier spins a service down after inactivity - a sleeping service takes
- * *at least* ~50s to cold-start (sometimes more). Critically, a request to a cold service
- * often fails *fast* (Render's edge returns an error immediately while the container is still
- * booting) rather than hanging for the full timeout - so the retry *count x delay* needs to
- * add up to a window comfortably longer than the cold-start floor, not rely on each attempt
- * eating the timeout on its own. HEALTH_CHECK_TIMEOUT stays high as a safety cap for the rarer
- * case where an attempt genuinely hangs instead of failing fast.
+ * Render's free tier spins a service down after inactivity. Measured cold-start time for
+ * these services (from a genuinely-asleep state) has been observed at ~130-140s+ - notably
+ * higher than Render's commonly-cited ~50-75s floor. A request to a cold service also fails
+ * *fast* (an immediate error while the container is still booting) rather than hanging for the
+ * full timeout - so the retry *count x delay* needs to add up to a window comfortably longer
+ * than the observed floor, not rely on each attempt eating the timeout on its own.
+ * HEALTH_CHECK_TIMEOUT stays high as a safety cap for the rarer case where an attempt
+ * genuinely hangs instead of failing fast.
  *
  * Every downstream service exposes both `/health` (checks its DB connection too) and a
  * lighter `/wake-up` (no DB dependency - just proves the container is awake). Wake-up pings
  * hit each service's own `/wake-up`; health checks hit `/health`.
  */
 const HEALTH_CHECK_TIMEOUT = 75_000;
-const HEALTH_CHECK_RETRIES = 6;
-const HEALTH_CHECK_RETRY_DELAY = 15_000;
+const HEALTH_CHECK_RETRIES = 10;
+const HEALTH_CHECK_RETRY_DELAY = 20_000;
 
 // Maps each `envs.url.service` key to its constants block, so pinging uses each service's
 // own `health`/`wakeUp` path instead of assuming every service shares the gateway's own.

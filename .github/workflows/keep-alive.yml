@@ -28,9 +28,9 @@ jobs:
     steps:
       - name: Ping gateway /wake-up
         # --max-time must stay comfortably above the gateway's own internal retry window
-        # (HEALTH_CHECK_RETRIES x HEALTH_CHECK_RETRY_DELAY in src/controllers/index.ts) -
-        # otherwise curl gives up before the gateway finishes waking every service.
+        # (HEALTH_CHECK_RETRIES x HEALTH_CHECK_RETRY_DELAY in src/controllers/index.ts, ~220s
+        # worst case) - otherwise curl gives up before the gateway finishes waking every service.
         run: |
           curl --fail --silent --show-error \
-            --max-time 180 \
+            --max-time 280 \
             "${{ vars.GATEWAY_BASE_URL }}/wake-up"
