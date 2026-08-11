@@ -13,24 +13,34 @@ import { generateAccessToken, verifyRefreshToken } from '../utils/index.js';
  * the container finishes booting. The timeout is set well above that floor, plus a couple
  * of delayed retries, so a slow-but-legitimate wake-up isn't reported down too early.
  *
- * None of the downstream services expose a dedicated "/wake-up" route (only `/health`) -
- * that path only exists on this gateway itself, so pinging `/health` on each of them is
- * what actually reaches (and wakes) them.
+ * Every downstream service exposes both `/health` (checks its DB connection too) and a
+ * lighter `/wake-up` (no DB dependency - just proves the container is awake). Wake-up pings
+ * hit each service's own `/wake-up`; health checks hit `/health`.
  */
 const HEALTH_CHECK_TIMEOUT = 75_000;
 const HEALTH_CHECK_RETRIES = 2;
 const HEALTH_CHECK_RETRY_DELAY = 5_000;
 
+// Maps each `envs.url.service` key to its constants block, so pinging uses each service's
+// own `health`/`wakeUp` path instead of assuming every service shares the gateway's own.
+const SERVICE_METHODS_AND_PATHS = {
+  mail: METHODS_AND_PATHS.mail_service,
+  media: METHODS_AND_PATHS.media_service,
+  product: METHODS_AND_PATHS.product_service,
+  user: METHODS_AND_PATHS.user_service,
+  organization: METHODS_AND_PATHS.organization_service,
+} as const;
+
 const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
 
-const pingService = async (url: string) => {
-  const target = `${url}${METHODS_AND_PATHS.health.path}`;
+const pingService = async (url: string, target: { method: 'get'; path: string }) => {
+  const endpoint = `${url}${target.path}`;
 
   let lastError: unknown = null;
 
   for (let attempt = 0; attempt <= HEALTH_CHECK_RETRIES; attempt++) {
     try {
-      const { data } = await axios[METHODS_AND_PATHS.health.method]<TApiResponse>(target, {
+      const { data } = await axios[target.method]<TApiResponse>(endpoint, {
         timeout: HEALTH_CHECK_TIMEOUT,
       });
 
@@ -53,7 +63,8 @@ export const wakeUpController = async (_req: Request, res: Response) => {
 
     const results = await Promise.all(
       Object.entries(services).map(async ([name, url]) => {
-        const { data, error } = await pingService(url);
+        const target = SERVICE_METHODS_AND_PATHS[name as keyof typeof SERVICE_METHODS_AND_PATHS];
+        const { data, error } = await pingService(url, target.wakeUp);
 
         if (!error) {
           return { service: name, status: 'UP', message: data?.message ?? null };
@@ -97,7 +108,8 @@ export const healthController = async (_req: Request, res: Response) => {
 
     const results = await Promise.all(
       Object.entries(services).map(async ([name, url]) => {
-        const { data, error } = await pingService(url);
+        const target = SERVICE_METHODS_AND_PATHS[name as keyof typeof SERVICE_METHODS_AND_PATHS];
+        const { data, error } = await pingService(url, target.health);
 
         if (!error) {
           return { service: name, status: 'HEALTHY', response: data };

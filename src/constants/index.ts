@@ -36,6 +36,8 @@ export const METHODS_AND_PATHS = {
   },
   user_service: {
     default: `/${SERVICE_NAMES_MAP['user-service']}`,
+    health: { method: GET, path: '/health' },
+    wakeUp: { method: GET, path: '/wake-up' },
     auth: {
       base: '/auth',
       login: {
@@ -87,9 +89,20 @@ export const METHODS_AND_PATHS = {
       },
     },
   },
-  media_service: { default: `/${SERVICE_NAMES_MAP['media-service']}` },
+  media_service: {
+    default: `/${SERVICE_NAMES_MAP['media-service']}`,
+    health: { method: GET, path: '/health' },
+    wakeUp: { method: GET, path: '/wake-up' },
+  },
+  mail_service: {
+    default: `/${SERVICE_NAMES_MAP['mail-service']}`,
+    health: { method: GET, path: '/health' },
+    wakeUp: { method: GET, path: '/wake-up' },
+  },
   product_service: {
     default: `/${SERVICE_NAMES_MAP['product-service']}`,
+    health: { method: GET, path: '/health' },
+    wakeUp: { method: GET, path: '/wake-up' },
     category: {
       base: '/category',
       add: { method: POST, path: '/' },
@@ -125,6 +138,8 @@ export const METHODS_AND_PATHS = {
   },
   organization_service: {
     default: `/${SERVICE_NAMES_MAP['organization-service']}`,
+    health: { method: GET, path: '/health' },
+    wakeUp: { method: GET, path: '/wake-up' },
     contact: {
       base: '/contact',
       create: { method: POST, path: '/' },
