@@ -1,0 +1,35 @@
+name: Periodic wake-up (drain background jobs)
+
+# This does NOT keep services always-on - Render's free web services still sleep after ~15
+# minutes of inactivity, which is fine. This just pings the gateway's /wake-up twice a day
+# (every ~12 hours), which cascades to wake every downstream microservice in parallel (see
+# src/controllers/index.ts). Waking the process also boots its BullMQ worker (see each
+# service's bootstrap/startup.ts), so any delayed job whose delay has already elapsed while
+# the service was asleep gets picked up here - instead of sitting stale for days.
+#
+# Why 12h and not more frequent: media-service's TTL_SAFETY_BUFFER_SECONDS gives BullMQ jobs
+# ~24h of margin after their delay elapses before MongoDB's own TTL index fires as a
+# last-resort cleanup. Waking at least once every 12h keeps jobs comfortably ahead of that
+# safety net, so it never fires as a *replacement* for the real cleanup job (which would
+# leave the Cloudinary asset orphaned - see the comment on CLEANUP_DELAY).
+#
+# Cost: ~2 wake cycles/day x ~15min each x 6 services ~= 6-12% of Render's 750 free
+# instance-hours/month (shared across the whole workspace) - leaves the vast majority of the
+# budget for real traffic.
+
+on:
+  schedule:
+    - cron: '0 */12 * * *' # 00:00 and 12:00 UTC - keep this spacing even, don't add more without re-checking the hour budget
+  workflow_dispatch: {} # allows a manual "Run workflow" trigger from the Actions tab
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping gateway /wake-up
+        run: |
+          curl --fail --silent --show-error \
+            --max-time 100 \
+            --retry 2 \
+            --retry-delay 5 \
+            "${{ vars.GATEWAY_BASE_URL }}/wake-up"
