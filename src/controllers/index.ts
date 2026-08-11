@@ -9,17 +9,20 @@ import { generateAccessToken, verifyRefreshToken } from '../utils/index.js';
 
 /**
  * Render's free tier spins a service down after inactivity - a sleeping service takes
- * *at least* ~50s to cold-start (sometimes more), and the connection can fail once before
- * the container finishes booting. The timeout is set well above that floor, plus a couple
- * of delayed retries, so a slow-but-legitimate wake-up isn't reported down too early.
+ * *at least* ~50s to cold-start (sometimes more). Critically, a request to a cold service
+ * often fails *fast* (Render's edge returns an error immediately while the container is still
+ * booting) rather than hanging for the full timeout - so the retry *count x delay* needs to
+ * add up to a window comfortably longer than the cold-start floor, not rely on each attempt
+ * eating the timeout on its own. HEALTH_CHECK_TIMEOUT stays high as a safety cap for the rarer
+ * case where an attempt genuinely hangs instead of failing fast.
  *
  * Every downstream service exposes both `/health` (checks its DB connection too) and a
  * lighter `/wake-up` (no DB dependency - just proves the container is awake). Wake-up pings
  * hit each service's own `/wake-up`; health checks hit `/health`.
  */
 const HEALTH_CHECK_TIMEOUT = 75_000;
-const HEALTH_CHECK_RETRIES = 2;
-const HEALTH_CHECK_RETRY_DELAY = 5_000;
+const HEALTH_CHECK_RETRIES = 6;
+const HEALTH_CHECK_RETRY_DELAY = 15_000;
 
 // Maps each `envs.url.service` key to its constants block, so pinging uses each service's
 // own `health`/`wakeUp` path instead of assuming every service shares the gateway's own.
