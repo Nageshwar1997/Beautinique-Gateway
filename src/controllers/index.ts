@@ -9,11 +9,12 @@ import { generateAccessToken, verifyRefreshToken } from '../utils/index.js';
 
 /**
  * Render's free tier spins a service down after inactivity. Measured cold-start time for
- * these services (from a genuinely-asleep state) has been observed at ~130-140s+ - notably
- * higher than Render's commonly-cited ~50-75s floor. A request to a cold service also fails
- * *fast* (an immediate error while the container is still booting) rather than hanging for the
- * full timeout - so the retry *count x delay* needs to add up to a window comfortably longer
- * than the observed floor, not rely on each attempt eating the timeout on its own.
+ * these services (from a genuinely-asleep state) varies run to run - observed anywhere from
+ * ~113s up to 220s+, notably higher and less predictable than Render's commonly-cited ~50-75s
+ * floor (likely shared/oversubscribed free-tier compute). A request to a cold service also
+ * fails *fast* (an immediate error while the container is still booting) rather than hanging
+ * for the full timeout - so the retry *count x delay* needs to add up to a window with real
+ * margin over the worst observed case, not rely on each attempt eating the timeout on its own.
  * HEALTH_CHECK_TIMEOUT stays high as a safety cap for the rarer case where an attempt
  * genuinely hangs instead of failing fast.
  *
@@ -22,7 +23,7 @@ import { generateAccessToken, verifyRefreshToken } from '../utils/index.js';
  * hit each service's own `/wake-up`; health checks hit `/health`.
  */
 const HEALTH_CHECK_TIMEOUT = 75_000;
-const HEALTH_CHECK_RETRIES = 10;
+const HEALTH_CHECK_RETRIES = 14;
 const HEALTH_CHECK_RETRY_DELAY = 20_000;
 
 // Maps each `envs.url.service` key to its constants block, so pinging uses each service's
