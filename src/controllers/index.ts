@@ -8,18 +8,23 @@ import { envs } from '../envs/index.js';
 import { generateAccessToken, verifyRefreshToken } from '../utils/index.js';
 
 /**
- * Used by `healthController` (`/overall-health`) only - that route is a manual/diagnostic
- * check, so it's fine to block and retry for a genuine answer. `wakeUpController` (the
- * twice-daily cron target) doesn't use this - see the comment on it for why.
+ * Render's free tier spins a service down after inactivity. Measured cold-start time for
+ * these services (from a genuinely-asleep state) varies run to run - observed anywhere from
+ * ~113s up to 220s+, notably higher and less predictable than Render's commonly-cited ~50-75s
+ * floor (likely shared/oversubscribed free-tier compute). A request to a cold service also
+ * fails *fast* (an immediate error while the container is still booting) rather than hanging
+ * for the full timeout - so the retry *count x delay* needs to add up to a window with real
+ * margin over the worst observed case, not rely on each attempt eating the timeout on its own.
+ * HEALTH_CHECK_TIMEOUT stays high as a safety cap for the rarer case where an attempt
+ * genuinely hangs instead of failing fast.
  *
- * Render's free tier spins a service down after inactivity, and a cold container can 429/502
- * for a while (observed anywhere from ~90s to 300s+) before Render's edge starts routing to
- * it - retrying *fast* makes this worse (rapid retries got 429'd), so this uses *few* attempts
- * with a *long* gap between them instead.
+ * Every downstream service exposes both `/health` (checks its DB connection too) and a
+ * lighter `/wake-up` (no DB dependency - just proves the container is awake). Wake-up pings
+ * hit each service's own `/wake-up`; health checks hit `/health`.
  */
 const HEALTH_CHECK_TIMEOUT = 75_000;
-const HEALTH_CHECK_RETRIES = 2;
-const HEALTH_CHECK_RETRY_DELAY = 45_000;
+const HEALTH_CHECK_RETRIES = 14;
+const HEALTH_CHECK_RETRY_DELAY = 20_000;
 
 // Maps each `envs.url.service` key to its constants block, so pinging uses each service's
 // own `health`/`wakeUp` path instead of assuming every service shares the gateway's own.
@@ -43,9 +48,11 @@ const pingService = async (url: string, target: { method: 'get'; path: string })
       const { data } = await axios[target.method]<TApiResponse>(endpoint, {
         timeout: HEALTH_CHECK_TIMEOUT,
       });
+      console.log('🚀 ~ pingService ~ data:', data);
 
       return { data, error: null };
     } catch (error) {
+      console.log('🚀 ~ pingService ~ error:', error);
       lastError = error;
 
       if (attempt < HEALTH_CHECK_RETRIES) {
@@ -57,36 +64,60 @@ const pingService = async (url: string, target: { method: 'get'; path: string })
   return { data: null, error: lastError };
 };
 
-/**
- * A single request is enough to trigger Render's cold-start provisioning for a sleeping
- * service - waiting for (or retrying until) a *confirmed successful* response doesn't help,
- * since Render's own edge can 429/502 an incoming request while the container is still coming
- * up, independent of how many times or how patiently the gateway asks (observed anywhere from
- * ~90s to 300s+, and not reliably fixed by more/longer retries). So this fires one ping per
- * service and returns immediately, instead of blocking the caller (the twice-daily cron, or
- * the frontend's boot-time ping) on that unpredictable window. The underlying wake-up still
- * happens in the background regardless of whether these pings individually succeed.
- */
-export const wakeUpController = (_req: Request, res: Response) => {
-  const services = envs.url.service;
+export const wakeUpController = async (_req: Request, res: Response) => {
+  try {
+    const services = envs.url.service;
 
-  Object.entries(services).forEach(([name, url]) => {
-    const target = SERVICE_METHODS_AND_PATHS[name as keyof typeof SERVICE_METHODS_AND_PATHS];
+    const results = await Promise.all(
+      Object.entries(services).map(async ([name, url]) => {
+        const target = SERVICE_METHODS_AND_PATHS[name as keyof typeof SERVICE_METHODS_AND_PATHS];
+        const { data, error } = await pingService(url, target.wakeUp);
 
-    void axios[target.wakeUp.method](`${url}${target.wakeUp.path}`, {
-      timeout: HEALTH_CHECK_TIMEOUT,
-    }).catch(() => {
-      // Expected while cold (Render's edge returns 429/502 before the container is routable) -
-      // the request still reached Render and triggered provisioning either way.
+        if (!error) {
+          return { service: name, status: 'UP', message: data?.message ?? null };
+        }
+
+        // TEMP DEBUG: surface the raw failure reason (axios error code/message, or the target
+        // URL that was hit) so we can tell DNS failure / connection refused / timeout apart -
+        // remove this `debug` field once the root cause is confirmed.
+        return {
+          service: name,
+          status: 'DOWN',
+          message: isAxiosError<TApiResponse>(error)
+            ? (error.response?.data.message ?? null)
+            : null,
+          debug: isAxiosError(error)
+            ? {
+                code: error.code ?? null,
+                message: error.message,
+                url: `${url}${target.wakeUp.path}`,
+                httpStatus: error.response?.status ?? null,
+              }
+            : { message: error instanceof Error ? error.message : JSON.stringify(error) },
+        };
+      }),
+    );
+
+    const allUp = results.every((service) => service.status === 'UP');
+    const allDown = results.every((service) => service.status === 'DOWN');
+
+    const overallStatus = allUp ? 'UP' : allDown ? 'DOWN' : 'DEGRADED';
+
+    res.status(200).json({
+      message: 'Gateway is up and running',
+      status: overallStatus,
+      gateway: 'UP',
+      services: results,
     });
-  });
-
-  res.status(200).json({
-    message: 'Wake-up triggered for every service',
-    status: 'TRIGGERED',
-    gateway: 'UP',
-    services: Object.keys(services),
-  });
+  } catch (err) {
+    res.status(500).json({
+      message: 'Gateway is down',
+      status: 'DOWN',
+      gateway: 'DOWN',
+      services: [],
+      error: err instanceof Error ? err.message : 'Something went wrong!',
+    });
+  }
 };
 
 export const healthController = async (_req: Request, res: Response) => {
