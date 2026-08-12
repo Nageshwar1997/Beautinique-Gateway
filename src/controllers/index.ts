@@ -8,23 +8,20 @@ import { envs } from '../envs/index.js';
 import { generateAccessToken, verifyRefreshToken } from '../utils/index.js';
 
 /**
- * Render's free tier spins a service down after inactivity. Measured cold-start time for
- * these services (from a genuinely-asleep state) varies run to run - observed anywhere from
- * ~113s up to 220s+, notably higher and less predictable than Render's commonly-cited ~50-75s
- * floor (likely shared/oversubscribed free-tier compute). A request to a cold service also
- * fails *fast* (an immediate error while the container is still booting) rather than hanging
- * for the full timeout - so the retry *count x delay* needs to add up to a window with real
- * margin over the worst observed case, not rely on each attempt eating the timeout on its own.
- * HEALTH_CHECK_TIMEOUT stays high as a safety cap for the rarer case where an attempt
- * genuinely hangs instead of failing fast.
+ * Render's free tier spins a service down after inactivity, and a cold container can 502 on
+ * the first request or two while it's still booting.
  *
- * Every downstream service exposes both `/health` (checks its DB connection too) and a
- * lighter `/wake-up` (no DB dependency - just proves the container is awake). Wake-up pings
- * hit each service's own `/wake-up`; health checks hit `/health`.
+ * IMPORTANT: retrying *fast* is actively harmful here - Render's edge rate-limits repeated
+ * requests to a service (confirmed via the `debug` field below: rapid retries came back as
+ * HTTP 429, not the underlying service's own response), so hammering a cold service with many
+ * quick attempts gets the *gateway itself* rate-limited instead of ever reaching the service.
+ * A single direct request reliably succeeds once the container is up. So this uses *few*
+ * attempts with a *long* gap between them - enough real time for the container to finish
+ * booting without tripping the rate limit.
  */
 const HEALTH_CHECK_TIMEOUT = 75_000;
-const HEALTH_CHECK_RETRIES = 14;
-const HEALTH_CHECK_RETRY_DELAY = 20_000;
+const HEALTH_CHECK_RETRIES = 2;
+const HEALTH_CHECK_RETRY_DELAY = 45_000;
 
 // Maps each `envs.url.service` key to its constants block, so pinging uses each service's
 // own `health`/`wakeUp` path instead of assuming every service shares the gateway's own.
