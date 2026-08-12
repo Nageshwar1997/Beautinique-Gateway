@@ -91,7 +91,7 @@ export const wakeUpController = async (_req: Request, res: Response) => {
                 url: `${url}${target.wakeUp.path}`,
                 httpStatus: error.response?.status ?? null,
               }
-            : { message: error instanceof Error ? error.message : String(error) },
+            : { message: error instanceof Error ? error.message : JSON.stringify(error) },
         };
       }),
     );
