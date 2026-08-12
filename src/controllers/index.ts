@@ -75,12 +75,23 @@ export const wakeUpController = async (_req: Request, res: Response) => {
           return { service: name, status: 'UP', message: data?.message ?? null };
         }
 
+        // TEMP DEBUG: surface the raw failure reason (axios error code/message, or the target
+        // URL that was hit) so we can tell DNS failure / connection refused / timeout apart -
+        // remove this `debug` field once the root cause is confirmed.
         return {
           service: name,
           status: 'DOWN',
           message: isAxiosError<TApiResponse>(error)
             ? (error.response?.data.message ?? null)
             : null,
+          debug: isAxiosError(error)
+            ? {
+                code: error.code ?? null,
+                message: error.message,
+                url: `${url}${target.wakeUp.path}`,
+                httpStatus: error.response?.status ?? null,
+              }
+            : { message: error instanceof Error ? error.message : String(error) },
         };
       }),
     );
