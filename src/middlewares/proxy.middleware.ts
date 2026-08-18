@@ -1,6 +1,6 @@
 import type { ServerResponse } from 'node:http';
 
-import { HEADERS_MAP } from '@beautinique/backend-constants';
+import { HEADERS_MAP, SERVICE_NAMES_MAP } from '@beautinique/backend-constants';
 import type { Request, Response } from 'express';
 import proxy from 'http-proxy';
 
@@ -9,7 +9,7 @@ import { METHODS_AND_PATHS, SERVICE_SECRET_MAP, SERVICES_BASE_URLS } from '../co
 import { getAuthUser } from '../utils/index.js';
 
 const mediaProxy = proxy.createProxyServer<Request, Response>({
-  target: `${SERVICES_BASE_URLS['media-service']}${METHODS_AND_PATHS.base}`,
+  target: `${SERVICES_BASE_URLS[SERVICE_NAMES_MAP.media]}${METHODS_AND_PATHS.base}`,
   changeOrigin: true,
   xfwd: true,
   proxyTimeout: 30000,
@@ -22,7 +22,7 @@ const isServerResponse = (res: unknown): res is ServerResponse =>
 mediaProxy.on('proxyReq', (proxyReq, req) => {
   const { _id, role } = getAuthUser(req.user);
 
-  proxyReq.setHeader(HEADERS_MAP.serviceSecret, SERVICE_SECRET_MAP['media-service']);
+  proxyReq.setHeader(HEADERS_MAP.serviceSecret, SERVICE_SECRET_MAP[SERVICE_NAMES_MAP.media]);
   proxyReq.setHeader(HEADERS_MAP.userId, _id);
   proxyReq.setHeader(HEADERS_MAP.userRole, role);
 });

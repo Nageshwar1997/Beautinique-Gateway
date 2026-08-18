@@ -6,19 +6,19 @@ import { envs } from '../envs/index.js';
 import { createRouteHelper } from '../utils/index.js';
 
 export const SERVICES_BASE_URLS: Record<TServiceName, string> = {
-  [SERVICE_NAMES_MAP['mail-service']]: envs.url.service.mail,
-  [SERVICE_NAMES_MAP['media-service']]: envs.url.service.media,
-  [SERVICE_NAMES_MAP['product-service']]: envs.url.service.product,
-  [SERVICE_NAMES_MAP['user-service']]: envs.url.service.user,
-  [SERVICE_NAMES_MAP['organization-service']]: envs.url.service.organization,
+  [SERVICE_NAMES_MAP.mail]: envs.url.service.mail,
+  [SERVICE_NAMES_MAP.media]: envs.url.service.media,
+  [SERVICE_NAMES_MAP.product]: envs.url.service.product,
+  [SERVICE_NAMES_MAP.user]: envs.url.service.user,
+  [SERVICE_NAMES_MAP.organization]: envs.url.service.organization,
 } as const;
 
 export const SERVICE_SECRET_MAP: Record<TServiceName, string> = {
-  [SERVICE_NAMES_MAP['mail-service']]: envs.service_secret.mail,
-  [SERVICE_NAMES_MAP['media-service']]: envs.service_secret.media,
-  [SERVICE_NAMES_MAP['product-service']]: envs.service_secret.product,
-  [SERVICE_NAMES_MAP['user-service']]: envs.service_secret.user,
-  [SERVICE_NAMES_MAP['organization-service']]: envs.service_secret.organization,
+  [SERVICE_NAMES_MAP.mail]: envs.service_secret.mail,
+  [SERVICE_NAMES_MAP.media]: envs.service_secret.media,
+  [SERVICE_NAMES_MAP.product]: envs.service_secret.product,
+  [SERVICE_NAMES_MAP.user]: envs.service_secret.user,
+  [SERVICE_NAMES_MAP.organization]: envs.service_secret.organization,
 } as const;
 
 export const ORIGINS = Object.values(envs.url.frontend);
@@ -35,7 +35,7 @@ export const METHODS_AND_PATHS = {
     refreshAccessToken: { method: POST, path: '/refresh-access-token' },
   },
   user_service: {
-    default: `/${SERVICE_NAMES_MAP['user-service']}`,
+    default: `/${SERVICE_NAMES_MAP.user}`,
     health: { method: GET, path: '/health' },
     wakeUp: { method: GET, path: '/wake-up' },
     auth: {
@@ -90,17 +90,17 @@ export const METHODS_AND_PATHS = {
     },
   },
   media_service: {
-    default: `/${SERVICE_NAMES_MAP['media-service']}`,
+    default: `/${SERVICE_NAMES_MAP.media}`,
     health: { method: GET, path: '/health' },
     wakeUp: { method: GET, path: '/wake-up' },
   },
   mail_service: {
-    default: `/${SERVICE_NAMES_MAP['mail-service']}`,
+    default: `/${SERVICE_NAMES_MAP.mail}`,
     health: { method: GET, path: '/health' },
     wakeUp: { method: GET, path: '/wake-up' },
   },
   product_service: {
-    default: `/${SERVICE_NAMES_MAP['product-service']}`,
+    default: `/${SERVICE_NAMES_MAP.product}`,
     health: { method: GET, path: '/health' },
     wakeUp: { method: GET, path: '/wake-up' },
     category: {
@@ -137,7 +137,7 @@ export const METHODS_AND_PATHS = {
     },
   },
   organization_service: {
-    default: `/${SERVICE_NAMES_MAP['organization-service']}`,
+    default: `/${SERVICE_NAMES_MAP.organization}`,
     health: { method: GET, path: '/health' },
     wakeUp: { method: GET, path: '/wake-up' },
     contact: {

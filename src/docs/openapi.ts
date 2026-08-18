@@ -9,6 +9,7 @@ import {
   MAX_VIDEO_SIZE,
   PRODUCT_STATUSES,
   PRODUCT_STATUSES_MAP,
+  SERVICE_NAMES_MAP,
   SORT,
   SORT_MAP,
   USER_ROLE_MAP,
@@ -85,7 +86,7 @@ const otpTokenResponse = {
       },
     },
   },
-  '502': errorResponse('user-service is unreachable or returned an unexpected error.'),
+  '502': errorResponse(`${SERVICE_NAMES_MAP.user} is unreachable or returned an unexpected error.`),
 };
 
 const otpAuthHeader = {
@@ -240,12 +241,7 @@ export const openApiSpec = {
   info: {
     title: 'Beautinique Gateway API',
     version: '1.0.0',
-    description:
-      'Single public entry point for the Beautinique platform. Issues/verifies the browser session ' +
-      '(JWT `access_token`/`refresh_token` cookies) and translates it into the `X-Service-Secret`/' +
-      '`X-User-Id`/`X-User-Role` headers `user-service` and `product-service` trust, or streams ' +
-      'requests straight through to `media-service` for uploads. This gateway has no database of its ' +
-      'own - see the [README](/) for the full request/response flow through each downstream service.',
+    description: `Single public entry point for the Beautinique platform. Issues/verifies the browser session (JWT 'access_token'/'refresh_token' cookies) and translates it into the 'X-Service-Secret'/'X-User-Id'/'X-User-Role' headers '${SERVICE_NAMES_MAP.user}' and '${SERVICE_NAMES_MAP.product}' trust, or streams requests straight through to '${SERVICE_NAMES_MAP.media}' for uploads. This gateway has no database of its own - see the [README](/) for the full request/response flow through each downstream service.`,
   },
   servers: [{ url: '/', description: 'This service' }],
   tags: [
@@ -255,20 +251,23 @@ export const openApiSpec = {
     },
     {
       name: 'User Service: Login',
-      description: 'Manual and OAuth login. Proxied to user-service.',
+      description: `Manual and OAuth login. Proxied to ${SERVICE_NAMES_MAP.user}.`,
     },
     {
       name: 'User Service: Register',
-      description: 'OTP-based registration. Proxied to user-service.',
+      description: `OTP-based registration. Proxied to ${SERVICE_NAMES_MAP.user}.`,
     },
     {
       name: 'User Service: Password',
-      description: 'Forgot / change / set password. Proxied to user-service.',
+      description: `Forgot / change / set password. Proxied to ${SERVICE_NAMES_MAP.user}.`,
     },
-    { name: 'User Service: Logout', description: 'Session invalidation. Proxied to user-service.' },
+    {
+      name: 'User Service: Logout',
+      description: `Session invalidation. Proxied to ${SERVICE_NAMES_MAP.user}.`,
+    },
     {
       name: 'User Service: Session',
-      description: "Current user's session lookup. Proxied to user-service.",
+      description: `Current user's session lookup. Proxied to ${SERVICE_NAMES_MAP.user}.`,
     },
     {
       name: 'Product Service: Category',
@@ -280,7 +279,7 @@ export const openApiSpec = {
     },
     {
       name: 'Media Service: Upload',
-      description: 'File upload, streamed to media-service.',
+      description: `File upload, streamed to ${SERVICE_NAMES_MAP.media}.`,
     },
   ],
   components: {
@@ -330,9 +329,7 @@ export const openApiSpec = {
       [wakeUp.method]: {
         tags: ['Gateway'],
         summary: 'Aggregate downstream service health',
-        description:
-          'Pings `{service}/health` on user-service, product-service, media-service and mail-service ' +
-          'in parallel and reports UP/DEGRADED overall. Not wrapped in the usual success envelope.',
+        description: `Pings 'SERVICES_BASE_URLS[key]/health' on ${SERVICE_NAMES_MAP.user}, ${SERVICE_NAMES_MAP.product}, ${SERVICE_NAMES_MAP.media}, ${SERVICE_NAMES_MAP.organization} and ${SERVICE_NAMES_MAP.mail} in parallel and reports UP/DEGRADED overall. Not wrapped in the usual success envelope.`,
         responses: {
           '200': {
             description:
@@ -405,7 +402,7 @@ export const openApiSpec = {
             description: 'Logged in. `access_token`/`refresh_token` cookies are set.',
             content: { 'application/json': { schema: successEnvelope(minimalUserSchema) } },
           },
-          '400': errorResponse('user-service returned no user for these credentials.'),
+          '400': errorResponse(`${SERVICE_NAMES_MAP.user} returned no user for these credentials.`),
           '403': errorResponse('Login role mismatch.'),
           '404': errorResponse('No user found for the given email/phone.'),
           '422': errorResponse('Wrong password, or account has no MANUAL provider linked.'),
@@ -672,7 +669,7 @@ export const openApiSpec = {
         security: [{ accessTokenCookie: [] }],
         responses: {
           '200': {
-            description: 'From user-service, cache-aside over Redis on their end.',
+            description: `From ${SERVICE_NAMES_MAP.user}, cache-aside over Redis on their end.`,
             content: { 'application/json': { schema: successEnvelope(minimalUserSchema) } },
           },
           '401': errorResponse('Missing/invalid/expired access_token cookie.'),
@@ -1047,9 +1044,7 @@ export const openApiSpec = {
       post: {
         tags: ['Media Service: Upload'],
         summary: 'Upload a single image or video',
-        description:
-          'Streamed 1:1 to media-service via a raw HTTP proxy (see README §12) - any role is ' +
-          'accepted, the request body is never parsed by this gateway.',
+        description: `Streamed 1:1 to ${SERVICE_NAMES_MAP.media} via a raw HTTP proxy (see README §12) - any role is accepted, the request body is never parsed by this gateway.`,
         security: [{ accessTokenCookie: [] }],
         requestBody: {
           required: true,
@@ -1090,7 +1085,7 @@ export const openApiSpec = {
           '400': errorResponse('Missing/empty body or file, or failed validation.'),
           '401': errorResponse('Missing/invalid/expired access_token cookie.'),
           '413': errorResponse('File exceeds the allowed size for its type.'),
-          '502': errorResponse('media-service is currently unavailable.'),
+          '502': errorResponse(`${SERVICE_NAMES_MAP.media} is currently unavailable.`),
         },
       },
     },
@@ -1098,7 +1093,7 @@ export const openApiSpec = {
       post: {
         tags: ['Media Service: Upload'],
         summary: 'Upload several images/videos at once',
-        description: 'Streamed 1:1 to media-service via a raw HTTP proxy (see README §12).',
+        description: `Streamed 1:1 to ${SERVICE_NAMES_MAP.media} via a raw HTTP proxy (see README §12).`,
         security: [{ accessTokenCookie: [] }],
         requestBody: {
           required: true,
@@ -1139,7 +1134,7 @@ export const openApiSpec = {
           '400': errorResponse('Missing/empty body or file, or failed validation.'),
           '401': errorResponse('Missing/invalid/expired access_token cookie.'),
           '413': errorResponse('A file exceeds the allowed size for its type.'),
-          '502': errorResponse('media-service is currently unavailable.'),
+          '502': errorResponse(`${SERVICE_NAMES_MAP.media} is currently unavailable.`),
         },
       },
     },
