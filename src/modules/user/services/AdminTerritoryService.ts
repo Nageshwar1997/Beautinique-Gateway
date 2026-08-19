@@ -10,6 +10,11 @@ import type { TUser } from '../../../types/index.js';
 class AdminTerritoryService extends BaseUserService {
   private routes = API_METHODS_AND_URLS.user_service.admin.territory;
 
+  /* ================== MY ADMIN PROFILE (self) ================== */
+  public getMyAdmin(user: TUser) {
+    return this.request({ ...this.routes.me, user });
+  }
+
   /* ================== ASSIGN TERRITORY (MASTER only) ================== */
   public assignAdminTerritory(user: TUser, adminId: string, data: TAssignAdminTerritoryZodSchema) {
     const { method, url } = this.routes.assign;

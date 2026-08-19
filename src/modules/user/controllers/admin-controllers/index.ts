@@ -7,6 +7,16 @@ import type { Request, Response } from 'express';
 import { getAuthUser } from '../../../../utils/index.js';
 import { adminTerritoryService } from '../../services/index.js';
 
+/* ================================ MY ADMIN PROFILE (self) ================================ */
+
+export const getMyAdminController = async (req: Request, res: Response) => {
+  const user = getAuthUser(req.user);
+
+  const response = await adminTerritoryService.getMyAdmin(user);
+
+  res.success(response);
+};
+
 /* ================================ ASSIGN TERRITORY (MASTER only) ================================ */
 
 export const assignAdminTerritoryController = async (req: Request, res: Response) => {

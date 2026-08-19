@@ -12,6 +12,7 @@ import { METHODS_AND_PATHS } from '../../../../constants/index.js';
 import { authorize } from '../../../../middlewares/index.js';
 import {
   assignAdminTerritoryController,
+  getMyAdminController,
   getStateAdminsController,
   getTerritoryMapController,
   updateAdminStatusController,
@@ -20,7 +21,16 @@ import {
 export const adminRouter = Router();
 const territoryRouter = Router();
 
-const { assign, base, map, stateAdmins, status } = METHODS_AND_PATHS.user_service.admin.territory;
+const { assign, base, map, me, stateAdmins, status } =
+  METHODS_AND_PATHS.user_service.admin.territory;
+
+/* ================== SELF (ADMIN/SUPER_ADMIN/MASTER) ================== */
+
+territoryRouter[me.method](
+  me.path,
+  authorize([USER_ROLE_MAP.ADMIN, USER_ROLE_MAP.SUPER_ADMIN, USER_ROLE_MAP.MASTER]),
+  tryCatchResponse(getMyAdminController),
+);
 
 /* ================== TERRITORY CONFIG (MASTER only) ================== */
 
