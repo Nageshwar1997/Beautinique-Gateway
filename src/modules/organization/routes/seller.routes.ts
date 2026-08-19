@@ -13,6 +13,7 @@ import { authenticate, authorize } from '../../../middlewares/auth.middleware.js
 import {
   createSellerController,
   getDraftSellerController,
+  getSellerQueueController,
   saveDraftSellerController,
   updateSellerApprovalStatusController,
 } from '../controllers/index.js';
@@ -20,7 +21,7 @@ import {
 export const sellerRouter = Router();
 const draftRouter = Router();
 
-const { draft, updateApprovalStatus } = METHODS_AND_PATHS.organization_service.seller;
+const { draft, queue, updateApprovalStatus } = METHODS_AND_PATHS.organization_service.seller;
 
 /* ================== DRAFT ROUTES (self-service onboarding wizard) ================== */
 
@@ -41,8 +42,14 @@ sellerRouter.use(draft.base, authenticate, draftRouter);
 
 sellerRouter[updateApprovalStatus.method](
   updateApprovalStatus.path,
-  authorize([USER_ROLE_MAP.ADMIN, USER_ROLE_MAP.MASTER]),
+  authorize([USER_ROLE_MAP.ADMIN, USER_ROLE_MAP.SUPER_ADMIN, USER_ROLE_MAP.MASTER]),
   checkEmptyRequest({ body: true, params: true }),
   validateZod({ body: updateSellerApprovalStatusZodSchema }),
   tryCatchResponse(updateSellerApprovalStatusController),
+);
+
+sellerRouter[queue.method](
+  queue.path,
+  authorize([USER_ROLE_MAP.ADMIN, USER_ROLE_MAP.SUPER_ADMIN, USER_ROLE_MAP.MASTER]),
+  tryCatchResponse(getSellerQueueController),
 );

@@ -40,3 +40,12 @@ export const updateSellerApprovalStatusController = async (req: Request, res: Re
 
   res.success(response);
 };
+
+export const getSellerQueueController = async (req: Request, res: Response) => {
+  const user = getUser(req.user);
+  const query = req.query as Record<string, string>;
+
+  const response = await sellerService.getSellerQueue(user, query);
+
+  res.success(response);
+};

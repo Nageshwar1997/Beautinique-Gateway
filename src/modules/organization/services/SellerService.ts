@@ -34,6 +34,11 @@ class SellerService extends BaseOrganizationService {
 
     return this.request({ method, url: url({ sellerId }), data, user: seller });
   }
+
+  /* ================== SELLER QUEUE ("My Queue") ================== */
+  public getSellerQueue(user: TUser, params?: Record<string, string>) {
+    return this.request({ ...this.routes.queue, user, params });
+  }
 }
 
 export const sellerService = new SellerService();

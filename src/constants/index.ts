@@ -88,6 +88,23 @@ export const METHODS_AND_PATHS = {
         set: { method: PATCH, path: '/set' },
       },
     },
+    admin: {
+      base: '/admin',
+      territory: {
+        base: '/territory',
+        // MASTER assigns/reassigns which state(s) an ADMIN owns.
+        assign: { method: POST, path: '/:adminId/assign' },
+        // Self (ACTIVE/ON_LEAVE) or MASTER (also SUSPENDED) toggles status.
+        status: { method: PATCH, path: '/:adminId/status' },
+        // MASTER - full India state -> admins -> status -> load overview.
+        map: { method: GET, path: '/map' },
+        // Eligible admins for one state, ACTIVE-first (resolution + admin UI).
+        stateAdmins: { method: GET, path: '/state/:state' },
+        // NOTE: `resolve` intentionally not exposed here - it's
+        // service-to-service-only (organization-service's local mirror),
+        // never frontend-facing.
+      },
+    },
   },
   media_service: {
     default: `/${SERVICE_NAMES_MAP.media}`,
@@ -149,6 +166,8 @@ export const METHODS_AND_PATHS = {
     seller: {
       base: '/seller',
       updateApprovalStatus: { method: PATCH, path: '/approval-status/:sellerId' },
+      // "My Queue" - ?status=PENDING (default) & ?filter=mine|all|unassigned
+      queue: { method: GET, path: '/queue' },
       draft: {
         base: '/draft',
         save: { method: POST, path: '/' }, // For saving a wizard step as draft
