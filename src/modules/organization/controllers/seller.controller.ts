@@ -49,3 +49,11 @@ export const getSellerQueueController = async (req: Request, res: Response) => {
 
   res.success(response);
 };
+
+export const getMySellerController = async (req: Request, res: Response) => {
+  const user = getUser(req.user);
+
+  const response = await sellerService.getMySeller(user);
+
+  res.success(response);
+};

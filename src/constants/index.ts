@@ -170,6 +170,8 @@ export const METHODS_AND_PATHS = {
       updateApprovalStatus: { method: PATCH, path: '/approval-status/:sellerId' },
       // "My Queue" - ?status=PENDING (default) & ?filter=mine|all|unassigned
       queue: { method: GET, path: '/queue' },
+      // Self - the applicant's own submitted application (any USER).
+      me: { method: GET, path: '/me' },
       draft: {
         base: '/draft',
         save: { method: POST, path: '/' }, // For saving a wizard step as draft
