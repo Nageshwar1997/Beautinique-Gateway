@@ -1,4 +1,7 @@
-import type { TDraftProductStepBodyZodSchema } from '@beautinique/backend-types';
+import type {
+  TDraftProductStepBodyZodSchema,
+  TUpdateProductApprovalStatusZodSchema,
+} from '@beautinique/backend-types';
 import type { Request, Response } from 'express';
 
 import { getAuthUser } from '../../../utils/index.js';
@@ -36,6 +39,25 @@ export const getDashboardProductsController = async (req: Request, res: Response
   const query = req.query as Record<string, string>;
 
   const response = await productService.getDashboardProducts({ user, params: query });
+
+  res.success(response);
+};
+
+export const updateProductApprovalStatusController = async (req: Request, res: Response) => {
+  const admin = getAuthUser(req.user);
+  const { productId } = req.params as { productId: string };
+  const body = req.body as TUpdateProductApprovalStatusZodSchema;
+
+  const response = await productService.updateProductApprovalStatus(admin, productId, body);
+
+  res.success(response);
+};
+
+export const getProductQueueController = async (req: Request, res: Response) => {
+  const user = getAuthUser(req.user);
+  const query = req.query as Record<string, string>;
+
+  const response = await productService.getProductQueue(user, query);
 
   res.success(response);
 };
