@@ -57,8 +57,9 @@ export const demoteAdminController = async (req: Request, res: Response) => {
 
 export const getTerritoryMapController = async (req: Request, res: Response) => {
   const user = getAuthUser(req.user);
+  const { includeInactive } = req.query as { includeInactive?: string };
 
-  const response = await adminTerritoryService.getTerritoryMap(user);
+  const response = await adminTerritoryService.getTerritoryMap(user, includeInactive === 'true');
 
   res.success(response);
 };

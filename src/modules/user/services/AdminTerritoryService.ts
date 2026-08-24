@@ -42,8 +42,12 @@ class AdminTerritoryService extends BaseUserService {
   }
 
   /* ================== TERRITORY MAP (MASTER only) ================== */
-  public getTerritoryMap(user: TUser) {
-    return this.request({ ...this.routes.map, user });
+  public getTerritoryMap(user: TUser, includeInactive?: boolean) {
+    return this.request({
+      ...this.routes.map,
+      user,
+      ...(includeInactive && { params: { includeInactive: 'true' } }),
+    });
   }
 
   /* ================== STATE ADMINS (internal + admin UI) ================== */
