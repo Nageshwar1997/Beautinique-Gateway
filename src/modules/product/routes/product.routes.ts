@@ -57,11 +57,13 @@ dashboardRouter[get.dashboard.bySlug.method](
 
 /* ================== PRODUCTS ROUTES ================ */
 
-productRouter.use(
-  draft.base,
-  authorize([USER_ROLE_MAP.ADMIN, USER_ROLE_MAP.MASTER, USER_ROLE_MAP.SELLER]),
-  draftRouter,
-);
+// Only a SELLER creates/edits their own draft products - stale copy of the
+// pre-Phase-5.0 policy was still letting ADMIN/MASTER through here even
+// though `product-service`'s own `draft.base` route has been SELLER-only
+// since then (see that service's `product.routes.ts`). The mismatch was
+// harmless (product-service's own `authorize` still rejected them), but the
+// gateway is supposed to mirror the real policy, not be more permissive.
+productRouter.use(draft.base, authorize([USER_ROLE_MAP.SELLER]), draftRouter);
 
 /* ================== ADMIN REVIEW ================== */
 
