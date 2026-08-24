@@ -29,6 +29,18 @@ class AdminTerritoryService extends BaseUserService {
     return this.request({ method, url: url({ adminId }), data, user });
   }
 
+  /* ================== DEMOTE (MASTER only) ================== */
+  public demoteAdmin(user: TUser, adminId: string, reassignTo?: string) {
+    const { method, url } = this.routes.demote;
+
+    return this.request({
+      method,
+      url: url({ adminId }),
+      user,
+      ...(reassignTo && { params: { reassignTo } }),
+    });
+  }
+
   /* ================== TERRITORY MAP (MASTER only) ================== */
   public getTerritoryMap(user: TUser) {
     return this.request({ ...this.routes.map, user });

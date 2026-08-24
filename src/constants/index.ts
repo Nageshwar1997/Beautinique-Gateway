@@ -98,6 +98,9 @@ export const METHODS_AND_PATHS = {
         assign: { method: POST, path: '/:adminId/assign' },
         // Self (ACTIVE/ON_LEAVE) or MASTER (also SUSPENDED) toggles status.
         status: { method: PATCH, path: '/:adminId/status' },
+        // MASTER only - demotes back to USER, only once SUSPENDED. Optional
+        // `?reassignTo=<adminUserId>` hands the vacated states to another admin.
+        demote: { method: DELETE, path: '/:adminId/demote' },
         // MASTER - full India state -> admins -> status -> load overview.
         map: { method: GET, path: '/map' },
         // Eligible admins for one state, ACTIVE-first (resolution + admin UI).

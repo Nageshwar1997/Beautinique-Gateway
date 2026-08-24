@@ -41,6 +41,18 @@ export const updateAdminStatusController = async (req: Request, res: Response) =
   res.success(response);
 };
 
+/* ================================ DEMOTE (MASTER only) ================================ */
+
+export const demoteAdminController = async (req: Request, res: Response) => {
+  const user = getAuthUser(req.user);
+  const { adminId } = req.params as { adminId: string };
+  const { reassignTo } = req.query as { reassignTo?: string };
+
+  const response = await adminTerritoryService.demoteAdmin(user, adminId, reassignTo);
+
+  res.success(response);
+};
+
 /* ================================ TERRITORY MAP (MASTER only) ================================ */
 
 export const getTerritoryMapController = async (req: Request, res: Response) => {
