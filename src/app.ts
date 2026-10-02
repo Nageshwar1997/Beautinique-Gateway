@@ -13,10 +13,17 @@ import { LOGGER_BASE_OPTIONS, METHODS_AND_PATHS, ORIGINS } from './constants/ind
 import { healthController } from './controllers/index.js';
 import { openApiSpec } from './docs/openapi.js';
 import { envs } from './envs/index.js';
-import { authorize, mediaServiceProxy } from './middlewares/index.js';
+import {
+  apiRateLimiter,
+  authorize,
+  authRateLimiter,
+  mediaServiceProxy,
+  overallHealthRateLimiter,
+} from './middlewares/index.js';
 import { router } from './routes/index.js';
 
-const { base, health, home, overall_health, wakeUp, media_service } = METHODS_AND_PATHS;
+const { base, health, home, overall_health, wakeUp, media_service, user_service } =
+  METHODS_AND_PATHS;
 
 /* -------------------------------------------------------------------------- */
 /*                               Express App                                  */
@@ -29,6 +36,14 @@ export const app = express();
 /* -------------------------------------------------------------------------- */
 
 app.set('query parser', (str: string) => parse(str));
+
+/**
+ * The gateway runs behind Render's load balancer, so the socket's remote address is always the
+ * balancer. Trusting that many proxy hops makes `req.ip` the real client IP (from
+ * `X-Forwarded-For`) - what the rate limiters below key on. A hop count, not `true`, on purpose:
+ * `true` would trust a client-supplied `X-Forwarded-For` and let anyone dodge the limits.
+ */
+app.set('trust proxy', envs.trust_proxy_hops);
 
 /**
  * Allows only the platform's own frontends (client/admin/seller/master) to call this
@@ -59,6 +74,15 @@ app.use(
     },
   }),
 );
+
+/**
+ * Rate limits - right after CORS (so preflights are already answered and a 429 still carries the
+ * CORS headers the browser needs to read it) and before everything costly (cookies, logging,
+ * proxying, body parsing). Auth endpoints get a second, much tighter limit on top of the general
+ * API one.
+ */
+app.use(base, apiRateLimiter);
+app.use(`${base}${user_service.default}${user_service.auth.base}`, authRateLimiter);
 
 /**
  * Parses cookies on incoming requests into `req.cookies` - needed by
@@ -137,7 +161,7 @@ app[health.method](health.path, (_req, res) => {
   });
 });
 
-app[overall_health.method](overall_health.path, healthController);
+app[overall_health.method](overall_health.path, overallHealthRateLimiter, healthController);
 
 /**
  * API routes - requires a trusted service caller and a ready DB connection.

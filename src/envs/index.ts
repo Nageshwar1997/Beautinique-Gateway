@@ -61,6 +61,9 @@ const {
   SELLER_BASE_URL,
 
   // T
+
+  TRUST_PROXY_HOPS,
+
   // U
 
   USER_SERVICE_BASE_URL,
@@ -116,6 +119,11 @@ export const envs = {
   },
 
   // T
+
+  // How many reverse proxies sit in front of the gateway (Render's load balancer = 1). Express uses
+  // this to read the real client IP out of `X-Forwarded-For` - the rate limiter keys on it. Raise
+  // it if the limiter ever reports every visitor as one IP (e.g. a CDN is added in front).
+  trust_proxy_hops: Number(TRUST_PROXY_HOPS) || 1,
   // U
 
   url: {
