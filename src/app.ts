@@ -10,7 +10,7 @@ import swaggerUi from 'swagger-ui-express';
 
 import { logger } from './configs/index.js';
 import { LOGGER_BASE_OPTIONS, METHODS_AND_PATHS, ORIGINS } from './constants/index.js';
-import { healthController, wakeUpController } from './controllers/index.js';
+import { healthController } from './controllers/index.js';
 import { openApiSpec } from './docs/openapi.js';
 import { envs } from './envs/index.js';
 import { authorize, mediaServiceProxy } from './middlewares/index.js';
@@ -114,7 +114,12 @@ app[home.method](home.path, (_, res) => {
 /**
  * Server wake-up (All Services) endpoint.
  */
-app[wakeUp.method](wakeUp.path, wakeUpController);
+/**
+ * Service wake-up endpoint.
+ */
+app[wakeUp.method](wakeUp.path, (_, res) => {
+  res.success({ message: 'Gateway is awaked.' });
+});
 
 /**
  * Interactive API docs (OpenAPI/Swagger) - unauthenticated, same as `/`

@@ -28,35 +28,6 @@ const SERVICE_METHODS_AND_PATHS = {
 } as const;
 
 /**
- * Fires one ping per service and returns immediately, without waiting for (or retrying
- * towards) a confirmed response. Render's edge can 429/502 a request while a service is
- * cold-starting regardless of how many times it's asked, so waiting doesn't help - the
- * request still reaches Render and triggers provisioning either way. This just kicks that off
- * and lets the caller (the periodic cron, or the frontend's boot-time ping) move on instead of
- * blocking on Render's unpredictable readiness window.
- */
-export const wakeUpController = (_req: Request, res: Response) => {
-  const services = envs.url.service;
-
-  Object.entries(services).forEach(([name, url]) => {
-    const target = SERVICE_METHODS_AND_PATHS[name as keyof typeof SERVICE_METHODS_AND_PATHS];
-
-    void axios[target.wakeUp.method](`${url}${target.wakeUp.path}`, {
-      timeout: REQUEST_TIMEOUT,
-    }).catch(() => {
-      // Expected while cold - the request still reached Render and triggered provisioning.
-    });
-  });
-
-  res.status(200).json({
-    message: 'Wake-up triggered for every service',
-    status: 'TRIGGERED',
-    gateway: 'UP',
-    services: Object.keys(services),
-  });
-};
-
-/**
  * Single request per service, no retries (see the note above `REQUEST_TIMEOUT`) - this is a
  * manual/diagnostic snapshot of what each service's `/health` says *right now*, not a
  * wait-until-ready check.
