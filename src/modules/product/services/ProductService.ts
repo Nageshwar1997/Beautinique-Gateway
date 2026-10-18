@@ -56,6 +56,15 @@ class ProductService extends BaseProductService {
     return this.request({ method, url: url({ slug }) });
   }
 
+  public getProducts(params: Record<string, string | string[]>) {
+    // `indexes: null` sends a list as repeated keys (`brand=A&brand=B`), not as `brand[]=A`
+    return this.request({
+      ...this.routes.get.products,
+      params,
+      paramsSerializer: { indexes: null },
+    });
+  }
+
   public getProductsSuggestions(params: Record<string, string>) {
     return this.request({ ...this.routes.get.suggestions, params });
   }

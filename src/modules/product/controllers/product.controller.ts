@@ -62,6 +62,14 @@ export const getProductQueueController = async (req: Request, res: Response) => 
   res.success(response);
 };
 
+export const getProductsController = async (req: Request, res: Response) => {
+  const query = req.query as Record<string, string | string[]>;
+
+  const response = await productService.getProducts(query);
+
+  res.success(response);
+};
+
 export const getProductsSuggestionsController = async (req: Request, res: Response) => {
   const query = req.query as { search?: string };
 

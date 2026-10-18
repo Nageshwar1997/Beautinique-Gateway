@@ -188,6 +188,70 @@ const productSchema = {
   },
 };
 
+const storefrontProductSchema = {
+  type: 'object',
+  description: 'A product as its storefront card shows it (no seller, no stock count).',
+  properties: {
+    _id: { type: 'string' },
+    title: { type: 'string' },
+    slug: { type: 'string' },
+    brand: { type: 'string' },
+    shortDescription: { type: 'string' },
+    thumbnail: { type: 'string', format: 'uri' },
+    hoverImage: {
+      type: 'string',
+      format: 'uri',
+      description: 'A second image for the hover state, when the product has one.',
+    },
+    originalPrice: { type: 'number' },
+    sellingPrice: { type: 'number' },
+    discount: { type: 'integer', description: 'Percent off, 0 when not on sale.' },
+    averageRating: { type: 'number' },
+    totalReviews: { type: 'integer' },
+    soldCount: { type: 'integer' },
+    inStock: { type: 'boolean' },
+    lowStock: { type: 'boolean', description: 'In stock, but only a few are left.' },
+    hasTryOn: { type: 'boolean' },
+    hasVariants: { type: 'boolean' },
+    colors: {
+      type: 'array',
+      description: 'The Color variants (at most 6).',
+      items: {
+        type: 'object',
+        properties: {
+          label: { type: 'string' },
+          value: { type: 'string', example: '#c1121f' },
+          thumbnail: { type: 'string', format: 'uri' },
+          inStock: { type: 'boolean' },
+        },
+      },
+    },
+    colorCount: { type: 'integer', description: 'How many Color variants there are in all.' },
+    createdAt: { type: 'string', format: 'date-time' },
+  },
+};
+
+const storefrontFiltersSchema = {
+  type: 'object',
+  description:
+    'What the filters can offer for the matching products. Each is counted with every filter except its own.',
+  properties: {
+    brands: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: { name: { type: 'string' }, count: { type: 'integer' } },
+      },
+    },
+    price: {
+      type: 'object',
+      nullable: true,
+      description: 'The cheapest and the dearest, null when nothing matches.',
+      properties: { min: { type: 'integer' }, max: { type: 'integer' } },
+    },
+  },
+};
+
 const paginationSchema = {
   type: 'object',
   properties: {
@@ -1005,6 +1069,81 @@ export const openApiSpec = {
             content: { 'application/json': { schema: successEnvelope(productSchema) } },
           },
           '404': errorResponse('Product not found or not published.'),
+        },
+      },
+    },
+
+    [`${base}${productServiceBase}${product.base}${product.get.products.path}`]: {
+      [product.get.products.method]: {
+        tags: ['Product Service: Product'],
+        summary: 'Public storefront product listing',
+        description:
+          'Only ever returns PUBLISHED products, one page at a time, with the brands and the price range ' +
+          'the filters can offer. `category` is a category id of any level (a main or sub category lists ' +
+          'the products of every final category below it). With `search` the products come from Atlas Search. ' +
+          'A query value that is not usable is left out, not an error. No authentication required.',
+        parameters: [
+          { name: 'page', in: 'query', schema: { type: 'integer', default: 1, minimum: 1 } },
+          {
+            name: 'limit',
+            in: 'query',
+            schema: { type: 'integer', default: 12, minimum: 1, maximum: 48 },
+          },
+          { name: 'search', in: 'query', schema: { type: 'string', maxLength: 100 } },
+          { name: 'category', in: 'query', schema: { type: 'string' } },
+          {
+            name: 'brand',
+            in: 'query',
+            description: 'Repeat the parameter for more than one brand (at most 20).',
+            schema: { type: 'array', items: { type: 'string' } },
+            style: 'form',
+            explode: true,
+          },
+          { name: 'minPrice', in: 'query', schema: { type: 'number', minimum: 0 } },
+          { name: 'maxPrice', in: 'query', schema: { type: 'number', minimum: 0 } },
+          { name: 'minRating', in: 'query', schema: { type: 'number', minimum: 1, maximum: 5 } },
+          { name: 'inStock', in: 'query', schema: { type: 'boolean' } },
+          {
+            name: 'minDiscount',
+            in: 'query',
+            schema: { type: 'number', minimum: 0, maximum: 100 },
+          },
+          { name: 'tryOn', in: 'query', schema: { type: 'boolean' } },
+          {
+            name: 'sort',
+            in: 'query',
+            description:
+              '`relevance` is the order of a search (without one it is `newest`). Default: `relevance` with a search, `newest` without.',
+            schema: {
+              type: 'string',
+              enum: [
+                'relevance',
+                'newest',
+                'price-asc',
+                'price-desc',
+                'popular',
+                'rating',
+                'discount',
+              ],
+            },
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'A page of products, the pagination info and what the filters can offer.',
+            content: {
+              'application/json': {
+                schema: successEnvelope({
+                  type: 'object',
+                  properties: {
+                    products: { type: 'array', items: storefrontProductSchema },
+                    pagination: paginationSchema,
+                    filters: storefrontFiltersSchema,
+                  },
+                }),
+              },
+            },
+          },
         },
       },
     },

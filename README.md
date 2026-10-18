@@ -219,6 +219,7 @@ See `media-service`'s own README (`src/reference/media-service/README.md` in thi
 | PATCH  | `/product/draft/publish`      | `ADMIN`, `SELLER`, `MASTER` | Publish a completed draft as a real product     |
 | GET    | `/product/dashboard/products` | `ADMIN`, `SELLER`, `MASTER` | Paginated/sortable/searchable dashboard listing |
 | GET    | `/product/dashboard/:slug`    | `ADMIN`, `SELLER`, `MASTER` | Single dashboard product lookup                 |
+| GET    | `/product/products`           | None                        | Public storefront listing (filters, sort, search, pagination) - see the product service README §7.3.1 |
 | GET    | `/product/:slug`              | None                        | Public storefront product lookup                |
 | GET    | `/product/suggestions`        | None                        | Autocomplete search suggestions                 |
 
