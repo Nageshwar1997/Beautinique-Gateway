@@ -220,7 +220,7 @@ See `media-service`'s own README (`src/reference/media-service/README.md` in thi
 | GET    | `/product/dashboard/products` | `ADMIN`, `SELLER`, `MASTER` | Paginated/sortable/searchable dashboard listing |
 | GET    | `/product/dashboard/:slug`    | `ADMIN`, `SELLER`, `MASTER` | Single dashboard product lookup                 |
 | GET    | `/product/products`           | None                        | Public storefront listing (filters, sort, search, pagination) - see the product service README §7.3.1 |
-| GET    | `/product/:slug`              | None                        | Public storefront product lookup                |
+| GET    | `/product/:slug`              | None                        | Public storefront product page (storefront shape, 404 when not published) |
 | GET    | `/product/suggestions`        | None                        | Autocomplete search suggestions                 |
 
 "Auth" here is enforced twice, independently: this gateway's own `authorize([...])` middleware checks the `access_token` cookie's role **before** forwarding, and `product-service` checks the `X-User-Role` header the Gateway attaches on the way in — a request can't reach the downstream service at all without first passing the Gateway's own check.
